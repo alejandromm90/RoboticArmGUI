@@ -35,14 +35,16 @@ public class ArmSimulation extends PApplet{
 	  testXaux -= shoulderX;
 	  testYaux -= shoulderY;
 	  Point newPoint = new Point(testXaux, testYaux, 0);
-	  thetaAngle = (float) Calculate.calculateAngles(newPoint).getTheta(); //ThetaAngle(testXaux, testYaux);
-	  phiAngle = (float) Calculate.calculateAngles(newPoint).getThi(); //calculatePhiAngle(testXaux, testYaux);
+	  thetaAngle = (float) Calculate.calculateAngles(newPoint, lengthShoulder, lengthElbow).getTheta(); //ThetaAngle(testXaux, testYaux);
+	  phiAngle = (float) Calculate.calculateAngles(newPoint, lengthShoulder, lengthElbow).getThi(); //calculatePhiAngle(testXaux, testYaux);
+//	  thetaAngle = Calculate.calculateThetaAngle(newPoint.getX(), newPoint.getY(), lengthShoulder, lengthElbow);
+//	  phiAngle = Calculate.calculatePhiAngle(newPoint.getX(), newPoint.getY(), lengthShoulder, lengthElbow, thetaAngle);
+	  
 //	  System.out.println("(" + testXaux + ", "+testYaux+")");	  
 //	  System.out.println("Phi : " + Math.toDegrees(phiAngle));
 //	  System.out.println("Theta 1: " + Math.toDegrees(thetaAngle));// + phiAngle));
 //	  float ttt = (float) (360 + Math.toDegrees(thetaAngle));// + phiAngle));
 //	  System.out.println("Theta 2: " + ttt);
-	  
 
 	  lineAngle(shoulderX, shoulderY, (-1) * phiAngle, lengthShoulder);
 	  lineAngle(elbowX, elbowY, (-1) * (thetaAngle + phiAngle), lengthElbow); // + phiAngle)), lengthElbow);

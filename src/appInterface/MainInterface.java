@@ -20,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -164,9 +165,14 @@ public class MainInterface extends javax.swing.JFrame {
 	}
 	
 	/** Sets the arm simulation JPanel to show how the arm will get the coordinates **/
-	private JPanel setSimulationPanel(ArrayList<Ellipse> points) {
-		this.setSize(700,600);
-        
+	private JFrame setSimulationPanel(ArrayList<Ellipse> points) {
+		JFrame simJFrame = new JFrame();
+		//simJFrame.add(mainPanel); 
+		simJFrame.setVisible(true);
+		simJFrame.setEnabled(true);
+		simJFrame.setSize(700,600);
+		simJFrame.setTitle("ARM SIMULATION");
+				
         JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -182,9 +188,11 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		mainPanel.add(title);
 		mainPanel.add(printPanel);
-        
+
+		simJFrame.setContentPane(mainPanel);
 		armSimulationSketch.init(); 
-        return mainPanel;
+        
+		return simJFrame;
 	}
 	
 	/** This method sets the buttons that appear in the Scan Sketch JPanel **/
@@ -212,7 +220,7 @@ public class MainInterface extends javax.swing.JFrame {
 		printButton.setFont(buttonsFont);
 		printButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO Send coordinates to print the sketch
+				// TODO Send coordinates to print the sketch				
 				setSimulationPanel(((ScanSketch) scanSketch).getPoints());
 			}
 		});
