@@ -56,9 +56,6 @@ public class MainInterface extends javax.swing.JFrame {
 	}
 	
 	private void initializeInterface() {
-		this.setVisible(true);
-		this.setEnabled(true);
-		this.setSize(500,500);
 
 		flavors = new ArrayList<Flavor>();
 		flavors.add(new Flavor("chocolate"));
@@ -82,6 +79,11 @@ public class MainInterface extends javax.swing.JFrame {
 			}
 		});
 		
+		this.setSize(700,600);
+
+		this.setEnabled(true);
+		this.setVisible(true);
+
 //		initializeLeapMotionListener();
 		
 	}
@@ -139,7 +141,6 @@ public class MainInterface extends javax.swing.JFrame {
 	
 	/** This method sets the Panel of the Scan Sketch mode **/
 	private JPanel setScanSketchPanel() {
-		this.setSize(700,600);
                 
         JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -151,7 +152,6 @@ public class MainInterface extends javax.swing.JFrame {
 		JPanel scanPanel = new JPanel();
 		scanSketch = new ScanSketch();
 		scanPanel.setBounds(20, 20, 600, 600);
-		scanPanel.setVisible(true);
 		scanPanel.add(scanSketch);
 		
 		JPanel buttonsPanel = setButtonsScanSketchPanel();
@@ -161,6 +161,10 @@ public class MainInterface extends javax.swing.JFrame {
 		mainPanel.add(buttonsPanel);
         
 		scanSketch.init(); 
+		
+		this.setSize(700,600);
+		scanPanel.setVisible(true);
+
         return mainPanel;
 	}
 	
@@ -168,9 +172,7 @@ public class MainInterface extends javax.swing.JFrame {
 	private JFrame setSimulationPanel(ArrayList<Ellipse> points) {
 		JFrame simJFrame = new JFrame();
 		//simJFrame.add(mainPanel); 
-		simJFrame.setVisible(true);
-		simJFrame.setEnabled(true);
-		simJFrame.setSize(700,600);
+
 		simJFrame.setTitle("ARM SIMULATION");
 				
         JPanel mainPanel = new JPanel();
@@ -192,6 +194,11 @@ public class MainInterface extends javax.swing.JFrame {
 		simJFrame.setContentPane(mainPanel);
 		armSimulationSketch.init(); 
         
+		simJFrame.setSize(700,600);
+		simJFrame.setEnabled(true);
+		simJFrame.setVisible(true);
+
+		
 		return simJFrame;
 	}
 	
@@ -244,7 +251,6 @@ public class MainInterface extends javax.swing.JFrame {
 	/** This method sets the Panel of the Drawing Canvas mode **/
 	private JPanel setDrawingCanvasPanel() {
 				
-		this.setSize(700,600);
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -255,11 +261,13 @@ public class MainInterface extends javax.swing.JFrame {
 		JPanel drawingPanel = new JPanel();
 		sketchDrawing = new DrawingCanvas();
 		drawingPanel.setBounds(20, 20, 600, 600);
-		drawingPanel.setVisible(true);
 		drawingPanel.add(sketchDrawing);
 		
 		JPanel buttonsPanel = setButtonsDrawingCanvasPanel();
 		
+		this.setSize(700,600);
+		drawingPanel.setVisible(true);
+	
 		mainPanel.add(title);
 		mainPanel.add(drawingPanel);
 		mainPanel.add(buttonsPanel);
