@@ -1,5 +1,10 @@
 package processingApps;
 
+/**
+ * @author Alejandro Moran
+ * 
+ * */
+
 public class Ellipse {
 
 	private float x, y;

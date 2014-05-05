@@ -1,5 +1,10 @@
 package leapMotion;
 
+/**
+ * @author Alejandro Moran
+ * 
+ * */
+
 import appInterface.Flavor;
 import java.util.ArrayList;
 

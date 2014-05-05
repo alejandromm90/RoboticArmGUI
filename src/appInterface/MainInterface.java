@@ -1,5 +1,10 @@
 package appInterface;
 
+/**
+ * @author Alejandro Moran
+ * 
+ * */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;

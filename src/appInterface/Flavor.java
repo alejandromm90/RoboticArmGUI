@@ -1,5 +1,10 @@
 package appInterface;
 
+/**
+ * @author Alejandro Moran
+ * 
+ * */
+
 public class Flavor {
 
 	

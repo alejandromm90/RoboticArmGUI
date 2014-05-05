@@ -1,5 +1,10 @@
 package processingApps;
 
+/**
+ * @author Alejandro Moran
+ * 
+ * */
+
 import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PImage;

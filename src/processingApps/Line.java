@@ -1,5 +1,10 @@
 package processingApps;
 
+/**
+ * @author Alejandro Moran
+ * 
+ * */
+
 public class Line {
 	
 	private float x, y, xE, yE;

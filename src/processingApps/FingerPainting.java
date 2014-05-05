@@ -1,4 +1,10 @@
 package processingApps;
+
+/**
+ * @author Alejandro Moran
+ * 
+ * */
+
 import java.awt.Color;
 
 import com.leapmotion.leap.Controller;

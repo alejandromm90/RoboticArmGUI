@@ -1,5 +1,10 @@
 package processingApps;
 
+/**
+ * @author Alejandro Moran
+ * 
+ * */
+
 import java.util.ArrayList;
 
 import com.leapmotion.leap.FingerList;

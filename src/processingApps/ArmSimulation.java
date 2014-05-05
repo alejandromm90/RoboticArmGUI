@@ -1,6 +1,11 @@
 package processingApps;
-import processing.core.PApplet;
 
+/**
+ * @author Alejandro Moran
+ * 
+ * */
+
+import processing.core.PApplet;
 
 public class ArmSimulation extends PApplet{
 	private float shoulderX, shoulderY, elbowX, elbowY;
