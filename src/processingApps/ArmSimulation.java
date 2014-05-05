@@ -13,7 +13,7 @@ import processing.core.PApplet;
 public class ArmSimulation extends PApplet{
 	private float shoulderX, shoulderY, elbowX, elbowY;
 	private final int lengthShoulder = 150;
-	private final int lengthElbow = 150;
+	private final int lengthElbow = 50;
 	private float phiAngle, thetaAngle;
 
 	public void setup() {
