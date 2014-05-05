@@ -75,7 +75,7 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		this.setContentPane(getMainPanel());
 		this.setTitle("PRINTER USER INTERFACE");
-
+		
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
@@ -396,6 +396,9 @@ public class MainInterface extends javax.swing.JFrame {
 			if (sketchDrawing != null) { 
 				sketchDrawing.destroy();
 			}
+			if (scanSketch != null) {
+				scanSketch.destroy();
+			}
 			break;
 		case 2: // Predefined sketch mode
 			break;
@@ -403,6 +406,9 @@ public class MainInterface extends javax.swing.JFrame {
 			if (scanSketch != null) {
 					scanSketch.destroy();
 			}
+			if (sketchDrawing != null) { 
+				sketchDrawing.destroy();
+			} 
 			break;
 		}
 	}
