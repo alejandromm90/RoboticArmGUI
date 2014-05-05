@@ -6,7 +6,6 @@ package appInterface;
  * */
 
 public class Flavor {
-//hello
 	
 	private String flavor;
 	
