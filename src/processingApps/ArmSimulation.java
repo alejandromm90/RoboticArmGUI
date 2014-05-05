@@ -2,10 +2,13 @@ package processingApps;
 
 /**
  * @author Alejandro Moran
- * 
+ *  
  * */
 
+import math.Calculate;
+import math.Point;
 import processing.core.PApplet;
+
 
 public class ArmSimulation extends PApplet{
 	private float shoulderX, shoulderY, elbowX, elbowY;
@@ -31,9 +34,9 @@ public class ArmSimulation extends PApplet{
 	  ellipse(testXaux, testYaux, 10, 10); 
 	  testXaux -= shoulderX;
 	  testYaux -= shoulderY;
-	  
-	  thetaAngle = calculateThetaAngle(testXaux, testYaux);
-	  phiAngle = calculatePhiAngle(testXaux, testYaux);
+	  Point newPoint = new Point(testXaux, testYaux, 0);
+	  thetaAngle = (float) Calculate.calculateAngles(newPoint).getTheta(); //ThetaAngle(testXaux, testYaux);
+	  phiAngle = (float) Calculate.calculateAngles(newPoint).getThi(); //calculatePhiAngle(testXaux, testYaux);
 //	  System.out.println("(" + testXaux + ", "+testYaux+")");	  
 //	  System.out.println("Phi : " + Math.toDegrees(phiAngle));
 //	  System.out.println("Theta 1: " + Math.toDegrees(thetaAngle));// + phiAngle));
@@ -64,18 +67,6 @@ public class ArmSimulation extends PApplet{
 	  ellipse(elbowX, elbowY, ellipseRadius, ellipseRadius);
 	}
 
-	private float calculatePhiAngle(float x, float y) {
-		float phi;
-		phi = atan2(y,x) - atan2(lengthElbow * sin(thetaAngle), lengthShoulder + lengthElbow*cos(thetaAngle));
-		return phi;
-	}
-	
-	private float calculateThetaAngle(float x, float y) {
-		float theta;
-		theta = 2 * atan(-sqrt(((lengthElbow + lengthShoulder) * (lengthElbow + lengthShoulder) - (x*x + y*y))
-				/ ((x*x + y*y) - (lengthElbow - lengthShoulder) * (lengthElbow - lengthShoulder))));
-		return theta;
-	}
 
 	private void moveArm() {
 	    
