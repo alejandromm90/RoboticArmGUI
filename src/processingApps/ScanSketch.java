@@ -6,6 +6,8 @@ package processingApps;
  * */
 
 import java.util.ArrayList;
+
+import math.Point;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -16,7 +18,7 @@ public class ScanSketch extends PApplet {
 
 	private int width = 640;
 	private int height = 400;
-	private ArrayList<Ellipse> ellipses;
+	private ArrayList<Point> ellipses;
 	private ArrayList<Line> lines;
 	private boolean firstPaint, endCapture;
 
@@ -36,7 +38,7 @@ public class ScanSketch extends PApplet {
 	  background(255);
 	  strokeWeight(2);  // Increases the weight of the line
 
-	  ellipses = new ArrayList<Ellipse>();
+	  ellipses = new ArrayList<Point>();
 	  lines = new ArrayList<Line>();
 	  firstPaint = true;
 	  endCapture = false;
@@ -66,12 +68,12 @@ public class ScanSketch extends PApplet {
 			    for (PVector point : contour.getPolygonApproximation().getPoints()) {
 			      fill(0,0,0);
 			      if(firstPaint) {
-			    	  ellipses.add(new Ellipse(point.x, point.y));
+			    	  ellipses.add(new Point(point.x, point.y, 0));
 			    	  // We only get ellipses by pairs, to save the lines
 			    	  if (contourCounter % 2 != 0) {
-			    		  Ellipse e1 = ellipses.get(contourCounter-1);
-			    		  Ellipse e2 = ellipses.get(contourCounter);
-			    		  lines.add(new Line(e1.getX(), e1.getY(), e2.getX(), e2.getY()));
+			    		  Point p1 = ellipses.get(contourCounter-1);
+			    		  Point p2 = ellipses.get(contourCounter);
+			    		  lines.add(new Line(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
 			    	  }
 			      }
 			      ellipse(point.x, point.y, 5, 5);
@@ -137,7 +139,7 @@ public class ScanSketch extends PApplet {
 	}
 	
 	/** Sends the points from the scanned sketch **/
-	public ArrayList<Ellipse> getPoints() { 
+	public ArrayList<Point> getPoints() { 
 		return ellipses;
 	}
 	

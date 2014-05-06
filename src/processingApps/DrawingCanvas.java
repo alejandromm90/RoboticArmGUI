@@ -7,6 +7,8 @@ package processingApps;
 
 import java.util.ArrayList;
 
+import math.Point;
+
 import com.leapmotion.leap.FingerList;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Hand;
@@ -24,7 +26,7 @@ public class DrawingCanvas extends PApplet{
 	private int width = 640;
 	private int height = 360;
 	private boolean firstClick, leapMotionMode;
-	private ArrayList<Ellipse> lastEllipse, ellipsesRedo, ellipsesLeapMotion;
+	private ArrayList<Point> lastEllipse, ellipsesRedo, ellipsesLeapMotion;
 	private ArrayList<Line> lastLine, linesRedo;
 	private Controller leapController;
 	
@@ -35,12 +37,12 @@ public class DrawingCanvas extends PApplet{
 
 	  background(255);
 	  firstClick = true;
-	  lastEllipse = new ArrayList<Ellipse>();
+	  lastEllipse = new ArrayList<Point>();
 	  lastLine = new ArrayList<Line>();
-	  ellipsesRedo = new ArrayList<Ellipse>();
+	  ellipsesRedo = new ArrayList<Point>();
 	  linesRedo = new ArrayList<Line>();
 	  strokeWeight(2);  // Increases the weight of the line
-  	  ellipsesLeapMotion = new ArrayList<Ellipse>();
+  	  ellipsesLeapMotion = new ArrayList<Point>();
 
 	  leapController = new Controller();
 	  
@@ -122,10 +124,10 @@ public class DrawingCanvas extends PApplet{
 	private void addEllipseToArray(float mX, float mY) {
 		if (!lastEllipse.isEmpty()) {
 	    	if ((lastEllipse.get(lastEllipse.size() - 1).getX() != mX) && (lastEllipse.get(lastEllipse.size() - 1).getY() != mY)) {
-	    		lastEllipse.add(new Ellipse(mX, mY));
+	    		lastEllipse.add(new Point(mX, mY, 0));
 	    	}
 	    } else {
-	    	lastEllipse.add(new Ellipse(mouseX, mouseY));
+	    	lastEllipse.add(new Point(mouseX, mouseY, 0));
 	    }
 	}
 
@@ -138,7 +140,7 @@ public class DrawingCanvas extends PApplet{
 	    float brushSize = maxBrushSize - maxBrushSize * tip.getZ();
 	    System.out.println(brushSize);
 	    if (brushSize == maxBrushSize) {
-	    	Ellipse newEllipse = new Ellipse(x, y);
+	    	Point newEllipse = new Point(x, y, 0);
 	    	ellipsesLeapMotion.add(newEllipse);
 	    	ellipse(x, y, 5, 5); //brushSize, brushSize);   
 	    } else {
@@ -159,11 +161,11 @@ public class DrawingCanvas extends PApplet{
 	public void cleanCanvas() {
 		background(255);
 		firstClick = true;
-		lastEllipse = new ArrayList<Ellipse>();
+		lastEllipse = new ArrayList<Point>();
 		lastLine = new ArrayList<Line>();
-		ellipsesRedo = new ArrayList<Ellipse>();
+		ellipsesRedo = new ArrayList<Point>();
 		linesRedo = new ArrayList<Line>();
-		ellipsesLeapMotion = new ArrayList<Ellipse>();
+		ellipsesLeapMotion = new ArrayList<Point>();
 	}
 	
 	public void undoCanvas() {
@@ -171,7 +173,7 @@ public class DrawingCanvas extends PApplet{
 		background(255);
 		if (!lastEllipse.isEmpty()) {
 			
-			Ellipse undoEllipse = lastEllipse.remove(lastEllipse.size() - 1);
+			Point undoEllipse = lastEllipse.remove(lastEllipse.size() - 1);
 			if (!ellipsesRedo.contains(undoEllipse)) {
 				ellipsesRedo.add(undoEllipse);
 			}
@@ -212,13 +214,13 @@ public class DrawingCanvas extends PApplet{
 		}
 	}
 	
-	private void repaintCanvas(ArrayList<Ellipse> ellipses, ArrayList<Line> lines, boolean redo) {
+	private void repaintCanvas(ArrayList<Point> ellipses, ArrayList<Line> lines, boolean redo) {
 		int i = 0;
 		if (redo && !ellipses.isEmpty()) {
 			i = ellipses.size() - 1;
 		}
 		while (i < ellipses.size()) {
-			Ellipse lastE = ellipses.get(i);
+			Point lastE = ellipses.get(i);
 
 			Line lastL = null;
 			if (i < lines.size()) {
@@ -244,7 +246,7 @@ public class DrawingCanvas extends PApplet{
 	  line(width-1, 0, width-1, height-1);
 	}
 	
-	public ArrayList<Ellipse> getPoints() {
+	public ArrayList<Point> getPoints() {
 		
 		if (lastEllipse.size() != 0) {
 			return lastEllipse;
