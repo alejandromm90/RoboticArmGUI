@@ -248,7 +248,7 @@ public class DrawingCanvas extends PApplet{
 	
 	public ArrayList<Point> getPoints() {
 		
-		if (lastEllipse.size() != 0) {
+		if (!lastEllipse.isEmpty()) {
 			return lastEllipse;
 		} else {
 			return ellipsesLeapMotion;
