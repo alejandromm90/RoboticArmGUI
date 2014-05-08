@@ -5,6 +5,8 @@ package appInterface;
  * 
  * */
 
+import geometric.RelativePoint;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -30,12 +32,13 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import leapMotion.LeapMotionListener;
-import processingApps.ArmSimulation;
 import processingApps.DrawingCanvas;
-import processingApps.Ellipse;
 import processingApps.ScanSketch;
+import processingApps.Simulation;
 
 import com.leapmotion.leap.Controller;
+
+import constants.Constants;
 
 
 public class MainInterface extends javax.swing.JFrame {
@@ -99,8 +102,8 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		// Depending on the menuItem you choose, it will show each panel
 //		bigPanel = setManuallyPrintingPanel();
-//		bigPanel = setDrawingCanvasPanel();
-		bigPanel = setScanSketchPanel();
+		bigPanel = setDrawingCanvasPanel();
+//		bigPanel = setScanSketchPanel();
 				
 		mainPanel.add(bigPanel, BorderLayout.CENTER);
 		
@@ -169,36 +172,34 @@ public class MainInterface extends javax.swing.JFrame {
 	}
 	
 	/** Sets the arm simulation JPanel to show how the arm will get the coordinates **/
-	private JFrame setSimulationPanel(ArrayList<Ellipse> points) {
+	private JFrame setSimulationPanel(ArrayList<RelativePoint> points) {
 		JFrame simJFrame = new JFrame();
-		//simJFrame.add(mainPanel); 
-
 		simJFrame.setTitle("ARM SIMULATION");
 				
         JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+//		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+//		mainPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
 		
-		JLabel title = new JLabel("Arm Simulation");
-		title.setFont(new Font("Arial", Font.BOLD, 20));
-		
+//		JLabel title = new JLabel("Arm Simulation");
+//		title.setFont(new Font("Arial", Font.BOLD, 20));
+//		
 		JPanel printPanel = new JPanel();
-		armSimulationSketch = new ArmSimulation();
+		armSimulationSketch = new Simulation(points);
+//		((ArmSimulationSide) armSimulationSideSketch).setPoints(points);
 		printPanel.setBounds(20, 20, 600, 600);
 		printPanel.setVisible(true);
 		printPanel.add(armSimulationSketch);
 		
-		mainPanel.add(title);
+//		mainPanel.add(title);
 		mainPanel.add(printPanel);
 
 		simJFrame.setContentPane(mainPanel);
 		armSimulationSketch.init(); 
         
-		simJFrame.setSize(700,600);
+		simJFrame.setSize(Constants.SIZE_WIDTH ,Constants.SIZE_HEIGHT);
 		simJFrame.setEnabled(true);
 		simJFrame.setVisible(true);
 
-		
 		return simJFrame;
 	}
 	
@@ -227,7 +228,7 @@ public class MainInterface extends javax.swing.JFrame {
 		printButton.setFont(buttonsFont);
 		printButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO Send coordinates to print the sketch				
+				// TODO Send coordinates to print the sketch
 				setSimulationPanel(((ScanSketch) scanSketch).getPoints());
 			}
 		});
@@ -303,7 +304,7 @@ public class MainInterface extends javax.swing.JFrame {
 		printButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				// TODO Send coordinates to print the sketch
-				((DrawingCanvas) sketchDrawing).getPoints();
+				setSimulationPanel(((DrawingCanvas) sketchDrawing).getPoints());
 			}
 		});
 		
