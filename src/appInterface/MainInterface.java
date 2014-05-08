@@ -5,6 +5,7 @@ package appInterface;
  * 
  * */
 
+import geometric.Move;
 import geometric.RelativePoint;
 
 import java.awt.BorderLayout;
@@ -184,7 +185,8 @@ public class MainInterface extends javax.swing.JFrame {
 //		title.setFont(new Font("Arial", Font.BOLD, 20));
 //		
 		JPanel printPanel = new JPanel();
-		armSimulationSketch = new Simulation(points);
+		System.out.println(points);
+		armSimulationSketch = new Simulation(Move.smoothMovement(transformRelativePoint(transformCoordinates(points))), transformCoordinates(points));//m1(m2(points)));
 //		((ArmSimulationSide) armSimulationSideSketch).setPoints(points);
 		printPanel.setBounds(20, 20, 600, 600);
 		printPanel.setVisible(true);
@@ -202,6 +204,54 @@ public class MainInterface extends javax.swing.JFrame {
 
 		return simJFrame;
 	}
+	
+	/**
+	* 
+	* @param points
+	* @return
+	*/
+	public static ArrayList<RelativePoint> transformCoordinates(
+		ArrayList<RelativePoint> points) {
+		ArrayList<RelativePoint> points2 = new ArrayList<RelativePoint>();
+	
+		for (int i = 0; i < points.size(); i++) {
+			RelativePoint point = points.get(i);
+		
+			points2.add(i, new RelativePoint(point.getX(), 360 - point.getY(),
+			point.getZ()));
+		}
+	
+		return points2;
+	}
+
+	/**
+	* 
+	* @param points
+	* @return
+	*/
+	public static ArrayList<RelativePoint> transformRelativePoint(
+		ArrayList<RelativePoint> points) {
+		ArrayList<RelativePoint> points2 = new ArrayList<RelativePoint>();
+		RelativePoint pointBefore;
+	
+		for (int i = 0; i < points.size(); i++) {
+			RelativePoint point = points.get(i);
+		
+			if (i == 0) {
+				pointBefore = new RelativePoint(0, 0, 0);
+			} else {
+				pointBefore = new RelativePoint(points.get(i - 1).getX(),
+				points.get(i - 1).getY(), points.get(i - 1).getZ());
+			}
+		
+			points2.add(i, new RelativePoint(point.getX() - pointBefore.getX(),
+			point.getY() - pointBefore.getY(), point.getZ()
+			- pointBefore.getZ()));
+		}
+	
+		return points2;
+	}
+	
 	
 	/** This method sets the buttons that appear in the Scan Sketch JPanel **/
 	private JPanel setButtonsScanSketchPanel() {

@@ -19,7 +19,7 @@ import constants.Constants;
  */
 @SuppressWarnings("serial")
 public class Simulation extends PApplet {
-	private ArrayList<RelativePoint> points;
+	private ArrayList<RelativePoint> points, pointsDraw;
 	private RelativePoint point;
 	private Angles angles;
 
@@ -27,8 +27,9 @@ public class Simulation extends PApplet {
 	 * 
 	 * @param points
 	 */
-	public Simulation(ArrayList<RelativePoint> points) {
+	public Simulation(ArrayList<RelativePoint> points, ArrayList<RelativePoint> pointsDraw) {
 		this.points = points;
+		this.pointsDraw = pointsDraw;
 	}
 
 	/**
@@ -37,7 +38,7 @@ public class Simulation extends PApplet {
 	public void setup() {
 		size(Constants.SIZE_WIDTH, Constants.SIZE_HEIGHT);
 		background(255);
-
+		
 		stroke(173, 112, 51); // define color
 		strokeWeight(17); // define line thickness of drawings, even for a point
 		fill(0); // fill circle
@@ -58,6 +59,7 @@ public class Simulation extends PApplet {
 	 */
 	public void draw() {
 		background(255);
+		drawPoints();
 		
 		if (points.size() > 0) {
 			RelativePoint point1 = points.remove(0);
@@ -78,6 +80,40 @@ public class Simulation extends PApplet {
 		waits();
 	}
 
+	/**
+	 * 
+	 */
+	private void drawPoints() {
+		double lastX = 0;
+		double lastY = 0;
+		double x = 0;
+		double y = 0;
+		stroke(0); // define color
+		strokeWeight(2); // define line thickness of drawings, even for a point
+	
+		for (int i = 0; i < pointsDraw.size(); i++) {	// Draw all points
+		  x = pointsDraw.get(i).getX() + Constants.BASE_X;
+		  y = pointsDraw.get(i).getY() + Constants.BASE_Y;
+		  fill(0);  // Fills the ellipse in black color
+//		  ellipse((float)x, (float)y, 5, 5);		
+		  drawPoint((float)x, (float)y, 5);
+      
+		  if (i != 0) {
+		      // draw line between points
+			  drawLine((float)lastX, (float)lastY, (float)x, (float)y);
+		  }
+		  
+		  lastX = x;  
+	      lastY = y;
+   
+		}
+		
+		// Define again:
+		stroke(173, 112, 51); // define color
+		strokeWeight(17); // define line thickness of drawings, even for a point
+	
+	}
+	
 	/**
 	 * 
 	 * @param thi
