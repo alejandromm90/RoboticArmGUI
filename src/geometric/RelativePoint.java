@@ -1,14 +1,15 @@
-package math;
+package geometric;
+
 
 /**
  * 
  * @author Philippe Heer
  *
  */
-public class Point {
-	private float x;
-	private float y;
-	private float z;
+public class RelativePoint {
+	private double x;
+	private double y;
+	private double z;
 
 	/**
 	 * 
@@ -16,17 +17,25 @@ public class Point {
 	 * @param y
 	 * @param z
 	 */
-	public Point(float x, float y, float z) {
+	public RelativePoint(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public String toString() {
+		return "x : " + (int) x + "\ny : " + (int) y + "\nz : " + (int) z;
 	}
 
 	/**
 	 * 
 	 * @return x
 	 */
-	public float getX() {
+	public double getX() {
 		return x;
 	}
 
@@ -34,7 +43,7 @@ public class Point {
 	 * 
 	 * @param x
 	 */
-	public void setX(int x) {
+	public void setX(double x) {
 		this.x = x;
 	}
 
@@ -42,7 +51,7 @@ public class Point {
 	 * 
 	 * @return y
 	 */
-	public float getY() {
+	public double getY() {
 		return y;
 	}
 
@@ -50,7 +59,7 @@ public class Point {
 	 * 
 	 * @param y
 	 */
-	public void setY(int y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 
@@ -58,7 +67,7 @@ public class Point {
 	 * 
 	 * @return z
 	 */
-	public float getZ() {
+	public double getZ() {
 		return z;
 	}
 
@@ -66,7 +75,7 @@ public class Point {
 	 * 
 	 * @param z
 	 */
-	public void setZ(int z) {
+	public void setZ(double z) {
 		this.z = z;
 	}
 }

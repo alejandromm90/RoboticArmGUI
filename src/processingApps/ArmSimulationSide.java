@@ -58,8 +58,10 @@ public class ArmSimulationSide extends PApplet{
 	  background(255);
 	  drawPoints();
 	  splitPoints();
-	  Point newP = splittedPoints.get(pointCounter);
-	  
+	  Point newP = new Point(SIZE_WIDTH / 2, SIZE_HEIGHT,0);
+	  if (!splittedPoints.isEmpty()) {
+		  newP = splittedPoints.get(pointCounter);
+	  }
 	  float testXaux = newP.getX(); 
 	  float testYaux = 0;
 
@@ -120,7 +122,7 @@ public class ArmSimulationSide extends PApplet{
 
 	/** Splits in more points the line between two points **/
 	private void splitPoints() { 
-		if (!allSplitted) {
+		if (!allSplitted && !points.isEmpty()) {
 			Point p1 = points.get(pointSplitted);
 			Point p2 = null;
 			if ((points.size() % 2) != 0) { // Points are not by pairs

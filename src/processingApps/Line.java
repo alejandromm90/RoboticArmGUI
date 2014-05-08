@@ -7,28 +7,28 @@ package processingApps;
 
 public class Line {
 	
-	private float x, y, xE, yE;
+	private double x, y, xE, yE;
 	
-	public Line (float x, float y, float xE, float yE) {
+	public Line (double x, double y, double xE, double yE) {
 		this.x = x;
 		this.y = y;
 		this.xE = xE;
 		this.yE = yE;
 	}
 
-	public float getX() {
+	public double getX() {
 		return x;
 	}
 
-	public float getY() {
+	public double getY() {
 		return y;
 	}
 
-	public float getxE() {
+	public double getxE() {
 		return xE;
 	}
 
-	public float getyE() {
+	public double getyE() {
 		return yE;
 	}
 	

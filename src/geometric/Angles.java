@@ -1,4 +1,5 @@
-package math;
+package geometric;
+
 /**
  * 
  * @author Philippe Heer
@@ -19,6 +20,16 @@ public class Angles {
 		this.thi = thi;
 		this.theta = theta;
 		this.kappa = kappa;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public String toString() {
+		return "thi : " + (int) Math.toDegrees(thi) + "\ntheta : "
+				+ (int) Math.toDegrees(theta) + "\nkappa : "
+				+ (int) Math.toDegrees(kappa);
 	}
 
 	/**
