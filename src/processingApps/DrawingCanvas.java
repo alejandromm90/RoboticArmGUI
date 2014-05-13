@@ -17,6 +17,8 @@ import com.leapmotion.leap.InteractionBox;
 import com.leapmotion.leap.Pointable;
 import com.leapmotion.leap.Vector;
 
+import constants.Constants;
+
 public class DrawingCanvas extends PApplet{
 	private double lastX, lastY;
 	private int width = 640;
@@ -48,6 +50,7 @@ public class DrawingCanvas extends PApplet{
 	public void draw() {
 	  drawBorder();
 	  stroke(0);
+	  drawWithLeapMotion();
 	  
 	  if (leapMotionMode) { 
 		  drawWithLeapMotion();
@@ -85,7 +88,6 @@ public class DrawingCanvas extends PApplet{
 	
 	private void drawWithLeapMotion() {
 		  Frame frame = leapController.frame();
-		  // TODO implement to detect only one finger
 	        
 //          if (!frame.hands().isEmpty()) {
 //            // Get the first hand
@@ -95,6 +97,7 @@ public class DrawingCanvas extends PApplet{
 //            FingerList fingers = hand.fingers();
 //            
 //            if(fingers.count() == 1) {
+		  
 			  Pointable pointer = frame.pointables().frontmost();
 			  if( pointer.isValid()) {
 			    int frontColor = color( 255, 0, 0, 0 );
@@ -102,6 +105,7 @@ public class DrawingCanvas extends PApplet{
 			    InteractionBox iBox = frame.interactionBox();
 			    Vector tip = iBox.normalizePoint(pointer.tipPosition());
 			    fingerPaint(tip, frontColor);
+			    waits(5000000);
 			  }
 //            }
 //          }
@@ -129,8 +133,7 @@ public class DrawingCanvas extends PApplet{
 
 	}
 
-	private void fingerPaint(Vector tip, int paintColor)
-	{
+	private void fingerPaint(Vector tip, int paintColor) {
 		int maxBrushSize = 140;
 	    fill(paintColor);
 	    float x = tip.getX() * width;
@@ -148,7 +151,13 @@ public class DrawingCanvas extends PApplet{
 	    	repaintCanvas(ellipsesLeapMotion, new ArrayList<Line>(), false);
 	    }
 	}
-
+	
+	private void waits(long waitTime) {
+		long i = 0;
+		while (i <= waitTime) {
+			i++;
+		}
+	}
 	
 	public void setLeapMotionMode(boolean activate) {
 		cleanCanvas();
