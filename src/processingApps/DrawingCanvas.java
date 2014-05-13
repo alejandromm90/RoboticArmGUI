@@ -9,7 +9,11 @@ import geometric.RelativePoint;
 
 import java.util.ArrayList;
 
+import leapMotion.LeapMotionListener;
+
 import processing.core.PApplet;
+
+import appInterface.Flavor;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
@@ -28,7 +32,9 @@ public class DrawingCanvas extends PApplet{
 	private ArrayList<RelativePoint> lastEllipse, ellipsesRedo, ellipsesLeapMotion;
 	private ArrayList<Line> lastLine, linesRedo;
 	private Controller leapController;
-	
+	private LeapMotionListener listener;
+	private ArrayList<Flavor> flavors;
+	private Controller controller;
 	
 	public void setup() {
 	  frameRate(30);
@@ -40,23 +46,33 @@ public class DrawingCanvas extends PApplet{
 	  lastLine = new ArrayList<Line>();
 	  ellipsesRedo = new ArrayList<RelativePoint>();
 	  linesRedo = new ArrayList<Line>();
-	  strokeWeight(2);  // Increases the weight of the line
   	  ellipsesLeapMotion = new ArrayList<RelativePoint>();
 
 	  leapController = new Controller();
-	  
+	  flavors = new ArrayList<Flavor>();
+	  flavors.add(new Flavor("chocolate"));
+	  flavors.add(new Flavor("cream"));
+	  flavors.add(new Flavor("vanilla"));
+	  initializeLeapMotionListener();
+//	  leapMotionMode = true;
+
 	}
 	
 	
 	public void draw() {
 	  drawBorder();
 	  stroke(0);
-	  
+
 	  if (leapMotionMode) { 
-		  drawWithLeapMotion();
-	  
+		  drawWithLeapMotion();	  
 	  } else {
-		  if (mousePressed == true) {
+		  drawWithMouse();
+	  }
+	}
+
+	
+	private void drawWithMouse() {
+		if (mousePressed == true) {
 		    if (firstClick) {
 		      lastX = mouseX;  
 		      lastY = mouseY;
@@ -75,16 +91,15 @@ public class DrawingCanvas extends PApplet{
 			  lastX = mouseX;
 			  lastY = mouseY;
 		  }
-		    fill(0,0,0);  // Fills the ellipse in black color
+		    fill(0);  // Fills the ellipse in black color
 		    
 		    addEllipseToArray(mouseX, mouseY);
 
 		    ellipse(mouseX, mouseY, 5, 5);
 		    firstClick = false;
 		  }
-	  }
 	}
-
+	
 	
 	private void drawWithLeapMotion() {
 		  Frame frame = leapController.frame();
@@ -105,7 +120,7 @@ public class DrawingCanvas extends PApplet{
 			    InteractionBox iBox = frame.interactionBox();
 			    Vector tip = iBox.normalizePoint(pointer.tipPosition());
 			    fingerPaint(tip, frontColor);
-			    waits(5000000);
+			    waits(8000000);
 			  }
 //            }
 //          }
@@ -134,24 +149,59 @@ public class DrawingCanvas extends PApplet{
 	}
 
 	private void fingerPaint(Vector tip, int paintColor) {
-		int maxBrushSize = 140;
-	    fill(paintColor);
+		final int MAXBRUSHSIZE = 140;
 	    float x = tip.getX() * width;
 	    float y = height - tip.getY() * height;
-	    float brushSize = maxBrushSize - maxBrushSize * tip.getZ();
+	    float brushSize = MAXBRUSHSIZE - MAXBRUSHSIZE * tip.getZ();
+	    boolean drawing = false;
+    	int numberFlavor = listener.getNumberFlavor();
+
 	    System.out.println(brushSize);
-	    if (brushSize == maxBrushSize) {
-	    	RelativePoint newEllipse = new RelativePoint(x, y, 0, 5, Flavour.CHOCOLATE);
-	    	ellipsesLeapMotion.add(newEllipse);
-	    	ellipse(x, y, 5, 5); //brushSize, brushSize);   
+	    if (brushSize == MAXBRUSHSIZE) {
+	        controller.removeListener(listener);
+	    	RelativePoint newPoint = new RelativePoint(x, y, 0, 5, Flavour.values()[numberFlavor]);
+	    	ellipsesLeapMotion.add(newPoint);
+//	    	ellipse(x, y, 5, 5); //brushSize, brushSize);	// brushShize to increment the size of the ellipse while going closer to the screen
+	    	drawFlavourPoint(x, y, 5, Flavour.values()[numberFlavor]);
+	    	drawing = true;
 	    } else {
+	        controller.addListener(listener);
 	    	background(255);
 	    	drawBorder();
-	    	ellipse(x, y, 10, 10);
+	    	drawFlavourPoint(x, y, 10, Flavour.values()[numberFlavor]);
 	    	repaintCanvas(ellipsesLeapMotion, new ArrayList<Line>(), false);
 	    }
+	    
+	    addLastPointIfNotDrawing(drawing);
 	}
 	
+	/** Initialize the Leap Motion Listener and its Controller when it is called **/
+	private void initializeLeapMotionListener() {
+		// Create a sample listener and controller
+		listener = new LeapMotionListener(flavors);
+		controller = new Controller();
+		
+        // Have the listener receive events from the controller
+        controller.addListener(listener);
+	}
+
+	/** It adds a Flow 0 point to the array when we are not drawing **/
+	private void addLastPointIfNotDrawing(boolean drawing) {
+		if (!drawing) { 
+	    	if (!ellipsesLeapMotion.isEmpty()) {
+	    		RelativePoint lastPoint = ellipsesLeapMotion.get(ellipsesLeapMotion.size()-1);
+		    	if (lastPoint.getFlow() > 0) {
+			    	RelativePoint newPoint = new RelativePoint(lastPoint.getX(), lastPoint.getY(), 0, 0, Flavour.CHOCOLATE);
+			    	ellipsesLeapMotion.add(newPoint);
+		    	}
+	    	}
+    	}
+	}
+	
+	/** Method to wait and control better the leap drawing 
+	 * @args waitTime
+	 * 
+	 **/
 	private void waits(long waitTime) {
 		long i = 0;
 		while (i <= waitTime) {
@@ -228,30 +278,68 @@ public class DrawingCanvas extends PApplet{
 		}
 		while (i < ellipses.size()) {
 			RelativePoint lastE = ellipses.get(i);
-
-			Line lastL = null;
-			if (i < lines.size()) {
-				lastL = lines.get(i);
+			if (lastE.getFlow() > 0) {
+				
+				Line lastL = null;
+				if (i < lines.size()) {
+					lastL = lines.get(i);
+				}
+				
+				drawFlavourPoint((float)lastE.getX(), (float)lastE.getY(), 5, lastE.getFlavour());
+//				ellipse((float)lastE.getX(), (float)lastE.getY(), 5, 5);
+				if (lastL != null) {
+					line((float)lastL.getX(), (float)lastL.getY(), (float)lastL.getxE(), (float)lastL.getyE());
+				}
+	
+				lastX = lastE.getX();
+				lastY = lastE.getY();
+				
 			}
-			
-			ellipse((float)lastE.getX(), (float)lastE.getY(), 5, 5);
-			if (lastL != null) {
-				line((float)lastL.getX(), (float)lastL.getY(), (float)lastL.getxE(), (float)lastL.getyE());
-			}
-
-			lastX = lastE.getX();
-			lastY = lastE.getY();
-			
 			i++;
+
 		}
 	}
 	
 	private void drawBorder() {
+	  strokeWeight(2);  // Increases the weight of the line
 	  line(0, 0, width, 0);
 	  line(0, 0, 0, height-1);
 	  line(0, height-1, width-1, height-1);
 	  line(width-1, 0, width-1, height-1);
 	}
+	
+	/**
+	 * 
+	 * @param x
+	 * @param z
+	 * @param radius
+	 * @param flavour
+	 */
+	private void drawFlavourPoint(float x, float y, float radius,
+			Flavour flavour) {
+		switch (flavour) {
+		case CHOCOLATE:
+			stroke(153, 76, 0);
+			fill(153, 76, 0);
+			break;
+		case VANILLE:
+			stroke(255, 255, 0);
+			fill(255, 255, 0);
+			break;
+		case STRAWBERRY:
+			stroke(255, 0, 0);
+			fill(255, 0, 0);
+			break;
+		default:
+			break;
+		}
+
+		strokeWeight(1); // define line thickness
+
+		float diameter = 2 * radius;
+		ellipse(x, y, diameter, diameter);
+	}
+
 	
 	public ArrayList<RelativePoint> getPoints() {
 		

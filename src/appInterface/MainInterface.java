@@ -309,6 +309,7 @@ public class MainInterface extends javax.swing.JFrame {
 		printButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				// TODO Send coordinates to print the sketch
+//				((DrawingCanvas) sketchDrawing).pauseLeapMotionMode(true);
 				setSimulationPanel(((DrawingCanvas) sketchDrawing).getPoints());
 			}
 		});

@@ -113,13 +113,10 @@ public class LeapMotionListener extends Listener{
 	                               + ", angle: " + Math.toDegrees(sweptAngle)
 	                               + ", " + clockwiseness);
 	                    
-	                    try {
-	                    	System.out.println("waiting");
-	            			Thread.sleep(1000);
-	            			System.out.println("waited");
-	            		} catch (InterruptedException e) {
-	            			e.printStackTrace();
-	            		}
+	                    System.out.println("waiting");
+                    	waits(800000000);
+                    	System.out.println("waited");
+	                    
 	                    
 	                    break;
 	//                case TYPE_SWIPE:
@@ -158,6 +155,17 @@ public class LeapMotionListener extends Listener{
          }
        }
     }
+    
+    /** Method to wait and control better the leap drawing 
+	 * @args waitTime
+	 * 
+	 **/
+	private void waits(long waitTime) {
+		long i = 0;
+		while (i <= waitTime) {
+			i++;
+		}
+	}
     
     public int getNumberFlavor() {
     	return this.numberFlavor;
