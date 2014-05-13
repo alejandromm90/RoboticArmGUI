@@ -7,6 +7,8 @@ package processingApps;
 
 import java.util.ArrayList;
 
+import constants.Flavour;
+
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -68,7 +70,7 @@ public class ScanSketch extends PApplet {
 			    for (PVector point : contour.getPolygonApproximation().getPoints()) {
 			      fill(0,0,0);
 			      if(firstPaint) {
-			    	  ellipses.add(new RelativePoint(point.x, point.y, 0));
+			    	  ellipses.add(new RelativePoint(point.x, point.y, 0, 5, Flavour.CHOCOLATE));
 			    	  // We only get ellipses by pairs, to save the lines
 			    	  if (contourCounter % 2 != 0) {
 			    		  RelativePoint p1 = ellipses.get(contourCounter-1);

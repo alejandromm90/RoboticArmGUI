@@ -18,6 +18,7 @@ import com.leapmotion.leap.Pointable;
 import com.leapmotion.leap.Vector;
 
 import constants.Constants;
+import constants.Flavour;
 
 public class DrawingCanvas extends PApplet{
 	private double lastX, lastY;
@@ -50,7 +51,6 @@ public class DrawingCanvas extends PApplet{
 	public void draw() {
 	  drawBorder();
 	  stroke(0);
-	  drawWithLeapMotion();
 	  
 	  if (leapMotionMode) { 
 		  drawWithLeapMotion();
@@ -129,7 +129,7 @@ public class DrawingCanvas extends PApplet{
 //	    } else {
 //	    	lastEllipse.add(new Point(mouseX, mouseY, 0));
 //	    }
-		lastEllipse.add(new RelativePoint(mX, mY, 0));
+		lastEllipse.add(new RelativePoint(mX, mY, 0, 5, Flavour.CHOCOLATE));
 
 	}
 
@@ -141,7 +141,7 @@ public class DrawingCanvas extends PApplet{
 	    float brushSize = maxBrushSize - maxBrushSize * tip.getZ();
 	    System.out.println(brushSize);
 	    if (brushSize == maxBrushSize) {
-	    	RelativePoint newEllipse = new RelativePoint(x, y, 0);
+	    	RelativePoint newEllipse = new RelativePoint(x, y, 0, 5, Flavour.CHOCOLATE);
 	    	ellipsesLeapMotion.add(newEllipse);
 	    	ellipse(x, y, 5, 5); //brushSize, brushSize);   
 	    } else {

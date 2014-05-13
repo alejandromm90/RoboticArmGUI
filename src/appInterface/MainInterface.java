@@ -5,7 +5,8 @@ package appInterface;
  * 
  * */
 
-import geometric.Move;
+import math.Calculate;
+import math.Move;
 import geometric.RelativePoint;
 
 import java.awt.BorderLayout;
@@ -186,7 +187,7 @@ public class MainInterface extends javax.swing.JFrame {
 //		
 		JPanel printPanel = new JPanel();
 		System.out.println(points);
-		armSimulationSketch = new Simulation(Move.smoothMovement(Move.transformRelativePoint(Move.transformCoordinates(points))), Move.transformCoordinates(points));
+		armSimulationSketch = new Simulation(Calculate.transformCoordinates(points));
 //		((ArmSimulationSide) armSimulationSideSketch).setPoints(points);
 		printPanel.setBounds(20, 20, 600, 600);
 		printPanel.setVisible(true);

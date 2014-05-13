@@ -41,7 +41,7 @@ public class Simulation extends PApplet {
 
 		this.points = Move.smoothMovement(Calculate
 				.transformRelativePoint(points));
-		pointsDraw = new ArrayList<>();
+		pointsDraw = new ArrayList<RelativePoint>();
 	}
 
 	/**

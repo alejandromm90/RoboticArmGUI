@@ -133,7 +133,7 @@ public abstract class Calculate {
 	 */
 	public static ArrayList<RelativePoint> pointsOfCercle(double x, double y,
 			double z, double radius, int flow, Flavour flavour) {
-		ArrayList<RelativePoint> points = new ArrayList<>();
+		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
 		for (int degree = 0; degree < 360; degree++) {
 			points.add(new RelativePoint(x + radius
