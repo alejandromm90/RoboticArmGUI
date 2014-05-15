@@ -161,6 +161,11 @@ public class Simulation extends PApplet {
 	 * @param kappa
 	 */
 	private void drawArmSide(float theta, float kappa) {
+		final int INITIAL_POS_Z = 300;
+		final int INITIAL_POS_X = 350;
+		final double NEW_BASE_DRAWING_X = Constants.BASE_X - INITIAL_POS_X;
+		final double NEW_BASE_DRAWING_Z = Constants.BASE_Z - INITIAL_POS_Z;
+		
 		float x1 = (float) Constants.BASE_X
 				+ (float) Constants.ARM_LENGTH_SHOULDER * cos(theta);
 		float z1 = (float) Constants.BASE_Z
@@ -169,13 +174,20 @@ public class Simulation extends PApplet {
 		float x2 = x1 + (float) Constants.ARM_LENGTH_ELBOW * cos(kappa);
 		float z2 = z1 + (float) Constants.ARM_LENGTH_ELBOW * sin(kappa);
 
-		drawLine((float) Constants.BASE_X - 100, (float) Constants.BASE_Z,
-				(float) Constants.BASE_X, (float) Constants.BASE_Z);
+		z1 -= INITIAL_POS_Z;
+		z2 -= INITIAL_POS_Z;
+		x1 -= INITIAL_POS_X;
+		x2 -= INITIAL_POS_X;
+
+//		drawLine((float) Constants.BASE_X - 100, (float) Constants.BASE_Z,
+//		(float) Constants.BASE_X, (float) Constants.BASE_Z);
+		drawLine((float) NEW_BASE_DRAWING_X - 100, (float) NEW_BASE_DRAWING_Z,
+				(float) NEW_BASE_DRAWING_X, (float) NEW_BASE_DRAWING_Z);
 		drawLine(x2, z2, x2 + 50, z2);
 
-		drawLine((float) Constants.BASE_X, (float) Constants.BASE_Z, x1, z1);
+		drawLine((float) NEW_BASE_DRAWING_X, (float) NEW_BASE_DRAWING_Z, x1, z1);
 		drawLine(x1, z1, x2, z2);
-		drawPoint((float) Constants.BASE_X, (float) Constants.BASE_Z, 5);
+		drawPoint((float) NEW_BASE_DRAWING_X, (float) NEW_BASE_DRAWING_Z, 5);
 		drawPoint(x1, z1, 5);
 		drawPoint(x2, z2, 5);
 	}

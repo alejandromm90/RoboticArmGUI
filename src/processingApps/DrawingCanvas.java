@@ -158,21 +158,23 @@ public class DrawingCanvas extends PApplet{
 
 	    System.out.println(brushSize);
 	    if (brushSize == MAXBRUSHSIZE) {
-	        controller.removeListener(listener);
+	        controller.removeListener(listener);	// Remove the Leap Motion listener to avoid gestures mistakes
 	    	RelativePoint newPoint = new RelativePoint(x, y, 0, 5, Flavour.values()[numberFlavor]);
 	    	ellipsesLeapMotion.add(newPoint);
 //	    	ellipse(x, y, 5, 5); //brushSize, brushSize);	// brushShize to increment the size of the ellipse while going closer to the screen
 	    	drawFlavourPoint(x, y, 5, Flavour.values()[numberFlavor]);
 	    	drawing = true;
 	    } else {
-	        controller.addListener(listener);
+	        controller.addListener(listener);	// Add the Leap Motion listener to enable gestures recognition
 	    	background(255);
 	    	drawBorder();
 	    	drawFlavourPoint(x, y, 10, Flavour.values()[numberFlavor]);
 	    	repaintCanvas(ellipsesLeapMotion, new ArrayList<Line>(), false);
 	    }
 	    
-	    addLastPointIfNotDrawing(drawing);
+	    if(!drawing) {
+	    	addLastPoint();
+	    }
 	}
 	
 	/** Initialize the Leap Motion Listener and its Controller when it is called **/
@@ -185,15 +187,13 @@ public class DrawingCanvas extends PApplet{
         controller.addListener(listener);
 	}
 
-	/** It adds a Flow 0 point to the array when we are not drawing **/
-	private void addLastPointIfNotDrawing(boolean drawing) {
-		if (!drawing) { 
-	    	if (!ellipsesLeapMotion.isEmpty()) {
-	    		RelativePoint lastPoint = ellipsesLeapMotion.get(ellipsesLeapMotion.size()-1);
-		    	if (lastPoint.getFlow() > 0) {
-			    	RelativePoint newPoint = new RelativePoint(lastPoint.getX(), lastPoint.getY(), 0, 0, Flavour.CHOCOLATE);
-			    	ellipsesLeapMotion.add(newPoint);
-		    	}
+	/** It adds a Flow 0 point to the array **/
+	private void addLastPoint() {
+    	if (!ellipsesLeapMotion.isEmpty()) {
+    		RelativePoint lastPoint = ellipsesLeapMotion.get(ellipsesLeapMotion.size()-1);
+	    	if (lastPoint.getFlow() > 0) {
+		    	RelativePoint newPoint = new RelativePoint(lastPoint.getX(), lastPoint.getY(), 0, 0, Flavour.CHOCOLATE);
+		    	ellipsesLeapMotion.add(newPoint);
 	    	}
     	}
 	}

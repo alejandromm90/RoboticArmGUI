@@ -23,7 +23,7 @@ public abstract class Constants {
 	public static final int DRAWING_APPLET_RELATIVE_X = -270;
 	public static final int DRAWING_APPLET_RELATIVE_Y = 100;
 
-	public static final double BASE_X = 350;
+	public static final double BASE_X = 500;
 	public static final double BASE_Y = 200;
 	public static final double BASE_Z = 350;
 
