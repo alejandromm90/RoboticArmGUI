@@ -1,9 +1,9 @@
-package processingApps;
+package gui;
 
 import java.util.ArrayList;
 
 import processing.core.PApplet;
-//import processing.serial.Serial; TODO
+import processing.serial.Serial;
 
 import constants.Constants;
 import constants.Flavour;
@@ -23,8 +23,7 @@ public class Simulation extends PApplet {
 	private ArrayList<RelativePoint> pointsDraw;
 	private RelativePoint point;
 	private Angles angles;
-
-	// private Serial port; TODO
+	private Serial port;
 
 	/**
 	 * 
@@ -51,7 +50,7 @@ public class Simulation extends PApplet {
 		size(Constants.SIZE_WIDTH, Constants.SIZE_HEIGHT);
 		background(255);
 
-		// port = new Serial(this, Serial.list()[0], 19200); TODO
+		port = new Serial(this, Serial.list()[0], 19200); // TODO
 
 		point = null;
 		angles = null;
@@ -86,11 +85,11 @@ public class Simulation extends PApplet {
 			// point.getFlow()
 		}
 
-		sendToArduino(angles);
+		sendToArduino(angles, point.getFlow()); // TODO
 
-		drawBorder();
+		drawBorders();
 		drawParameters();
-		drawHistoryPoints();
+		// drawHistoryPoints(); // TODO
 
 		drawArmTop((float) angles.getThi(), (float) angles.getTheta(),
 				(float) angles.getKappa());
@@ -102,12 +101,14 @@ public class Simulation extends PApplet {
 	/**
 	 * 
 	 */
-	private void drawBorder() {
+	private void drawBorders() {
 		noFill();
 		rect((float) Constants.BASE_X + Constants.DRAWING_APPLET_RELATIVE_X,
 				(float) (Constants.SIZE_HEIGHT - (Constants.BASE_Y + Constants.DRAWING_APPLET_RELATIVE_Y)),
 				Constants.DRAWING_APPLET_SIZE_WIDTH,
 				(float) -Constants.DRAWING_APPLET_SIZE_HEIGHT);
+		rect((float) Constants.BASE_X + Constants.DRAWING_APPLET_RELATIVE_Y,
+				(float) (Constants.SIZE_HEIGHT - 10), 300, -300);
 	}
 
 	/**
@@ -124,9 +125,15 @@ public class Simulation extends PApplet {
 	 */
 	private void drawHistoryPoints() {
 		for (int i = 0; i < pointsDraw.size(); i++) {
-			drawFlavourPoint(
-					(float) (pointsDraw.get(i).getX() + Constants.BASE_X),
-					(float) (pointsDraw.get(i).getY() + Constants.BASE_Y),
+			drawFlavourPoint((float) (Constants.BASE_X + pointsDraw.get(i)
+					.getX()), (float) (Constants.BASE_Y + pointsDraw.get(i)
+					.getY()), (float) pointsDraw.get(i).getFlow(), pointsDraw
+					.get(i).getFlavour());
+			drawFlavourPoint((float) (Constants.BASE_X + Math.sqrt(pointsDraw
+					.get(i).getX()
+					* pointsDraw.get(i).getX()
+					+ pointsDraw.get(i).getY() * pointsDraw.get(i).getY())),
+					(float) (Constants.BASE_Z + pointsDraw.get(i).getZ()),
 					(float) pointsDraw.get(i).getFlow(), pointsDraw.get(i)
 							.getFlavour());
 		}
@@ -142,17 +149,29 @@ public class Simulation extends PApplet {
 		float length1 = (float) Constants.ARM_LENGTH_SHOULDER * cos(theta);
 		float length2 = (float) Constants.ARM_LENGTH_ELBOW * cos(kappa);
 
-		float x1 = (float) Constants.BASE_X + length1 * cos(thi);
-		float y1 = (float) Constants.BASE_Y + length1 * sin(thi);
+		float x1 = (float) (Constants.BASE_X + Constants.BASE_BOTTOM_LENGTH
+				* cos(thi));
+		float y1 = (float) (Constants.BASE_Y + Constants.BASE_BOTTOM_LENGTH
+				* sin(thi));
 
-		float x2 = x1 + length2 * cos(thi);
-		float y2 = y1 + length2 * sin(thi);
+		float x2 = (float) x1 + length1 * cos(thi);
+		float y2 = (float) y1 + length1 * sin(thi);
+
+		float x3 = x2 + length2 * cos(thi);
+		float y3 = y2 + length2 * sin(thi);
+
+		float x4 = x3 + (float) Constants.BASE_TOP_LENGTH * cos(thi);
+		float y4 = y3 + (float) Constants.BASE_TOP_LENGTH * sin(thi);
 
 		drawLine((float) Constants.BASE_X, (float) Constants.BASE_Y, x1, y1);
 		drawLine(x1, y1, x2, y2);
-		drawPoint((float) Constants.BASE_X, (float) Constants.BASE_Y, 5);
+		drawLine(x2, y2, x3, y3);
+		drawLine(x3, y3, x4, y4);
+		drawPoint((float) Constants.BASE_X, (float) Constants.BASE_Y, 8);
 		drawPoint(x1, y1, 5);
-		drawPoint(x2, y2, 5);
+		drawPoint(x2, y2, 8);
+		drawPoint(x3, y3, 5);
+		drawPoint(x4, y4, 8);
 	}
 
 	/**
@@ -161,35 +180,33 @@ public class Simulation extends PApplet {
 	 * @param kappa
 	 */
 	private void drawArmSide(float theta, float kappa) {
-		final int INITIAL_POS_Z = 300;
-		final int INITIAL_POS_X = 350;
-		final double NEW_BASE_DRAWING_X = Constants.BASE_X - INITIAL_POS_X;
-		final double NEW_BASE_DRAWING_Z = Constants.BASE_Z - INITIAL_POS_Z;
-		
 		float x1 = (float) Constants.BASE_X
-				+ (float) Constants.ARM_LENGTH_SHOULDER * cos(theta);
-		float z1 = (float) Constants.BASE_Z
-				+ (float) Constants.ARM_LENGTH_SHOULDER * sin(theta);
+				+ (float) Constants.BASE_BOTTOM_LENGTH;
+		float z1 = (float) Constants.BASE_Z;
 
-		float x2 = x1 + (float) Constants.ARM_LENGTH_ELBOW * cos(kappa);
-		float z2 = z1 + (float) Constants.ARM_LENGTH_ELBOW * sin(kappa);
+		float x2 = x1 + (float) Constants.ARM_LENGTH_SHOULDER * cos(theta);
+		float z2 = z1 + (float) Constants.ARM_LENGTH_SHOULDER * sin(theta);
 
-		z1 -= INITIAL_POS_Z;
-		z2 -= INITIAL_POS_Z;
-		x1 -= INITIAL_POS_X;
-		x2 -= INITIAL_POS_X;
+		float x3 = x2 + (float) Constants.ARM_LENGTH_ELBOW * cos(kappa);
+		float z3 = z2 + (float) Constants.ARM_LENGTH_ELBOW * sin(kappa);
 
-//		drawLine((float) Constants.BASE_X - 100, (float) Constants.BASE_Z,
-//		(float) Constants.BASE_X, (float) Constants.BASE_Z);
-		drawLine((float) NEW_BASE_DRAWING_X - 100, (float) NEW_BASE_DRAWING_Z,
-				(float) NEW_BASE_DRAWING_X, (float) NEW_BASE_DRAWING_Z);
-		drawLine(x2, z2, x2 + 50, z2);
+		float x4 = x3 + (float) Constants.BASE_TOP_LENGTH;
+		float z4 = z3;
 
-		drawLine((float) NEW_BASE_DRAWING_X, (float) NEW_BASE_DRAWING_Z, x1, z1);
+		// Bottom and end paddle
+		drawLine((float) Constants.BASE_X - 80, (float) Constants.BASE_Z,
+				(float) Constants.BASE_X, (float) Constants.BASE_Z);
+		drawLine(x4, z4, x4 + 15, z4);
+
+		drawLine((float) Constants.BASE_X, (float) Constants.BASE_Z, x1, z1);
 		drawLine(x1, z1, x2, z2);
-		drawPoint((float) NEW_BASE_DRAWING_X, (float) NEW_BASE_DRAWING_Z, 5);
+		drawLine(x2, z2, x3, z3);
+		drawLine(x3, z3, x4, z4);
+		drawPoint((float) Constants.BASE_X, (float) Constants.BASE_Z, 8);
 		drawPoint(x1, z1, 5);
-		drawPoint(x2, z2, 5);
+		drawPoint(x2, z2, 8);
+		drawPoint(x3, z3, 5);
+		drawPoint(x4, z4, 8);
 	}
 
 	/**
@@ -256,8 +273,9 @@ public class Simulation extends PApplet {
 	/**
 	 * 
 	 * @param angles
+	 * @param flow
 	 */
-	void sendToArduino(Angles angles) {
+	void sendToArduino(Angles angles, int flow) {
 		int thi = (int) Math.toDegrees(angles.getThi())
 				+ Constants.CORRECT_ANGLE_THI;
 		int theta = (int) Math.toDegrees(angles.getTheta())
@@ -265,8 +283,11 @@ public class Simulation extends PApplet {
 		int kappa = (int) -Math.toDegrees(angles.getKappa())
 				+ Constants.CORRECT_ANGLE_KAPPA;
 
-		// port.write(thi + "a"); TODO
-		// port.write(theta + "b");
-		// port.write(kappa + "c");
+		flow = (100 * flow) + 12000;
+
+		port.write(thi + "a");
+		port.write(theta + "b");
+		port.write(kappa + "c");
+		port.write(flow + "d");
 	}
 }

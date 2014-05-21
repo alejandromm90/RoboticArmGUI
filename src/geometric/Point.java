@@ -22,12 +22,12 @@ public class Point extends RelativePoint {
 	 * @param z
 	 *            - coordinate z
 	 * @param flow
-	 *            - flow
+	 *            - flow, between -120 and 120
 	 * @param flavour
 	 *            - flavour
 	 */
 	public Point(double x, double y, double z, int flow, Flavour flavour) {
-		super(x - Constants.BASE_X, y - Constants.BASE_Y, z - Constants.BASE_Z,
-				flow, flavour);
+		super(x - Constants.DRAWING_APPLET_RELATIVE_X,
+				Constants.DRAWING_APPLET_SIZE_HEIGHT - y, z, flow, flavour);
 	}
 }

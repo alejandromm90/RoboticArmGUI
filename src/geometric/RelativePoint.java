@@ -26,7 +26,7 @@ public class RelativePoint {
 	 * @param z
 	 *            - coordinate z
 	 * @param flow
-	 *            - flow
+	 *            - flow, between -120 and 120
 	 * @param flavour
 	 *            - flavour
 	 */

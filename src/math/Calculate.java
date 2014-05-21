@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import constants.Constants;
 import constants.Flavour;
 import geometric.Angles;
+import geometric.Point;
 import geometric.RelativePoint;
 
 /**
@@ -25,8 +26,8 @@ public abstract class Calculate {
 		double z = point.getZ();
 
 		double thi = Math.atan2(y, x);
-		double length = Math.sqrt(x * x + y * y);// TODO -
-													// Constants.BASE_TOP_LENGTH;
+		double length = Math.sqrt(x * x + y * y) - Constants.BASE_BOTTOM_LENGTH
+				- Constants.BASE_TOP_LENGTH;
 
 		double kappa = 2 * Math
 				.atan(-Math
@@ -136,10 +137,14 @@ public abstract class Calculate {
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
 		for (int degree = 0; degree < 360; degree++) {
-			points.add(new RelativePoint(x + radius
-					* Math.cos(Math.toRadians(degree)), y + radius
-					* Math.sin(Math.toRadians(degree)), z, flow, flavour));
+			points.add(new Point(x + radius * Math.cos(Math.toRadians(degree)),
+					y + radius * Math.sin(Math.toRadians(degree)), z, flow,
+					flavour));
 		}
+
+		RelativePoint point = points.get(points.size() - 1);
+		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),
+				0, Flavour.CHOCOLATE));
 
 		return points;
 	}
