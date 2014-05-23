@@ -1,11 +1,12 @@
 package math;
 
-import java.util.ArrayList;
-
-import constants.Constants;
 import geometric.Angles;
 import geometric.Point;
 import geometric.RelativePoint;
+
+import java.util.ArrayList;
+
+import constants.Constants;
 
 /**
  * 
@@ -135,13 +136,91 @@ public abstract class Calculate {
 	 */
 	public static ArrayList<RelativePoint> pointsOfCercle(double x, double y,
 			double z, double radius, long flow1, long flow2, long flow3) {
+		return pointsOfArc(x, y, z, radius, 0, 360, flow1, flow2, flow3);
+	}
+
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param radius
+	 * @param angle1
+	 * @param angle2
+	 * @param flow1
+	 * @param flow2
+	 * @param flow3
+	 * @return
+	 */
+	public static ArrayList<RelativePoint> pointsOfArc(double x, double y,
+			double z, double radius, int angle1, int angle2, long flow1,
+			long flow2, long flow3) {
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
-		for (int degree = 0; degree < 360; degree++) {
+		for (int degree = angle1; degree < angle2;) {
 			points.add(new Point(x + radius * Math.cos(Math.toRadians(degree)),
 					y + radius * Math.sin(Math.toRadians(degree)), z, flow1,
 					flow2, flow3));
+			degree += 4;
 		}
+
+		RelativePoint point = points.get(points.size() - 1);
+		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),
+				0, 0, 0));
+
+		return points;
+	}
+
+	/**
+	 * Give leftdown corner coordinates, clockwise direction
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param width
+	 * @param height
+	 * @param flow1
+	 * @param flow2
+	 * @param flow3
+	 * @return
+	 */
+	public static ArrayList<RelativePoint> pointsOfRectangle(double x,
+			double y, double z, int width, int height, long flow1, long flow2,
+			long flow3) {
+		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
+
+		points.add(new Point(x, y, z, flow1, flow2, flow3));
+		points.add(new Point(x, y + height, z, flow1, flow2, flow3));
+		points.add(new Point(x + width, y + height, z, flow1, flow2, flow3));
+		points.add(new Point(x + width, y, z, flow1, flow2, flow3));
+		points.add(new Point(x, y, z, flow1, flow2, flow3));
+
+		RelativePoint point = points.get(points.size() - 1);
+		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),
+				0, 0, 0));
+
+		return points;
+	}
+
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param x_length
+	 * @param y_length
+	 * @param flow1
+	 * @param flow2
+	 * @param flow3
+	 * @return
+	 */
+	public static ArrayList<RelativePoint> pointsOfLine(double x, double y,
+			double z, int x_length, int y_length, long flow1, long flow2,
+			long flow3) {
+		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
+
+		points.add(new Point(x, y, z, flow1, flow2, flow3));
+		points.add(new Point(x + x_length, y + y_length, z, flow1, flow2, flow3));
 
 		RelativePoint point = points.get(points.size() - 1);
 		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),

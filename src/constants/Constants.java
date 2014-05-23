@@ -10,23 +10,26 @@ public abstract class Constants {
 	/**
 	 * Speed relevant
 	 */
-	public static final int SIMULATION_SPEED = 0;
+	public static final int SIMULATION_SPEED = 5;
 	public static final double STEP_RESOLUTION = 2.0;
 	
 	/**
 	 * Flow relevant
 	 */
-	public static final int FLOW_WAIT = 500;	
-	public static final long FLOW_WAIT_SPEED = 100;	
 	public static final int NUMBER_OF_FLAVOURS = 3;
 	public static final int FLOW_SEPARATION_SIZE = 5;
+	public static final int MAX_ALLOWED_FLOW_BY_USER = 40;
+	
+	public static final long[] FLOW_WAIT_SPEED_START = {80, 80}; // TODO have to test the chocolate	
+	public static final long[] FLOW_WAIT_SPEED_END = {20, 51};	
+	public static final int FLOW_WAIT = 1000;
 	public static final int DEFAULT_FLOW = 15;
 	
 	/**
 	 * Flavour relevant
 	 */
 	public static final int DEFAULT_FLAVOUR = 1; // Chocolate by default
-
+	
 	
 	/****************************************************************************************************
 	 *																									*
@@ -90,7 +93,7 @@ public abstract class Constants {
 	/**
 	 * Only for drawing in the applet
 	 */
-	public static final double BASE_X = 350;
-	public static final double BASE_Y = 300;
+	public static final double BASE_X = 280;
+	public static final double BASE_Y = 230;
 	public static final double BASE_Z = 109;
 }

@@ -1,15 +1,15 @@
 package processingApps;
 
-import java.util.ArrayList;
-
-import processing.core.PApplet;
-import processing.serial.Serial;
-
-import constants.Constants;
 import geometric.Angles;
 import geometric.RelativePoint;
+
+import java.util.ArrayList;
+
 import math.Calculate;
 import math.Move;
+import processing.core.PApplet;
+import processing.serial.Serial;
+import constants.Constants;
 
 /**
  * 
@@ -24,6 +24,7 @@ public class Simulation extends PApplet {
 	private Angles angles;
 	private Serial port;
 	private long[] flowBefore;
+	public static boolean finishPrint = false;
 
 	/**
 	 * 
@@ -50,7 +51,7 @@ public class Simulation extends PApplet {
 		size(Constants.SIZE_WIDTH, Constants.SIZE_HEIGHT);
 		background(255);
 
-//		port = new Serial(this, Serial.list()[0], 19200); // TODO
+		port = new Serial(this, Serial.list()[9], 19200); // TODO
 
 		point = null;
 		angles = null;
@@ -62,31 +63,31 @@ public class Simulation extends PApplet {
 	}
 
 	/**
-	 * 
-	 */
-	public void closeApplication() {
-		System.exit(0);
-	}
-
-	/**
 	 *
 	 */
 	public void draw() {
 		background(255);
 
 		if (points.size() > 0) {
+			finishPrint = false;
 			RelativePoint point1 = points.remove(0);
 
 			point = new RelativePoint(point1.getX(), point1.getY(),
 					point1.getZ(), point1.getFlow1(), point1.getFlow2(),
 					point1.getFlow3());
+		} else if (points.size() == 0){
+			finishPrint = true;
 		}
 
 		angles = Calculate.calculateAngles(point);
 
 		controlFlow();
-//		sendToArduino(angles, point.getFlow1(), point.getFlow2(),
-//				point.getFlow3()); // TODO
+		sendToArduino(angles, point.getFlow1(), point.getFlow2(),
+				point.getFlow3()); // TODO
+
+		if ((point.getFlow1() + point.getFlow2() + point.getFlow3()) > 0) {
+			pointsDraw.add(point);
+		}
 
 		drawBorders();
 		drawParameters();
@@ -109,38 +110,30 @@ public class Simulation extends PApplet {
 		flow[1] = point.getFlow2();
 		flow[2] = point.getFlow3();
 
-		int total = 0;
-		for (int i = 0; i < flow.length; i++) {
-			total += flow[i];
-		}
-
-		if (total != 0) {
-			pointsDraw.add(point);
-		}
-
 		boolean wait = false;
 
 		for (int j = 0; j < flow.length; j++) {
 			if ((flowBefore[j] == 0) && (flow[j] != 0)) {
-				flow[j] = Constants.FLOW_WAIT_SPEED;
+				flow[j] = Constants.FLOW_WAIT_SPEED_START[j];
+
 				wait = true;
 			} else if ((flowBefore[j] != 0) && (flow[j] == 0)) {
-				flow[j] = -Constants.FLOW_WAIT_SPEED;
+				flow[j] = -Constants.FLOW_WAIT_SPEED_END[j];
+
 				wait = true;
 			}
 		}
 
 		if (wait) {
 			for (int i = 0; i < flow.length; i++) {
-				if ((flow[i] > 0) && (flow[i] < Constants.FLOW_WAIT_SPEED)) {
+				if ((flow[i] > 0)
+						&& (flow[i] < Constants.MAX_ALLOWED_FLOW_BY_USER)) {
 					flow[i] = 0;
 				}
 			}
 
-			System.out.println("flow1 : " + flow[0] + ", flow2 : " + flow[1]
-					+ ", flow3 : " + flow[2]); // TODO
+			sendFlowToArduino(flow[0], flow[1], flow[2]); // TODO
 
-//			sendFlowToArduino(flow[0], flow[1], flow[2]); // TODO
 			delay(Constants.FLOW_WAIT);
 		}
 
@@ -368,4 +361,5 @@ public class Simulation extends PApplet {
 		// flow3 = (100 * flow2) + 12000; // TODO
 		// port.write(flow3 + "f");
 	}
+
 }

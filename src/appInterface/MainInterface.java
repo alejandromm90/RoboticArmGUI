@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -186,7 +187,7 @@ public class MainInterface extends javax.swing.JFrame {
 	
 	/** Sets the arm simulation JPanel to show how the arm will get the coordinates **/
 	private JFrame setSimulationPanel(ArrayList<RelativePoint> points) {
-		JFrame simJFrame = new JFrame();
+		final JFrame simJFrame = new JFrame();
 		simJFrame.setTitle("ARM SIMULATION");
 				
         JPanel mainPanel = new JPanel();
@@ -209,7 +210,20 @@ public class MainInterface extends javax.swing.JFrame {
 
 		simJFrame.setContentPane(mainPanel);
 		armSimulationSketch.init(); 
-        
+		
+		simJFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		simJFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				if(Simulation.finishPrint) {
+					armSimulationSketch.destroy();
+					simJFrame.setVisible(false);
+					simJFrame.dispose();
+					
+				}else { 
+					JOptionPane.showMessageDialog(null, "Printing in process");
+				}
+			}
+		});
 		simJFrame.setSize(Constants.SIZE_WIDTH + 80 ,Constants.SIZE_HEIGHT + 80);
 		simJFrame.setEnabled(true);
 		simJFrame.setVisible(true);

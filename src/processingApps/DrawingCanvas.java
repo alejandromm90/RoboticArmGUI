@@ -164,7 +164,7 @@ public class DrawingCanvas extends PApplet{
 //	    } else {
 //	    	lastEllipse.add(new Point(mouseX, mouseY, 0));
 //	    }
-		lastEllipse.add(new RelativePoint(mX, mY, -70, flow1, flow2, flow3));	// Z = -70
+		lastEllipse.add(new RelativePoint(mX, mY, -50, flow1, flow2, flow3));	// Z = -50
 
 	}
 
