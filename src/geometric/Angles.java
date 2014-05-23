@@ -27,8 +27,8 @@ public class Angles {
 	 */
 	@Override
 	public String toString() {
-		return "thi : " + (int) Math.toDegrees(thi) + " theta : "
-				+ (int) Math.toDegrees(theta) + " kappa : "
+		return "thi : " + (int) Math.toDegrees(thi) + ", theta : "
+				+ (int) Math.toDegrees(theta) + ", kappa : "
 				+ (int) Math.toDegrees(kappa) + "\n";
 	}
 

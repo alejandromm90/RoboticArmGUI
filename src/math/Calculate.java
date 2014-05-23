@@ -3,7 +3,6 @@ package math;
 import java.util.ArrayList;
 
 import constants.Constants;
-import constants.Flavour;
 import geometric.Angles;
 import geometric.Point;
 import geometric.RelativePoint;
@@ -77,11 +76,13 @@ public abstract class Calculate {
 		for (int i = 0; i < points.size(); i++) {
 			RelativePoint point = points.get(i);
 
-			points2.add(i, new RelativePoint(point.getX()
-					+ Constants.DRAWING_APPLET_RELATIVE_X,
-					Constants.DRAWING_APPLET_SIZE_HEIGHT - point.getY()
-							+ Constants.DRAWING_APPLET_RELATIVE_Y,
-					point.getZ(), point.getFlow(), point.getFlavour()));
+			points2.add(i,
+					new RelativePoint(point.getX()
+							+ Constants.DRAWING_APPLET_RELATIVE_X,
+							Constants.DRAWING_APPLET_SIZE_HEIGHT - point.getY()
+									+ Constants.DRAWING_APPLET_RELATIVE_Y,
+							point.getZ(), point.getFlow1(), point.getFlow2(),
+							point.getFlow3()));
 		}
 
 		return points2;
@@ -102,21 +103,20 @@ public abstract class Calculate {
 
 			if (i == 0) {
 				pointBefore = new RelativePoint(Constants.START_X,
-						Constants.START_Y, Constants.START_Z, 0,
-						Flavour.CHOCOLATE);
+						Constants.START_Y, Constants.START_Z, 0, 0, 0);
 			} else {
 				pointBefore = new RelativePoint(points.get(i - 1).getX(),
 						points.get(i - 1).getY(), points.get(i - 1).getZ(),
-						points.get(i - 1).getFlow(), points.get(i - 1)
-								.getFlavour());
+						points.get(i - 1).getFlow1(), points.get(i - 1)
+								.getFlow2(), points.get(i - 1).getFlow3());
 			}
 
 			points2.add(
 					i,
 					new RelativePoint(point.getX() - pointBefore.getX(), point
 							.getY() - pointBefore.getY(), point.getZ()
-							- pointBefore.getZ(), point.getFlow(), point
-							.getFlavour()));
+							- pointBefore.getZ(), point.getFlow1(), point
+							.getFlow2(), point.getFlow3()));
 		}
 
 		return points2;
@@ -128,23 +128,24 @@ public abstract class Calculate {
 	 * @param y
 	 * @param z
 	 * @param radius
-	 * @param flow
-	 * @param flavour
+	 * @param flow1
+	 * @param flow2
+	 * @param flow3
 	 * @return
 	 */
 	public static ArrayList<RelativePoint> pointsOfCercle(double x, double y,
-			double z, double radius, int flow, Flavour flavour) {
+			double z, double radius, long flow1, long flow2, long flow3) {
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
 		for (int degree = 0; degree < 360; degree++) {
 			points.add(new Point(x + radius * Math.cos(Math.toRadians(degree)),
-					y + radius * Math.sin(Math.toRadians(degree)), z, flow,
-					flavour));
+					y + radius * Math.sin(Math.toRadians(degree)), z, flow1,
+					flow2, flow3));
 		}
 
 		RelativePoint point = points.get(points.size() - 1);
 		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),
-				0, Flavour.CHOCOLATE));
+				0, 0, 0));
 
 		return points;
 	}

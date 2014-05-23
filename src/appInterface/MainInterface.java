@@ -5,8 +5,6 @@ package appInterface;
  * 
  * */
 
-import math.Calculate;
-import math.Move;
 import geometric.RelativePoint;
 
 import java.awt.BorderLayout;
@@ -16,6 +14,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -24,16 +24,22 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import leapMotion.LeapMotionListener;
+import math.Calculate;
 import processingApps.DrawingCanvas;
 import processingApps.ScanSketch;
 import processingApps.Simulation;
@@ -53,8 +59,10 @@ public class MainInterface extends javax.swing.JFrame {
 	private JPanel bigPanel, mainPanel;
 	private boolean firstTimeManuallyPrinting, firstClickLeapMotionMode, manualPrinting, firstClickStartLeapMotion, firstClickScanMode;
 	private processing.core.PApplet sketchDrawing, scanSketch, armSimulationSketch;
-	private Font buttonsFont= new Font("Arial", Font.PLAIN, 15);
+	private Font buttonsFont = new Font("Arial", Font.PLAIN, 15);
+	private int actualFlow1, actualFlow2, actualFlow3, actualFlow;
 	
+
 	public static void main(String[] args) {			
 		MainInterface inter = new MainInterface();
 		inter.initializeInterface();
@@ -74,6 +82,10 @@ public class MainInterface extends javax.swing.JFrame {
 		firstClickScanMode = false;
 		manualPrinting = true;
 		printingLabel = new JLabel();
+		actualFlow = Constants.DEFAULT_FLOW;
+		actualFlow1 = Constants.DEFAULT_FLOW;	
+		actualFlow2 = 0;
+		actualFlow3 = 0;
 		
 		this.setContentPane(getMainPanel());
 		this.setTitle("PRINTER USER INTERFACE");
@@ -85,8 +97,8 @@ public class MainInterface extends javax.swing.JFrame {
 		});
 		
 		this.setSize(700,600);
-
 		this.setEnabled(true);
+		this.pack();
 		this.setVisible(true);
 
 //		initializeLeapMotionListener();
@@ -98,7 +110,7 @@ public class MainInterface extends javax.swing.JFrame {
 		BorderLayout b = new BorderLayout(0,10);
 		
 		mainPanel.setLayout(b);
-		mainPanel.validate();
+
 		JMenuBar mBar = setMenuBar();
 		mainPanel.add(mBar, BorderLayout.NORTH);
 		
@@ -106,9 +118,8 @@ public class MainInterface extends javax.swing.JFrame {
 //		bigPanel = setManuallyPrintingPanel();
 		bigPanel = setDrawingCanvasPanel();
 //		bigPanel = setScanSketchPanel();
-				
 		mainPanel.add(bigPanel, BorderLayout.CENTER);
-		
+
 		return mainPanel;
 	}
 	
@@ -199,7 +210,7 @@ public class MainInterface extends javax.swing.JFrame {
 		simJFrame.setContentPane(mainPanel);
 		armSimulationSketch.init(); 
         
-		simJFrame.setSize(Constants.SIZE_WIDTH ,Constants.SIZE_HEIGHT);
+		simJFrame.setSize(Constants.SIZE_WIDTH + 80 ,Constants.SIZE_HEIGHT + 80);
 		simJFrame.setEnabled(true);
 		simJFrame.setVisible(true);
 
@@ -266,19 +277,14 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		JPanel drawingPanel = new JPanel();
 		sketchDrawing = new DrawingCanvas();
-		drawingPanel.setBounds(20, 20, 600, 600);
 		drawingPanel.add(sketchDrawing);
-		
 		JPanel buttonsPanel = setButtonsDrawingCanvasPanel();
-		
-		this.setSize(700,600);
-		drawingPanel.setVisible(true);
-	
+
 		mainPanel.add(title);
 		mainPanel.add(drawingPanel);
 		mainPanel.add(buttonsPanel);
-        
 		sketchDrawing.init(); 
+		
         return mainPanel;
 	}
 	
@@ -308,19 +314,8 @@ public class MainInterface extends javax.swing.JFrame {
 		printButton.setFont(buttonsFont);
 		printButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO Send coordinates to print the sketch
 //				((DrawingCanvas) sketchDrawing).pauseLeapMotionMode(true);
 				setSimulationPanel(((DrawingCanvas) sketchDrawing).getPoints());
-			}
-		});
-		
-		JButton saveButton = new JButton("Save");
-		saveButton.setFont(buttonsFont);
-		saveButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				// ((DrawingCanvas) sketchDrawing).saveCanvas();
-				// TODO It should export the drawn points and lines, and also the Array of points to move the arm
-				// Also add confirmation window YES, NO
 			}
 		});
 		
@@ -329,36 +324,109 @@ public class MainInterface extends javax.swing.JFrame {
 		cleanButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				((DrawingCanvas) sketchDrawing).cleanCanvas();
-				// TODO add confirmation window YES, NO
 			}
 		});
 		
-		JButton undoButton = new JButton("UNDO");
-		undoButton.setFont(buttonsFont);
-		undoButton.addActionListener(new ActionListener(){
+		JButton splitButton = new JButton("Split");
+		splitButton.setFont(buttonsFont);
+		splitButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				((DrawingCanvas) sketchDrawing).undoCanvas();
-				// TODO add confirmation window YES, NO
+				((DrawingCanvas) sketchDrawing).splitDraw();
 			}
 		});
 		
-		JButton redoButton = new JButton("REDO");
-		redoButton.setFont(buttonsFont);
-		redoButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				((DrawingCanvas) sketchDrawing).redoCanvas();
-				// TODO add confirmation window YES, NO
-			}
-		});
+		// Create the check box
+		JCheckBox chocolateButton = setFlavourCheckBox(1); 
+        JCheckBox strawberryButton = setFlavourCheckBox(2);
+
+        JPanel checkPanel = new JPanel(new GridLayout(0, 1));
+        JLabel flavoursLabel = new JLabel("Select flavours: ");
+        flavoursLabel.setFont(buttonsFont);
+        checkPanel.add(flavoursLabel);
+        checkPanel.add(chocolateButton);
+        checkPanel.add(strawberryButton);
+		
+		JPanel flowPanel = new JPanel();
+		JLabel flowLabel = new JLabel("Set Flow: ");
+		flowLabel.setFont(buttonsFont);
+
+		SpinnerNumberModel flows = new SpinnerNumberModel(15, 5, 20, 5); // initial, min, max, step 
+		JSpinner spinnerFlow = new JSpinner(flows);
+		spinnerFlow.addChangeListener( new ChangeListener() {
+		      @Override
+		      public void stateChanged( ChangeEvent e ) {
+		        JSpinner spinner = ( JSpinner ) e.getSource();
+		        SpinnerNumberModel spinnerModel = (SpinnerNumberModel) spinner.getModel();
+		        actualFlow = (Integer) spinnerModel.getValue();
+		        if (actualFlow1 > 0) {	// Here we check which flows we have, to set them on the canvas 
+		        	actualFlow1 = actualFlow;
+		        } if (actualFlow2 > 0) {
+		        	actualFlow2 = actualFlow;
+		        } if (actualFlow3 > 0) {
+		        	actualFlow3 = actualFlow;
+		        }
+		        System.out.println(actualFlow);
+		        ((DrawingCanvas) sketchDrawing).setActualFlow(actualFlow1, actualFlow2, actualFlow3); 
+		      }
+		    } );
+		
+		flowPanel.add(flowLabel);
+		flowPanel.add(spinnerFlow);
 		
 		buttonsPanel.add(leapMotionButton);
 		buttonsPanel.add(printButton);
-		buttonsPanel.add(saveButton);
 		buttonsPanel.add(cleanButton);
-		buttonsPanel.add(undoButton);
-		buttonsPanel.add(redoButton);
+		buttonsPanel.add(splitButton);
+		buttonsPanel.add(checkPanel);
+		buttonsPanel.add(flowPanel);
 		
 		return buttonsPanel;
+	}
+	
+	/** Sets the flavours checkBoxes
+	 * @params flavour 1 - Chocolate, 2 - Strawberry
+	**/
+	private JCheckBox setFlavourCheckBox(int flavour) {
+		switch (flavour) {
+		case 1:
+			JCheckBox chocolateButton = new JCheckBox("Chocolate");
+			chocolateButton.setFont(buttonsFont);
+			chocolateButton.setSelected(true);
+			chocolateButton.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent itemEvent) {
+			        int state = itemEvent.getStateChange();
+			        if (state == ItemEvent.SELECTED) {
+			        	actualFlow1 = actualFlow;	// We need to update flow1 to know that we are on chocolate
+						((DrawingCanvas) sketchDrawing).setActualFlavour(1, actualFlow1); // Activate Chocolate
+			        } else if (state == ItemEvent.DESELECTED) {
+			        	actualFlow1 = 0;
+						((DrawingCanvas) sketchDrawing).setActualFlavour(1, 0); // Deactivate Chocolate
+			        }
+			    }
+			});
+			return chocolateButton;
+			
+		case 2:
+			JCheckBox strawberryButton = new JCheckBox("Strawberry");
+		    strawberryButton.setFont(buttonsFont);
+		    strawberryButton.setSelected(false);
+		    strawberryButton.addItemListener(new ItemListener() {
+		    	public void itemStateChanged(ItemEvent itemEvent) {
+		        int state = itemEvent.getStateChange();
+
+		        if (state == ItemEvent.SELECTED) {
+		        	actualFlow2 = actualFlow;	// We need to update flow2 to know that we are on strawberry
+					((DrawingCanvas) sketchDrawing).setActualFlavour(2, actualFlow2); // Activate Strawberry
+		        } else if (state == ItemEvent.DESELECTED) {
+		        	actualFlow2 = 0;
+					((DrawingCanvas) sketchDrawing).setActualFlavour(2, 0); // Deactivate Strawberry
+		        }
+		    }	
+		    });     
+		    return strawberryButton;
+		default:
+			return null;
+		}
 	}
 	
 	/** Sets the contain of the big Panel. Depending on the MenuItem Mode selected **/
@@ -386,8 +454,7 @@ public class MainInterface extends javax.swing.JFrame {
 			mainPanel.remove(bigPanel);
 			bigPanel = setDrawingCanvasPanel();
 			mainPanel.add(bigPanel, BorderLayout.CENTER);
-			mainPanel.repaint();
-			mainPanel.revalidate();
+			
 //			mainPanel.setSize(700, 610);
 			
 			break;

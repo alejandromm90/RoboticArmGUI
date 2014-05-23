@@ -1,11 +1,6 @@
 package geometric;
 
-import constants.Flavour;
-
 /**
- * The RelativePoint class represents a point in a 3d space relative to the
- * robotic arm. It also has attribute w, the flow of the flavour and f, the
- * flavour itself.
  * 
  * @author Philippe Heer
  * 
@@ -14,28 +9,27 @@ public class RelativePoint {
 	private double x;
 	private double y;
 	private double z;
-	private int flow;
-	private Flavour flavour;
+	private long flow1;
+	private long flow2;
+	private long flow3;
 
 	/**
 	 * 
 	 * @param x
-	 *            - coordinate x
 	 * @param y
-	 *            - coordinate y
 	 * @param z
-	 *            - coordinate z
-	 * @param flow
-	 *            - flow, between -120 and 120
-	 * @param flavour
-	 *            - flavour
+	 * @param flow1
+	 * @param flow2
+	 * @param flow3
 	 */
-	public RelativePoint(double x, double y, double z, int flow, Flavour flavour) {
+	public RelativePoint(double x, double y, double z, long flow1, long flow2,
+			long flow3) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.flow = flow;
-		this.flavour = flavour;
+		this.flow1 = flow1;
+		this.flow2 = flow2;
+		this.flow3 = flow3;
 	}
 
 	/**
@@ -43,8 +37,9 @@ public class RelativePoint {
 	 */
 	@Override
 	public String toString() {
-		return "x : " + (int) x + " y : " + (int) y + " z : " + (int) z
-				+ " flow : " + flow + " flavour : " + flavour + "\n";
+		return "x : " + (int) x + ", y : " + (int) y + ", z : " + (int) z
+				+ ", flow1 : " + flow1 + ", flow2 : " + flow2 + ", flow3 : "
+				+ flow3 + "\n";
 	}
 
 	/**
@@ -97,33 +92,49 @@ public class RelativePoint {
 
 	/**
 	 * 
-	 * @return flow
+	 * @return flow1
 	 */
-	public int getFlow() {
-		return flow;
+	public long getFlow1() {
+		return flow1;
 	}
 
 	/**
 	 * 
-	 * @param flow
+	 * @param flow1
 	 */
-	public void setFlow(int flow) {
-		this.flow = flow;
+	public void setFlow1(long flow1) {
+		this.flow1 = flow1;
 	}
 
 	/**
 	 * 
-	 * @return flavour
+	 * @return flow2
 	 */
-	public Flavour getFlavour() {
-		return flavour;
+	public long getFlow2() {
+		return flow2;
 	}
 
 	/**
 	 * 
-	 * @param flavour
+	 * @param flow2
 	 */
-	public void setF(Flavour flavour) {
-		this.flavour = flavour;
+	public void setFlow2(long flow2) {
+		this.flow2 = flow2;
+	}
+
+	/**
+	 * 
+	 * @return flow3
+	 */
+	public long getFlow3() {
+		return flow3;
+	}
+
+	/**
+	 * 
+	 * @param flow3
+	 */
+	public void setFlow3(long flow3) {
+		this.flow3 = flow3;
 	}
 }

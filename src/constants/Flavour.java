@@ -7,5 +7,5 @@ package constants;
  *
  */
 public enum Flavour {
-	CHOCOLATE, VANILLE, STRAWBERRY;
+	CHOCOLATE, STRAWBERRY;
 }

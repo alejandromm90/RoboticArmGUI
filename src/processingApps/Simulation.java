@@ -1,4 +1,4 @@
-package gui;
+package processingApps;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,6 @@ import processing.core.PApplet;
 import processing.serial.Serial;
 
 import constants.Constants;
-import constants.Flavour;
 import geometric.Angles;
 import geometric.RelativePoint;
 import math.Calculate;
@@ -24,6 +23,7 @@ public class Simulation extends PApplet {
 	private RelativePoint point;
 	private Angles angles;
 	private Serial port;
+	private long[] flowBefore;
 
 	/**
 	 * 
@@ -33,10 +33,10 @@ public class Simulation extends PApplet {
 		RelativePoint point1 = points.get(points.size() - 1);
 
 		points.add(new RelativePoint(point1.getX(), point1.getY(), point1
-				.getZ(), 0, Flavour.CHOCOLATE));
+				.getZ(), 0, 0, 0));
 
 		points.add(new RelativePoint(Constants.START_X, Constants.START_Y,
-				Constants.START_Z, 0, Flavour.CHOCOLATE));
+				Constants.START_Z, 0, 0, 0));
 
 		this.points = Move.smoothMovement(Calculate
 				.transformRelativePoint(points));
@@ -50,10 +50,15 @@ public class Simulation extends PApplet {
 		size(Constants.SIZE_WIDTH, Constants.SIZE_HEIGHT);
 		background(255);
 
-		port = new Serial(this, Serial.list()[0], 19200); // TODO
+//		port = new Serial(this, Serial.list()[0], 19200); // TODO
 
 		point = null;
 		angles = null;
+
+		flowBefore = new long[Constants.NUMBER_OF_FLAVOURS];
+		for (int i = 0; i < flowBefore.length; i++) {
+			flowBefore[i] = 0;
+		}
 	}
 
 	/**
@@ -73,29 +78,75 @@ public class Simulation extends PApplet {
 			RelativePoint point1 = points.remove(0);
 
 			point = new RelativePoint(point1.getX(), point1.getY(),
-					point1.getZ(), point1.getFlow(), point1.getFlavour());
+					point1.getZ(), point1.getFlow1(), point1.getFlow2(),
+					point1.getFlow3());
 		}
 
 		angles = Calculate.calculateAngles(point);
 
-		if (point.getFlow() != 0) {
-			pointsDraw.add(point);
-
-			// TODO Here you should let the flavour flow with intesity
-			// point.getFlow()
-		}
-
-		sendToArduino(angles, point.getFlow()); // TODO
+		controlFlow();
+//		sendToArduino(angles, point.getFlow1(), point.getFlow2(),
+//				point.getFlow3()); // TODO
 
 		drawBorders();
 		drawParameters();
-		// drawHistoryPoints(); // TODO
+		drawHistoryPoints();
 
 		drawArmTop((float) angles.getThi(), (float) angles.getTheta(),
 				(float) angles.getKappa());
 		drawArmSide((float) angles.getTheta(), (float) angles.getKappa());
 
 		delay(Constants.SIMULATION_SPEED);
+	}
+
+	/**
+	 * 
+	 */
+	private void controlFlow() {
+		long flow[] = new long[Constants.NUMBER_OF_FLAVOURS];
+
+		flow[0] = point.getFlow1();
+		flow[1] = point.getFlow2();
+		flow[2] = point.getFlow3();
+
+		int total = 0;
+		for (int i = 0; i < flow.length; i++) {
+			total += flow[i];
+		}
+
+		if (total != 0) {
+			pointsDraw.add(point);
+		}
+
+		boolean wait = false;
+
+		for (int j = 0; j < flow.length; j++) {
+			if ((flowBefore[j] == 0) && (flow[j] != 0)) {
+				flow[j] = Constants.FLOW_WAIT_SPEED;
+				wait = true;
+			} else if ((flowBefore[j] != 0) && (flow[j] == 0)) {
+				flow[j] = -Constants.FLOW_WAIT_SPEED;
+				wait = true;
+			}
+		}
+
+		if (wait) {
+			for (int i = 0; i < flow.length; i++) {
+				if ((flow[i] > 0) && (flow[i] < Constants.FLOW_WAIT_SPEED)) {
+					flow[i] = 0;
+				}
+			}
+
+			System.out.println("flow1 : " + flow[0] + ", flow2 : " + flow[1]
+					+ ", flow3 : " + flow[2]); // TODO
+
+//			sendFlowToArduino(flow[0], flow[1], flow[2]); // TODO
+			delay(Constants.FLOW_WAIT);
+		}
+
+		flowBefore[0] = point.getFlow1();
+		flowBefore[1] = point.getFlow2();
+		flowBefore[2] = point.getFlow3();
 	}
 
 	/**
@@ -127,15 +178,17 @@ public class Simulation extends PApplet {
 		for (int i = 0; i < pointsDraw.size(); i++) {
 			drawFlavourPoint((float) (Constants.BASE_X + pointsDraw.get(i)
 					.getX()), (float) (Constants.BASE_Y + pointsDraw.get(i)
-					.getY()), (float) pointsDraw.get(i).getFlow(), pointsDraw
-					.get(i).getFlavour());
+					.getY()), (float) pointsDraw.get(i).getFlow1(),
+					(float) pointsDraw.get(i).getFlow2(), (float) pointsDraw
+							.get(i).getFlow3());
 			drawFlavourPoint((float) (Constants.BASE_X + Math.sqrt(pointsDraw
 					.get(i).getX()
 					* pointsDraw.get(i).getX()
 					+ pointsDraw.get(i).getY() * pointsDraw.get(i).getY())),
 					(float) (Constants.BASE_Z + pointsDraw.get(i).getZ()),
-					(float) pointsDraw.get(i).getFlow(), pointsDraw.get(i)
-							.getFlavour());
+					(float) pointsDraw.get(i).getFlow1(), (float) pointsDraw
+							.get(i).getFlow2(), (float) pointsDraw.get(i)
+							.getFlow3());
 		}
 	}
 
@@ -227,32 +280,39 @@ public class Simulation extends PApplet {
 	 * 
 	 * @param x
 	 * @param z
-	 * @param radius
-	 * @param flavour
+	 * @param flow1
+	 * @param flow2
+	 * @param flow3
 	 */
-	private void drawFlavourPoint(float x, float z, float radius,
-			Flavour flavour) {
-		switch (flavour) {
-		case CHOCOLATE:
-			stroke(153, 76, 0);
-			fill(153, 76, 0);
-			break;
-		case VANILLE:
-			stroke(255, 255, 0);
-			fill(255, 255, 0);
-			break;
-		case STRAWBERRY:
-			stroke(255, 0, 0);
-			fill(255, 0, 0);
-			break;
-		default:
-			break;
-		}
-
+	private void drawFlavourPoint(float x, float z, float flow1, float flow2,
+			float flow3) {
 		strokeWeight(1); // define line thickness
 
-		float diameter = 2 * radius;
-		ellipse(x, Constants.SIZE_HEIGHT - z, diameter, diameter);
+		float diameter;
+
+		if (flow1 > 0) {
+			stroke(153, 76, 0);
+			fill(153, 76, 0);
+
+			diameter = 2 * flow1;
+			ellipse(x + Constants.FLOW_SEPARATION_SIZE, Constants.SIZE_HEIGHT
+					- z, diameter, diameter);
+		}
+		if (flow2 > 0) {
+			stroke(255, 0, 0);
+			fill(255, 0, 0);
+
+			diameter = 2 * flow2;
+			ellipse(x - Constants.FLOW_SEPARATION_SIZE, Constants.SIZE_HEIGHT
+					- z, diameter, diameter);
+		}
+		if (flow3 > 0) {
+			stroke(255, 255, 0);
+			fill(255, 255, 0);
+
+			diameter = 2 * flow3;
+			ellipse(x, Constants.SIZE_HEIGHT - z, diameter, diameter);
+		}
 	}
 
 	/**
@@ -273,9 +333,11 @@ public class Simulation extends PApplet {
 	/**
 	 * 
 	 * @param angles
-	 * @param flow
+	 * @param flow1
+	 * @param flow2
+	 * @param flow3
 	 */
-	void sendToArduino(Angles angles, int flow) {
+	private void sendToArduino(Angles angles, long flow1, long flow2, long flow3) {
 		int thi = (int) Math.toDegrees(angles.getThi())
 				+ Constants.CORRECT_ANGLE_THI;
 		int theta = (int) Math.toDegrees(angles.getTheta())
@@ -283,11 +345,27 @@ public class Simulation extends PApplet {
 		int kappa = (int) -Math.toDegrees(angles.getKappa())
 				+ Constants.CORRECT_ANGLE_KAPPA;
 
-		flow = (100 * flow) + 12000;
-
 		port.write(thi + "a");
 		port.write(theta + "b");
 		port.write(kappa + "c");
-		port.write(flow + "d");
+
+		sendFlowToArduino(flow1, flow2, flow3);
+	}
+
+	/**
+	 * 
+	 * @param flow1
+	 * @param flow2
+	 * @param flow3
+	 */
+	private void sendFlowToArduino(long flow1, long flow2, long flow3) {
+		flow1 = (100 * flow1) + 12000;
+		port.write(flow1 + "d");
+
+		flow2 = (-100 * flow2) + 12000;
+		port.write(flow2 + "e");
+
+		// flow3 = (100 * flow2) + 12000; // TODO
+		// port.write(flow3 + "f");
 	}
 }

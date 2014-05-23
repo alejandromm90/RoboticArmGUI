@@ -13,7 +13,20 @@ public abstract class Constants {
 	public static final int SIMULATION_SPEED = 0;
 	public static final double STEP_RESOLUTION = 2.0;
 	
+	/**
+	 * Flow relevant
+	 */
+	public static final int FLOW_WAIT = 500;	
+	public static final long FLOW_WAIT_SPEED = 100;	
+	public static final int NUMBER_OF_FLAVOURS = 3;
+	public static final int FLOW_SEPARATION_SIZE = 5;
+	public static final int DEFAULT_FLOW = 15;
 	
+	/**
+	 * Flavour relevant
+	 */
+	public static final int DEFAULT_FLAVOUR = 1; // Chocolate by default
+
 	
 	/****************************************************************************************************
 	 *																									*
@@ -32,7 +45,6 @@ public abstract class Constants {
 	 * Axes neither in center of turn or at the boottom end (both x and y)
 	 */
 	public static final double BASE_TOP_LENGTH = 32;
-//	public static final double BASE_TOP_SIDE = -10; // TODO
 	public static final double BASE_BOTTOM_LENGTH = 17;
 	
 	/**
@@ -66,19 +78,19 @@ public abstract class Constants {
 	/**
 	 * Dimension of drawing Canvas
 	 */
-	public static final int DRAWING_APPLET_SIZE_WIDTH = 640;
-	public static final int DRAWING_APPLET_SIZE_HEIGHT = 360;
+	public static final int DRAWING_APPLET_SIZE_WIDTH = 682; //640;
+	public static final int DRAWING_APPLET_SIZE_HEIGHT = 270; //360;
 
 	/**
 	 * Move the drawing applet grid in the print applet
 	 */
-	public static final int DRAWING_APPLET_RELATIVE_X = -270;
+	public static final int DRAWING_APPLET_RELATIVE_X = -341;
 	public static final int DRAWING_APPLET_RELATIVE_Y = 100;
 
 	/**
 	 * Only for drawing in the applet
 	 */
-	public static final double BASE_X = 280;
-	public static final double BASE_Y = 230;
+	public static final double BASE_X = 350;
+	public static final double BASE_Y = 300;
 	public static final double BASE_Z = 109;
 }

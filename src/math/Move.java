@@ -3,7 +3,6 @@ package math;
 import java.util.ArrayList;
 
 import constants.Constants;
-import constants.Flavour;
 import geometric.Angles;
 import geometric.RelativePoint;
 
@@ -24,7 +23,7 @@ public abstract class Move {
 		ArrayList<RelativePoint> points2 = new ArrayList<RelativePoint>();
 
 		RelativePoint pointBefore = new RelativePoint(Constants.START_X,
-				Constants.START_Y, Constants.START_Z, 0, Flavour.CHOCOLATE);
+				Constants.START_Y, Constants.START_Z, 0, 0, 0);
 
 		while (!points.isEmpty()) {
 			double x_before = pointBefore.getX();
@@ -50,14 +49,18 @@ public abstract class Move {
 				double y_temp = length_temp * Math.sin(angles.getThi());
 
 				points2.add(new RelativePoint(x_temp + x_before, y_temp
-						+ y_before, z_temp + z_before, pointBefore.getFlow(),
-						pointBefore.getFlavour()));
+						+ y_before, z_temp + z_before, pointBefore.getFlow1(),
+						pointBefore.getFlow2(), pointBefore.getFlow3()));
 
-				points.add(0, new RelativePoint(x - x_temp, y - y_temp, z
-						- z_temp, point.getFlow(), point.getFlavour()));
+				points.add(
+						0,
+						new RelativePoint(x - x_temp, y - y_temp, z - z_temp,
+								point.getFlow1(), point.getFlow2(), point
+										.getFlow3()));
 			} else {
 				points2.add(new RelativePoint(x + x_before, y + y_before, z
-						+ z_before, point.getFlow(), point.getFlavour()));
+						+ z_before, point.getFlow1(), point.getFlow2(), point
+						.getFlow3()));
 			}
 
 			pointBefore = points2.get(points2.size() - 1);
