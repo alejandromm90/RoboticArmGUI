@@ -5,11 +5,13 @@ package appInterface;
  * 
  * */
 
+import appInterface.ColoredObjectTrack;
 import geometric.RelativePoint;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -45,6 +47,7 @@ import processingApps.DrawingCanvas;
 import processingApps.ScanSketch;
 import processingApps.Simulation;
 
+import com.googlecode.javacv.CanvasFrame;
 import com.leapmotion.leap.Controller;
 
 import constants.Constants;
@@ -62,7 +65,7 @@ public class MainInterface extends javax.swing.JFrame {
 	private processing.core.PApplet sketchDrawing, scanSketch, armSimulationSketch;
 	private Font buttonsFont = new Font("Arial", Font.PLAIN, 15);
 	private int actualFlow1, actualFlow2, actualFlow3, actualFlow;
-	
+	private ColoredObjectTrack colorTrackingObject;
 
 	public static void main(String[] args) {			
 		MainInterface inter = new MainInterface();
@@ -117,7 +120,8 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		// Depending on the menuItem you choose, it will show each panel
 //		bigPanel = setManuallyPrintingPanel();
-		bigPanel = setDrawingCanvasPanel();
+//		bigPanel = setDrawingCanvasPanel();
+		bigPanel = setColorTrackingPanel();
 //		bigPanel = setScanSketchPanel();
 		mainPanel.add(bigPanel, BorderLayout.CENTER);
 
@@ -258,7 +262,6 @@ public class MainInterface extends javax.swing.JFrame {
 		printButton.setFont(buttonsFont);
 		printButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO Send coordinates to print the sketch
 				setSimulationPanel(((ScanSketch) scanSketch).getPoints());
 			}
 
@@ -278,9 +281,7 @@ public class MainInterface extends javax.swing.JFrame {
 		JButton saveButton = new JButton("Save");
 		saveButton.setFont(buttonsFont);
 		saveButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				// TODO Save sketch
-				
+			public void actionPerformed(ActionEvent e){				
 			}
 		});
 		
@@ -328,7 +329,6 @@ public class MainInterface extends javax.swing.JFrame {
 					firstClickLeapMotionMode = false;
 					leapMotionButton.setText("Disable Leap Motion Mode");
 				} else {
-					// TODO ask to save sketch and save coordinates array
 					((DrawingCanvas) sketchDrawing).setLeapMotionMode(false);
 					firstClickLeapMotionMode = true;
 					leapMotionButton.setText("Leap Motion Mode");
@@ -455,6 +455,63 @@ public class MainInterface extends javax.swing.JFrame {
 		}
 	}
 	
+	/********************************************************************************
+	 * 								Color Tracking									*
+	 * 																				*
+	 * ******************************************************************************/
+	
+	private JPanel setColorTrackingPanel() {
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		mainPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+		
+		JLabel title = new JLabel("Color Tracking Canvas");
+		title.setFont(new Font("Arial", Font.BOLD, 20));
+		
+		JPanel trackingPanel = new JPanel();
+		trackingPanel.setSize(700,600);
+		//TODO add stop button
+		JPanel buttonsPanel = setButtonsColorTrackingPanel();
+		
+		// Init color tracking thread
+		colorTrackingObject = new ColoredObjectTrack(trackingPanel);		
+        Thread threadColorTrack = new Thread(colorTrackingObject);
+        threadColorTrack.start();
+       
+		mainPanel.add(title);
+		mainPanel.add(trackingPanel);
+//		mainPanel.add(buttonsPanel);
+		
+        return mainPanel;
+	}
+	
+	/** This method sets the buttons that appear in the Drawing Canvas JPanel **/
+	private JPanel setButtonsColorTrackingPanel() {
+		JPanel buttonsPanel = new JPanel();
+		
+		JButton stopButton = new JButton("Stop");
+		stopButton.setFont(buttonsFont);
+		stopButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+//				((DrawingCanvas) sketchDrawing).splitDraw();
+			}
+		});
+		
+		JButton printButton = new JButton("Print");
+		printButton.setFont(buttonsFont);
+		printButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+//				setSimulationPanel(((DrawingCanvas) sketchDrawing).getPoints());
+			}
+		});
+				
+		buttonsPanel.add(stopButton);
+		buttonsPanel.add(printButton);
+		
+		return buttonsPanel;
+	}
+	
+	
 	/** Sets the contain of the big Panel. Depending on the MenuItem Mode selected **/
 	private void setBigPanel(int mode) {
 		switch(mode){
@@ -479,11 +536,15 @@ public class MainInterface extends javax.swing.JFrame {
 			manualPrinting = false;
 			mainPanel.remove(bigPanel);
 			bigPanel = setDrawingCanvasPanel();
-			mainPanel.add(bigPanel, BorderLayout.CENTER);
-			
-//			mainPanel.setSize(700, 610);
-			
+			mainPanel.add(bigPanel, BorderLayout.CENTER);	
 			break;
+		case 4: // Color Detection
+			manualPrinting = false;
+			// TODO ADD Color Detection PApplet
+	        mainPanel.remove(bigPanel);
+	        bigPanel = setColorTrackingPanel();
+	        mainPanel.add(bigPanel, BorderLayout.CENTER);
+	        break;
 		default:
 			break;
 		}
@@ -511,6 +572,15 @@ public class MainInterface extends javax.swing.JFrame {
 		case 2: // Predefined sketch mode
 			break;
 		case 3: // Drawing Canvas mode
+			if (scanSketch != null) {
+					scanSketch.destroy();
+			}
+			if (sketchDrawing != null) { 
+				sketchDrawing.destroy();
+			} 
+			break;
+			
+		case 4: // Color Tracking mode
 			if (scanSketch != null) {
 					scanSketch.destroy();
 			}
@@ -558,10 +628,19 @@ public class MainInterface extends javax.swing.JFrame {
 			}
 		});
 		
+		JMenuItem mItemColorTracking = new JMenuItem("Color Tracking"); 
+		mItemColorTracking.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				destroyPAppletThreads(4);
+				setBigPanel(4);
+			}
+		});
+		
 		menuModes.add(mItemManually);
 		menuModes.add(mItemScanSketch);
 		menuModes.add(mItemPredefinedModels);
 		menuModes.add(mItemDrawingCanvas);
+		menuModes.add(mItemColorTracking);
 		
 		
 		
@@ -628,7 +707,6 @@ public class MainInterface extends javax.swing.JFrame {
 		JButton flavorButton = new JButton();
 		flavorButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO send flavor info to arduino and set current flavor
 				numberFlavor = flavors.indexOf(newFlavor);
 				listener.setNumberFlavor(numberFlavor);
 			}
