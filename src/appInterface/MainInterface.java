@@ -5,13 +5,11 @@ package appInterface;
  * 
  * */
 
-import appInterface.ColoredObjectTrack;
 import geometric.RelativePoint;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -43,14 +41,11 @@ import javax.swing.event.ChangeListener;
 
 import leapMotion.LeapMotionListener;
 import math.Calculate;
-import processing.core.PApplet;
-import processing.serial.Serial;
 import processingApps.DrawingCanvas;
 import processingApps.ScanSketch;
 import processingApps.Simulation;
 import ArduinoComm.TalkWithArduino;
 
-import com.googlecode.javacv.CanvasFrame;
 import com.leapmotion.leap.Controller;
 
 import constants.Constants;
@@ -64,7 +59,7 @@ public class MainInterface extends javax.swing.JFrame {
 	private int numberFlavor;
 	private JLabel printingLabel;
 	private JPanel bigPanel, mainPanel;
-	private boolean firstTimeManuallyPrinting, firstClickLeapMotionMode, manualPrinting, firstClickStartLeapMotion, firstClickScanMode;
+	private boolean firstTimeManuallyPrinting, firstClickLeapMotionMode, manualPrinting, firstClickStartLeapMotion, firstClickScanMode, firstClickPauseColorTracking;
 	private processing.core.PApplet sketchDrawing, scanSketch, armSimulationSketch;
 	private Font buttonsFont = new Font("Arial", Font.PLAIN, 15);
 	private int actualFlow1, actualFlow2, actualFlow3, actualFlow;
@@ -87,6 +82,7 @@ public class MainInterface extends javax.swing.JFrame {
 		firstClickLeapMotionMode = true;
 		firstClickStartLeapMotion = false;
 		firstClickScanMode = false;
+		firstClickPauseColorTracking = false;
 		manualPrinting = true;
 		printingLabel = new JLabel();
 		actualFlow = Constants.DEFAULT_FLOW;
@@ -112,6 +108,12 @@ public class MainInterface extends javax.swing.JFrame {
 		
 	}
 	
+	
+	/********************************************************************************
+	 * 								Main Panel										*
+	 * 																				*
+	 * ******************************************************************************/
+	
 	private JPanel getMainPanel() {
 		mainPanel = new JPanel();
 		BorderLayout b = new BorderLayout(0,10);
@@ -123,74 +125,184 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		// Depending on the menuItem you choose, it will show each panel
 //		bigPanel = setManuallyPrintingPanel();
-//		bigPanel = setDrawingCanvasPanel();
-		bigPanel = setColorTrackingPanel();
+		bigPanel = setDrawingCanvasPanel();
+//		bigPanel = setColorTrackingPanel();
 //		bigPanel = setScanSketchPanel();
 		mainPanel.add(bigPanel, BorderLayout.CENTER);
 
 		return mainPanel;
 	}
 	
-	/** This method sets the Panel the manual printing mode **/
-	private JPanel setManuallyPrintingPanel() {
-		manualPrinting = true;
-		
-		this.setSize(500,500);
-		JPanel upPanel = new JPanel();
-		upPanel.setLayout(new BorderLayout(0,5));
-		
-		JPanel centerPanel = getCenterManuallyPrintingPanel();		
-		
-		JPanel panelButtons = new JPanel();
-		panelButtons.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		panelButtons.setLayout(new GridLayout(0,3));
-		
-		for (int i = 0; i < flavors.size(); i++) {
-			// We check the first access to generate the flavors buttons just once
-			if (firstTimeManuallyPrinting) {
-				JButton flavorButton = getFlavorButton(flavors.get(i));
-				flavorsButton.add(flavorButton);
-				panelButtons.add(flavorButton);
-			} else {
-				JButton flavorButton = flavorsButton.get(i);
-				panelButtons.add(flavorButton);
-			}
+	
+	/** Sets the contain of the big Panel. Depending on the MenuItem Mode selected **/
+	private void setBigPanel(int mode) {
+		switch(mode){
+		case 0:	// Manual Printing
+			mainPanel.remove(bigPanel);
+			bigPanel = setManuallyPrintingPanel();
+			mainPanel.add(bigPanel, BorderLayout.CENTER);
+			break;
+		case 1:	// Scan Sketch
+			manualPrinting = false;
+			mainPanel.remove(bigPanel);
+			bigPanel = setScanSketchPanel();
+			mainPanel.add(bigPanel, BorderLayout.CENTER);
+			break;
+		case 2:	// Predefined Sketch
+//			manualPrinting = false;
+//			mainPanel.remove(bigPanel);
+//			bigPanel = setDrawingCanvasPanel();
+//			mainPanel.add(bigPanel, BorderLayout.CENTER);
+			break;
+		case 3:	// Drawing Canvas
+			manualPrinting = false;
+			mainPanel.remove(bigPanel);
+			bigPanel = setDrawingCanvasPanel();
+			mainPanel.add(bigPanel, BorderLayout.CENTER);	
+			break;
+		case 4: // Color Detection
+			manualPrinting = false;
+			// TODO ADD Color Detection PApplet
+	        mainPanel.remove(bigPanel);
+	        bigPanel = setColorTrackingPanel();
+	        mainPanel.add(bigPanel, BorderLayout.CENTER);
+	        break;
+		default:
+			break;
 		}
-		firstTimeManuallyPrinting = false;
-		
-		upPanel.add(panelButtons, BorderLayout.NORTH);
-		upPanel.add(centerPanel, BorderLayout.CENTER);
-		return upPanel;
 	}
 	
-	/** This method sets the Panel of the Scan Sketch mode **/
-	private JPanel setScanSketchPanel() {
-                
-        JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
-		
-		JLabel title = new JLabel("Scan Sketch");
-		title.setFont(new Font("Arial", Font.BOLD, 20));
-		
-		JPanel scanPanel = new JPanel();
-		scanSketch = new ScanSketch();
-		scanPanel.setBounds(20, 20, 600, 600);
-		scanPanel.add(scanSketch);
-		
-		JPanel buttonsPanel = setButtonsScanSketchPanel();
-		
-		mainPanel.add(title);
-		mainPanel.add(scanPanel);
-		mainPanel.add(buttonsPanel);
-        
-		scanSketch.init(); 
-		
-		this.setSize(700,600);
-		scanPanel.setVisible(true);
-
-        return mainPanel;
+	/** This method destroys the PApplet threads create from a Processing PApplet **/
+	private void destroyPAppletThreads(int mode) {
+		switch (mode) {
+		case 0: // Manually Printing mode
+			if (sketchDrawing != null) { 
+				sketchDrawing.destroy();
+			} 
+			if (scanSketch != null) {
+				scanSketch.destroy();
+			}
+			break;
+		case 1: // Scan Sketch mode
+			if (sketchDrawing != null) { 
+				sketchDrawing.destroy();
+			}
+			if (scanSketch != null) {
+				scanSketch.destroy();
+			}
+			break;
+		case 2: // Predefined sketch mode
+			break;
+		case 3: // Drawing Canvas mode
+			if (scanSketch != null) {
+					scanSketch.destroy();
+			}
+			if (sketchDrawing != null) { 
+				sketchDrawing.destroy();
+			} 
+//			if (colorTrackingObject != null) {
+//				colorTrackingObject.
+//			} // TODO
+			break;
+			
+		case 4: // Color Tracking mode
+			if (scanSketch != null) {
+					scanSketch.destroy();
+			}
+			if (sketchDrawing != null) { 
+				sketchDrawing.destroy();
+			} 
+			break;
+		}
 	}
+	
+	/********************************************************************************
+	 * 								Menu Bar										*
+	 * 																				*
+	 * ******************************************************************************/
+	
+	/**	Sets the menu bar with the drawing modes and the tools for the motors and Arduino **/
+	private JMenuBar setMenuBar() {
+		JMenuBar mBar = new JMenuBar();
+		
+		/****************************************
+		 * 				Drawing Modes			*
+		 * **************************************/
+		JMenu menuModes = new JMenu("Modes");		
+		JMenuItem mItemManually = new JMenuItem("Manually printing");
+		mItemManually.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				destroyPAppletThreads(0); // We destroy the PApplet thread to stop it every time we change the mode
+				setBigPanel(0);
+				initializeLeapMotionListener();
+			}
+		});
+		
+		JMenuItem mItemScanSketch = new JMenuItem("Scan Sketch"); 
+		mItemScanSketch.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				destroyPAppletThreads(1);
+				setBigPanel(1);
+			}
+		});
+		
+		JMenuItem mItemPredefinedModels = new JMenuItem("Predefined Sketch"); 
+		mItemPredefinedModels.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				destroyPAppletThreads(2);
+				setBigPanel(2);
+			}
+		});
+		
+		JMenuItem mItemDrawingCanvas = new JMenuItem("Drawing Canvas"); 
+		mItemDrawingCanvas.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				destroyPAppletThreads(3);
+				setBigPanel(3);
+			}
+		});
+		
+		JMenuItem mItemColorTracking = new JMenuItem("Color Tracking"); 
+		mItemColorTracking.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				destroyPAppletThreads(4);
+				setBigPanel(4);
+			}
+		});
+		
+		menuModes.add(mItemManually);
+		menuModes.add(mItemScanSketch);
+		menuModes.add(mItemPredefinedModels);
+		menuModes.add(mItemDrawingCanvas);
+		menuModes.add(mItemColorTracking);
+		
+		/****************************************
+		 * 					Tools				*
+		 * **************************************/
+		
+		JMenu menuTools = new JMenu("Tools");		
+		JMenuItem mItemStepperManual = new JMenuItem("Steppers Manual Control");
+		mItemStepperManual.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				new ManualControl(MainInterface.this);
+			}
+		});
+		menuTools.add(mItemStepperManual);
+		
+		
+		
+		mBar.add(menuModes);
+		mBar.add(TalkWithArduino.getSelectPortMenu());
+		mBar.add(menuTools);
+
+		return mBar;
+	}
+	
+	
+	/********************************************************************************
+	 * 								Simulation										*
+	 * 																				*
+	 * ******************************************************************************/	
 	
 	/** Sets the arm simulation JPanel to show how the arm will get the coordinates **/
 	private JFrame setSimulationPanel(ArrayList<RelativePoint> points) {
@@ -222,7 +334,7 @@ public class MainInterface extends javax.swing.JFrame {
 		simJFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				if(Simulation.finishPrint) {
-					armSimulationSketch.destroy();
+					armSimulationSketch.destroy();	
 					simJFrame.setVisible(false);
 					simJFrame.dispose();
 					
@@ -238,6 +350,40 @@ public class MainInterface extends javax.swing.JFrame {
 		return simJFrame;
 	}
 	
+	
+	/********************************************************************************
+	 * 								Scan Sketch Mode								*
+	 * 																				*
+	 * ******************************************************************************/
+	
+	/** This method sets the Panel of the Scan Sketch mode **/
+	private JPanel setScanSketchPanel() {
+                
+        JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		mainPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+		
+		JLabel title = new JLabel("Scan Sketch");
+		title.setFont(new Font("Arial", Font.BOLD, 20));
+		
+		JPanel scanPanel = new JPanel();
+		scanSketch = new ScanSketch();
+		scanPanel.setBounds(20, 20, 600, 600);
+		scanPanel.add(scanSketch);
+		
+		JPanel buttonsPanel = setButtonsScanSketchPanel();
+		
+		mainPanel.add(title);
+		mainPanel.add(scanPanel);
+		mainPanel.add(buttonsPanel);
+        
+		scanSketch.init(); 
+		
+		this.setSize(700,600);
+		scanPanel.setVisible(true);
+
+        return mainPanel;
+	}
 	
 	/** This method sets the buttons that appear in the Scan Sketch JPanel **/
 	private JPanel setButtonsScanSketchPanel() {
@@ -294,6 +440,13 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		return buttonsPanel;
 	}
+	
+	
+	/********************************************************************************
+	 * 								Drawing Canvas Mode								*
+	 * 																				*
+	 * ******************************************************************************/
+	
 	
 	/** This method sets the Panel of the Drawing Canvas mode **/
 	private JPanel setDrawingCanvasPanel() {
@@ -384,18 +537,7 @@ public class MainInterface extends javax.swing.JFrame {
 		spinnerFlow.addChangeListener( new ChangeListener() {
 		      @Override
 		      public void stateChanged( ChangeEvent e ) {
-		        JSpinner spinner = ( JSpinner ) e.getSource();
-		        SpinnerNumberModel spinnerModel = (SpinnerNumberModel) spinner.getModel();
-		        actualFlow = (Integer) spinnerModel.getValue();
-		        if (actualFlow1 > 0) {	// Here we check which flows we have, to set them on the canvas 
-		        	actualFlow1 = actualFlow;
-		        } if (actualFlow2 > 0) {
-		        	actualFlow2 = actualFlow;
-		        } if (actualFlow3 > 0) {
-		        	actualFlow3 = actualFlow;
-		        }
-		        System.out.println(actualFlow);
-		        ((DrawingCanvas) sketchDrawing).setActualFlow(actualFlow1, actualFlow2, actualFlow3); 
+		    	  setSpinnerFlow(e);	// We set the flow value from the spinner value
 		      }
 		    } );
 		
@@ -412,8 +554,26 @@ public class MainInterface extends javax.swing.JFrame {
 		return buttonsPanel;
 	}
 	
+	/** Sets the flow from the spinner change event value 
+	 * @params event - from ChangeEvent
+	**/
+	private void setSpinnerFlow(ChangeEvent event) {
+		JSpinner spinner = ( JSpinner ) event.getSource();
+        SpinnerNumberModel spinnerModel = (SpinnerNumberModel) spinner.getModel();
+        actualFlow = (Integer) spinnerModel.getValue();
+        if (actualFlow1 > 0) {	// Here we check which flows we have, to set them on the canvas 
+        	actualFlow1 = actualFlow;
+        } if (actualFlow2 > 0) {
+        	actualFlow2 = actualFlow;
+        } if (actualFlow3 > 0) {
+        	actualFlow3 = actualFlow;
+        }
+        System.out.println(actualFlow);
+        ((DrawingCanvas) sketchDrawing).setActualFlow(actualFlow1, actualFlow2, actualFlow3); 
+	}
+	
 	/** Sets the flavours checkBoxes
-	 * @params flavour 1 - Chocolate, 2 - Strawberry
+	 * @params flavour 1 = Chocolate, 2 = Strawberry
 	**/
 	private JCheckBox setFlavourCheckBox(int flavour) {
 		switch (flavour) {
@@ -459,10 +619,11 @@ public class MainInterface extends javax.swing.JFrame {
 	}
 	
 	/********************************************************************************
-	 * 								Color Tracking									*
+	 * 								Color Tracking Mode								*
 	 * 																				*
 	 * ******************************************************************************/
 	
+	/** Sets the Color Tracking Mode JPanel **/
 	private JPanel setColorTrackingPanel() {
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -472,8 +633,7 @@ public class MainInterface extends javax.swing.JFrame {
 		title.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		JPanel trackingPanel = new JPanel();
-		trackingPanel.setSize(700,600);
-		//TODO add stop button
+		
 		JPanel buttonsPanel = setButtonsColorTrackingPanel();
 		
 		// Init color tracking thread
@@ -483,7 +643,7 @@ public class MainInterface extends javax.swing.JFrame {
        
 		mainPanel.add(title);
 		mainPanel.add(trackingPanel);
-//		mainPanel.add(buttonsPanel);
+		mainPanel.add(buttonsPanel);
 		
         return mainPanel;
 	}
@@ -492,11 +652,19 @@ public class MainInterface extends javax.swing.JFrame {
 	private JPanel setButtonsColorTrackingPanel() {
 		JPanel buttonsPanel = new JPanel();
 		
-		JButton stopButton = new JButton("Stop");
+		final JButton stopButton = new JButton("Pause");
 		stopButton.setFont(buttonsFont);
 		stopButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-//				((DrawingCanvas) sketchDrawing).splitDraw();
+				if (firstClickPauseColorTracking) { // Continue mode
+					colorTrackingObject.setPauseMode(false);
+					firstClickPauseColorTracking = false;
+					stopButton.setText("Pause");
+				} else {	// Pause mode
+					colorTrackingObject.setPauseMode(true);
+					firstClickPauseColorTracking = true;
+					stopButton.setText("Continue");
+				}
 			}
 		});
 		
@@ -504,167 +672,54 @@ public class MainInterface extends javax.swing.JFrame {
 		printButton.setFont(buttonsFont);
 		printButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-//				setSimulationPanel(((DrawingCanvas) sketchDrawing).getPoints());
+//				setSimulationPanel(colorTrackingObject.getPoints());
 			}
 		});
 				
 		buttonsPanel.add(stopButton);
-		buttonsPanel.add(printButton);
+//		buttonsPanel.add(printButton);
 		
 		return buttonsPanel;
 	}
 	
 	
-	/** Sets the contain of the big Panel. Depending on the MenuItem Mode selected **/
-	private void setBigPanel(int mode) {
-		switch(mode){
-		case 0:	// Manual Printing
-			mainPanel.remove(bigPanel);
-			bigPanel = setManuallyPrintingPanel();
-			mainPanel.add(bigPanel, BorderLayout.CENTER);
-			break;
-		case 1:	// Scan Sketch
-			manualPrinting = false;
-			mainPanel.remove(bigPanel);
-			bigPanel = setScanSketchPanel();
-			mainPanel.add(bigPanel, BorderLayout.CENTER);
-			break;
-		case 2:	// Predefined Sketch
-//			manualPrinting = false;
-//			mainPanel.remove(bigPanel);
-//			bigPanel = setDrawingCanvasPanel();
-//			mainPanel.add(bigPanel, BorderLayout.CENTER);
-			break;
-		case 3:	// Drawing Canvas
-			manualPrinting = false;
-			mainPanel.remove(bigPanel);
-			bigPanel = setDrawingCanvasPanel();
-			mainPanel.add(bigPanel, BorderLayout.CENTER);	
-			break;
-		case 4: // Color Detection
-			manualPrinting = false;
-			// TODO ADD Color Detection PApplet
-	        mainPanel.remove(bigPanel);
-	        bigPanel = setColorTrackingPanel();
-	        mainPanel.add(bigPanel, BorderLayout.CENTER);
-	        break;
-		default:
-			break;
+	/********************************************************************************
+	 * 								Manual Printing Mode							*
+	 * 																				*
+	 * ******************************************************************************/
+	
+	/** This method sets the Panel the manual printing mode **/
+	private JPanel setManuallyPrintingPanel() {
+		manualPrinting = true;
+		
+		this.setSize(500,500);
+		JPanel upPanel = new JPanel();
+		upPanel.setLayout(new BorderLayout(0,5));
+		
+		JPanel centerPanel = getCenterManuallyPrintingPanel();		
+		
+		JPanel panelButtons = new JPanel();
+		panelButtons.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		panelButtons.setLayout(new GridLayout(0,3));
+		
+		for (int i = 0; i < flavors.size(); i++) {
+			// We check the first access to generate the flavors buttons just once
+			if (firstTimeManuallyPrinting) {
+				JButton flavorButton = getFlavorButton(flavors.get(i));
+				flavorsButton.add(flavorButton);
+				panelButtons.add(flavorButton);
+			} else {
+				JButton flavorButton = flavorsButton.get(i);
+				panelButtons.add(flavorButton);
+			}
 		}
+		firstTimeManuallyPrinting = false;
+		
+		upPanel.add(panelButtons, BorderLayout.NORTH);
+		upPanel.add(centerPanel, BorderLayout.CENTER);
+		return upPanel;
 	}
 	
-	/** This method destroys the PApplet threads create from a Processing PApplet **/
-	private void destroyPAppletThreads(int mode) {
-		switch (mode) {
-		case 0: // Manually Printing mode
-			if (sketchDrawing != null) { 
-				sketchDrawing.destroy();
-			} 
-			if (scanSketch != null) {
-				scanSketch.destroy();
-			}
-			break;
-		case 1: // Scan Sketch mode
-			if (sketchDrawing != null) { 
-				sketchDrawing.destroy();
-			}
-			if (scanSketch != null) {
-				scanSketch.destroy();
-			}
-			break;
-		case 2: // Predefined sketch mode
-			break;
-		case 3: // Drawing Canvas mode
-			if (scanSketch != null) {
-					scanSketch.destroy();
-			}
-			if (sketchDrawing != null) { 
-				sketchDrawing.destroy();
-			} 
-			break;
-			
-		case 4: // Color Tracking mode
-			if (scanSketch != null) {
-					scanSketch.destroy();
-			}
-			if (sketchDrawing != null) { 
-				sketchDrawing.destroy();
-			} 
-			break;
-		}
-	}
-	
-	private JMenuBar setMenuBar() {
-		JMenuBar mBar = new JMenuBar();
-		
-		JMenu menuModes = new JMenu("Modes");		
-		JMenuItem mItemManually = new JMenuItem("Manually printing");
-		mItemManually.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				destroyPAppletThreads(0); // We destroy the PApplet thread to stop it every time we change the mode
-				setBigPanel(0);
-				initializeLeapMotionListener();
-			}
-		});
-		
-		JMenuItem mItemScanSketch = new JMenuItem("Scan Sketch"); 
-		mItemScanSketch.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				destroyPAppletThreads(1);
-				setBigPanel(1);
-			}
-		});
-		
-		JMenuItem mItemPredefinedModels = new JMenuItem("Predefined Sketch"); 
-		mItemPredefinedModels.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				destroyPAppletThreads(2);
-				setBigPanel(2);
-			}
-		});
-		
-		JMenuItem mItemDrawingCanvas = new JMenuItem("Drawing Canvas"); 
-		mItemDrawingCanvas.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				destroyPAppletThreads(3);
-				setBigPanel(3);
-			}
-		});
-		
-		JMenuItem mItemColorTracking = new JMenuItem("Color Tracking"); 
-		mItemColorTracking.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				destroyPAppletThreads(4);
-				setBigPanel(4);
-			}
-		});
-		
-		menuModes.add(mItemManually);
-		menuModes.add(mItemScanSketch);
-		menuModes.add(mItemPredefinedModels);
-		menuModes.add(mItemDrawingCanvas);
-		menuModes.add(mItemColorTracking);
-		
-		
-		
-		JMenu menuTools = new JMenu("Tools");		
-		JMenuItem mItemStepperManual = new JMenuItem("Steppers Manual Control");
-		mItemStepperManual.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				new ManualControl(MainInterface.this);
-			}
-		});
-		menuTools.add(mItemStepperManual);
-		
-		
-		
-		mBar.add(menuModes);
-		mBar.add(TalkWithArduino.getSelectPortMenu());
-		mBar.add(menuTools);
-
-		return mBar;
-	}
-
 	private JPanel getCenterManuallyPrintingPanel() {
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BorderLayout (0, 5));
@@ -704,6 +759,7 @@ public class MainInterface extends javax.swing.JFrame {
 		return centerPanel;
 	}
 	
+	/** Used for the Images to change flavors **/
 	private JButton getFlavorButton(final Flavor newFlavor){
 		
 		ImageIcon image = new ImageIcon(newFlavor.getFlavor() + ".png");
@@ -720,18 +776,7 @@ public class MainInterface extends javax.swing.JFrame {
 		return flavorButton;
 	}
 	
-	
-	public ImageIcon redefineImagen(ImageIcon originalImage){
-		// new width and height: to stay with the same we send a -1
-		int width = 150; 
-		int height = 150; 
 
-		// It obtains an icon redefined with specified dimension 
-		ImageIcon imageRedefined = new ImageIcon(originalImage.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_DEFAULT));
-		
-		return imageRedefined;		
-	}
-	
 	/** Initialize the Leap Motion Listener and its Controller when it is called **/
 	private void initializeLeapMotionListener() {
 		// Create a sample listener and controller
@@ -791,4 +836,16 @@ public class MainInterface extends javax.swing.JFrame {
 		}
 		printingLabel.setText(printingText);
 	}
+
+	public ImageIcon redefineImagen(ImageIcon originalImage){
+		// new width and height: to stay with the same we send a -1
+		int width = 150; 
+		int height = 150; 
+
+		// It obtains an icon redefined with specified dimension 
+		ImageIcon imageRedefined = new ImageIcon(originalImage.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_DEFAULT));
+		
+		return imageRedefined;		
+	}
+	
 }

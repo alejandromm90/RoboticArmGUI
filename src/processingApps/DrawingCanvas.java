@@ -22,6 +22,8 @@ import com.leapmotion.leap.Vector;
 import constants.Constants;
 
 public class DrawingCanvas extends PApplet{
+	private static final int MAX_BRUSH_SIZE = 260;
+	private static final int MIN_BRUSH_SIZE = 160;
 	private double lastX, lastY;
 	private int width = 682;
 	private int height = 270;
@@ -73,6 +75,10 @@ public class DrawingCanvas extends PApplet{
 	  }
 	}
 
+	/********************************************************************************
+	 * 								Mouse Drawing Mode								*
+	 * 																				*
+	 * ******************************************************************************/
 	
 	private void drawWithMouse() {
 		if (mousePressed == true) {
@@ -102,25 +108,12 @@ public class DrawingCanvas extends PApplet{
 		}
 	}
 
-
-	/** Checks if the mouse point is inside the arm range **/
-	private boolean insideCanvas(int mouseX, int mouseY) {
-		// Converts coordinates to the same that are in the arm canvas
-		int x = mouseX + Constants.DRAWING_APPLET_RELATIVE_X;// - 80; 
-		int y = Constants.DRAWING_APPLET_SIZE_HEIGHT - mouseY + 80;
-		
-		double ratio = Constants.DRAWING_APPLET_SIZE_WIDTH/2; // 341
-		double xCenter = 0;
-		double yCenter = 0;
-
-		if (Math.sqrt (((xCenter-x)*(xCenter-x)) + ((yCenter-y)*(yCenter-y))) <= ratio) { 
-			return true;
-		} else { 
-			return false;
-		}
-	}
-
-
+	
+	/********************************************************************************
+	 * 								Leap Motion Drawing Mode						*
+	 * 																				*
+	 * ******************************************************************************/
+	
 	private void drawWithLeapMotion() {
 		  Frame frame = leapController.frame();
 	        
@@ -146,72 +139,52 @@ public class DrawingCanvas extends PApplet{
 //          }
 	}
 	
-	private boolean addLineToArray(double mX, double mY, double lX, double lY) {
-		if (lastLine.isEmpty()) {
-			  lastLine.add(new Line(mX, mY, lX, lY));
-		  } else if ((lastLine.get(lastLine.size()-1).getX() != mX) && (lastLine.get(lastLine.size()-1).getY() != mY)
-				  && (lastLine.get(lastLine.size()-1).getxE() != lX) && (lastLine.get(lastLine.size()-1).getyE() != lY)) {
-			  lastLine.add(new Line(mX, mY, lX, lY));
-		  }
-		return true;
-	}
-	
-	private void addEllipseToArray(double mX, double mY, int flow1, int flow2, int flow3) {
-//		if (!lastEllipse.isEmpty()) {
-//	    	if ((lastEllipse.get(lastEllipse.size() - 1).getX() != mX) && (lastEllipse.get(lastEllipse.size() - 1).getY() != mY)) {
-//	    		lastEllipse.add(new Point(mX, mY, 0));
-//	    	}
-//	    } else {
-//	    	lastEllipse.add(new Point(mouseX, mouseY, 0));
-//	    }
-		lastEllipse.add(new RelativePoint(mX, mY, -50, flow1, flow2, flow3));	// Z = -50
-
-	}
-
 	/**
 	 * Draws with Leap Motion tracking the finger
 	**/
 	private void fingerPaint(Vector tip, int paintColor) {
-		final int MAXBRUSHSIZE = 240;
+		
 	    float x = tip.getX() * width;
 	    float y = height - tip.getY() * height;
-	    float brushSize = MAXBRUSHSIZE - MAXBRUSHSIZE * tip.getZ();
+	    float brushSize = MAX_BRUSH_SIZE - MAX_BRUSH_SIZE * tip.getZ();
 	    int flow = Constants.DEFAULT_FLOW;
 	    
 	    boolean drawing = false;
     	int numberFlavor = listener.getNumberFlavor();
     	if (insideCanvas((int)x, (int)y)) {
 		    System.out.println(brushSize);
-		    if (brushSize > 210 && brushSize <= MAXBRUSHSIZE) {
+		    if (brushSize > 240 && brushSize <= MAX_BRUSH_SIZE) {
 		    	flow = 20;
-		    } else if (brushSize > 170 && brushSize <= 210) {
+		    } else if (brushSize > 180 && brushSize <= 240) {
 		    	flow = 15;
-		    } else if (brushSize > 140 && brushSize <= 170) {
+		    } else if (brushSize > MIN_BRUSH_SIZE && brushSize <= 180) {
 		    	flow = 10;
 		    } 
 		    
-		    if (brushSize > 140) {
+		    if (brushSize > MIN_BRUSH_SIZE) {
 		    	// We are drawing
 		        controller.removeListener(listener);	// Remove the Leap Motion listener to avoid gestures mistakes
 		        RelativePoint newPoint = null;
-		        switch (numberFlavor) {
-		        case 0:	// Chocolate
-		        	newPoint = new RelativePoint(x, y, 0, flow, 0, 0);
-			    	drawFlavourPoint(x, y, flow, 0, 0);
-		        	break;
-		        case 1:	// Strawberry
-		        	newPoint = new RelativePoint(x, y, 0, 0, flow, 0);
-			    	drawFlavourPoint(x, y, 0, flow, 0);
-		        	break;
-		        case 2:	// Chocolate + Strawberry
-		        	newPoint = new RelativePoint(x, y, 0, flow, flow, 0);
-			    	drawFlavourPoint(x, y, flow, flow, 0);
-		        	break;
-		        }
-		    	
-		    	ellipsesLeapMotion.add(newPoint);
+		        if (!newPointEqualToLast(x, y)) {	// We check if the point is the same to the last one
+			        switch (numberFlavor) {
+			        case 0:	// Chocolate
+			        	newPoint = new RelativePoint(x, y, 0, flow, 0, 0);
+				    	drawFlavourPoint(x, y, flow, 0, 0);
+			        	break;
+			        case 1:	// Strawberry
+			        	newPoint = new RelativePoint(x, y, 0, 0, flow, 0);
+				    	drawFlavourPoint(x, y, 0, flow, 0);
+			        	break;
+			        case 2:	// Chocolate + Strawberry
+			        	newPoint = new RelativePoint(x, y, 0, flow, flow, 0);
+				    	drawFlavourPoint(x, y, flow, flow, 0);
+			        	break;
+			        }
+			    	
+			    	ellipsesLeapMotion.add(newPoint);
+		        } 
 		    	drawing = true;
-		    	
+
 		    } else {
 		    	// We just draw the brush (mouse)
 		        controller.addListener(listener);	// Add the Leap Motion listener to enable gestures recognition
@@ -236,16 +209,20 @@ public class DrawingCanvas extends PApplet{
     	}
 	}
 	
-	/** Initialize the Leap Motion Listener and its Controller when it is called **/
-	private void initializeLeapMotionListener() {
-		// Create a sample listener and controller
-		listener = new LeapMotionListener(flavors);
-		controller = new Controller();
-		
-        // Have the listener receive events from the controller
-        controller.addListener(listener);
+	/** Returns true if the last point added is equal to the new one
+	 *  @params x
+	 *  @params y
+	**/
+	private boolean newPointEqualToLast(float x, float y) { 
+		if (!ellipsesLeapMotion.isEmpty()) {
+			RelativePoint lastPoint = ellipsesLeapMotion.get(ellipsesLeapMotion.size()-1);
+	        if (((int)lastPoint.getX() == (int)x) && ((int)lastPoint.getY() == (int)y)) {
+	        	return true;
+	        	
+	        } else return false;
+		} else return false;
 	}
-
+	
 	/** It adds a Flow 0 point to the array **/
 	private void addLastPoint() {
     	if (!ellipsesLeapMotion.isEmpty()) {
@@ -256,6 +233,62 @@ public class DrawingCanvas extends PApplet{
 	    	}
     	}
 	}
+	
+	/** Initialize the Leap Motion Listener and its Controller when it is called **/
+	private void initializeLeapMotionListener() {
+		// Create a sample listener and controller
+		listener = new LeapMotionListener(flavors);
+		controller = new Controller();
+		
+        // Have the listener receive events from the controller
+        controller.addListener(listener);
+	}
+	
+	
+	/********************************************************************************
+	 * 								Auxiliary functions 							*
+	 * 																				*
+	 * ******************************************************************************/
+	
+	/** Checks if two points are inside the arm range **/
+	private boolean insideCanvas(int mouseX, int mouseY) {
+		// Converts coordinates to the same that are in the arm canvas
+		int x = mouseX + Constants.DRAWING_APPLET_RELATIVE_X;// - 80; 
+		int y = Constants.DRAWING_APPLET_SIZE_HEIGHT - mouseY + 80;
+		
+		double ratio = Constants.DRAWING_APPLET_SIZE_WIDTH/2; // 341
+		double xCenter = 0;
+		double yCenter = 0;
+
+		if (Math.sqrt (((xCenter-x)*(xCenter-x)) + ((yCenter-y)*(yCenter-y))) <= ratio) { 
+			return true;
+		} else { 
+			return false;
+		}
+	}
+	
+	private boolean addLineToArray(double mX, double mY, double lX, double lY) {
+		if (lastLine.isEmpty()) {
+			  lastLine.add(new Line(mX, mY, lX, lY));
+		  } else if ((lastLine.get(lastLine.size()-1).getX() != mX) && (lastLine.get(lastLine.size()-1).getY() != mY)
+				  && (lastLine.get(lastLine.size()-1).getxE() != lX) && (lastLine.get(lastLine.size()-1).getyE() != lY)) {
+			  lastLine.add(new Line(mX, mY, lX, lY));
+		  }
+		return true;
+	}
+	
+	private void addEllipseToArray(double mX, double mY, int flow1, int flow2, int flow3) {
+//		if (!lastEllipse.isEmpty()) {
+//	    	if ((lastEllipse.get(lastEllipse.size() - 1).getX() != mX) && (lastEllipse.get(lastEllipse.size() - 1).getY() != mY)) {
+//	    		lastEllipse.add(new Point(mX, mY, 0));
+//	    	}
+//	    } else {
+//	    	lastEllipse.add(new Point(mouseX, mouseY, 0));
+//	    }
+		lastEllipse.add(new RelativePoint(mX, mY, -50, flow1, flow2, flow3));	// Z = -50
+
+	}
+
 	
 	/** Method to wait and control better the leap drawing 
 	 * @args waitTime
@@ -284,6 +317,8 @@ public class DrawingCanvas extends PApplet{
 		ellipsesLeapMotion = new ArrayList<RelativePoint>();
 	}
 	
+	
+	/** UNDO function. Not used in the end **/
 	public void undoCanvas() {
 		drawBorder();
 		if (!lastEllipse.isEmpty()) {
@@ -306,6 +341,7 @@ public class DrawingCanvas extends PApplet{
 		}	
 	}
 	
+	/** REDO function. Not used in the end **/
 	public void redoCanvas() {
 		drawBorder();
 		firstClick = false;
@@ -465,21 +501,28 @@ public class DrawingCanvas extends PApplet{
 		if (!lastEllipse.isEmpty()) {	// if is not the first point, we add a new one with the new flow value
 			RelativePoint lastPoint = lastEllipse.get(lastEllipse.size()-1);
 			if (flow1 > 0) {	// Chocolate
-				actualFlow1 = flow1;
 				lastPoint.setFlow1(flow1);
-				strokeWeight(flow1 - 5);
 
 			} if (flow2 > 0) {	// Strawberry
-				actualFlow2 = flow2;
 			 	lastPoint.setFlow2(flow2);
-				strokeWeight(flow2 - 5);
 
 			} if (flow3 > 0) {	// Other flavour
-				actualFlow3 = flow3;
 				lastPoint.setFlow3(flow3);
-				strokeWeight(flow3 - 5);
-
 			}
+		}
+		
+		// We change the color and set the actualFlow values
+		if (flow1 > 0) {	// Chocolate
+			actualFlow1 = flow1;
+			strokeWeight(flow1 - 5);
+
+		} if (flow2 > 0) {	// Strawberry
+			actualFlow2 = flow2;
+			strokeWeight(flow2 - 5);
+
+		} if (flow3 > 0) {	// Other flavour
+			actualFlow3 = flow3;
+			strokeWeight(flow3 - 5);
 		}
 	}
 	
