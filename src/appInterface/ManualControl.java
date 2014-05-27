@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 
+import ArduinoComm.TalkWithArduino;
+
 
 public class ManualControl extends JDialog implements MouseListener {
 	private static final long serialVersionUID = 1L;
@@ -47,30 +49,29 @@ public class ManualControl extends JDialog implements MouseListener {
 
 
 	public void mousePressed(MouseEvent e) { //TODO access Serial port write +- speedmax 
+		int flow1 = 0;
+		int flow2 = 0;
+		int flow3 = 0;
 		if(stepper1FW == e.getSource()) {
-			System.out.println("1fw");
+			flow1 =120;
 		} else if(stepper1BW == e.getSource()){
-			System.out.println("1bw");
+			flow1 =-120;
 
 		} else if(stepper2FW == e.getSource()) {
-			System.out.println("2fw");
+			flow2 = 120;
 		} else if(stepper2BW == e.getSource()){
-			System.out.println("2bw");
+			flow2 = -120;
 
 		}
+		TalkWithArduino.sendFlowToArduino(flow1, flow2, flow3);
 	}
 
 	public void mouseReleased(MouseEvent e) { //TODO access Serial port write 0;
-		if(stepper1FW == e.getSource()) {
-			System.out.println("1fw st");
-		} else if(stepper1BW == e.getSource()){
-			System.out.println("1bw st");
-
-		} else if(stepper2FW == e.getSource()) {
-			System.out.println("2fw st");
-		} else if(stepper2BW == e.getSource()){
-			System.out.println("2bw st");
-
+		if(stepper1FW == e.getSource()
+				|| stepper1BW == e.getSource()
+				|| stepper2FW == e.getSource()
+				|| stepper2BW == e.getSource()){
+			TalkWithArduino.sendFlowToArduino(0, 0, 0);
 		}
 	}
 	@Override

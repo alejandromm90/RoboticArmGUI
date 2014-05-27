@@ -43,9 +43,12 @@ import javax.swing.event.ChangeListener;
 
 import leapMotion.LeapMotionListener;
 import math.Calculate;
+import processing.core.PApplet;
+import processing.serial.Serial;
 import processingApps.DrawingCanvas;
 import processingApps.ScanSketch;
 import processingApps.Simulation;
+import ArduinoComm.TalkWithArduino;
 
 import com.googlecode.javacv.CanvasFrame;
 import com.leapmotion.leap.Controller;
@@ -656,6 +659,7 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		
 		mBar.add(menuModes);
+		mBar.add(TalkWithArduino.getSelectPortMenu());
 		mBar.add(menuTools);
 
 		return mBar;
