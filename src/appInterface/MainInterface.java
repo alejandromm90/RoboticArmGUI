@@ -235,13 +235,14 @@ public class MainInterface extends javax.swing.JFrame {
 	/** This method sets the buttons that appear in the Scan Sketch JPanel **/
 	private JPanel setButtonsScanSketchPanel() {
 		JPanel buttonsPanel = new JPanel();
-		
+
 		final JButton scanButton = new JButton("Get Scanned Sketch");
 		scanButton.setFont(buttonsFont);
 		scanButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				
 				if (firstClickScanMode) {
+					((ScanSketch) scanSketch).setActualFlow(1,15); 				
 					((ScanSketch) scanSketch).setScanMode(true); 
 					scanButton.setText("Get Scanned Sketch");
 					firstClickScanMode = false;
@@ -263,6 +264,17 @@ public class MainInterface extends javax.swing.JFrame {
 
 		});
 		
+//		// Create the check box
+//		JCheckBox chocolateButton = setFlavourCheckBox(1); 
+//        JCheckBox strawberryButton = setFlavourCheckBox(2);
+//
+//        JPanel checkPanel = new JPanel(new GridLayout(0, 1));
+//        JLabel flavoursLabel = new JLabel("Select flavours: ");
+//        flavoursLabel.setFont(buttonsFont);
+//        checkPanel.add(flavoursLabel);
+//        checkPanel.add(chocolateButton);
+//        checkPanel.add(strawberryButton);
+        
 		JButton saveButton = new JButton("Save");
 		saveButton.setFont(buttonsFont);
 		saveButton.addActionListener(new ActionListener(){

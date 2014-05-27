@@ -11,6 +11,8 @@ import geometric.RelativePoint;
 
 import java.util.ArrayList;
 
+import constants.Constants;
+
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -23,7 +25,8 @@ public class ScanSketch extends PApplet {
 	private ArrayList<RelativePoint> ellipses;
 	private ArrayList<Line> lines;
 	private boolean firstPaint, endCapture;
-
+	private long actualFlow1, actualFlow2, actualFlow3;
+	
 	OpenCV opencv;
 	Capture video;
 	PImage src, dst;
@@ -44,6 +47,11 @@ public class ScanSketch extends PApplet {
 	  lines = new ArrayList<Line>();
 	  firstPaint = true;
 	  endCapture = false;
+	  actualFlow1 = 0;	
+	  actualFlow2 = 0;
+	  actualFlow3 = 0;
+	  
+	  setActualFlow(1, Constants.DEFAULT_FLOW);	// Chocolate by default
 	}
 
 	public void draw() {
@@ -61,8 +69,10 @@ public class ScanSketch extends PApplet {
 		  scale((float) 1.5);
 		  
 		  for (Contour contour : contours) {
-		    stroke(0);
-	
+//		    stroke(0);
+			stroke(153, 76, 0);	// Chocolate color
+			fill(153, 76, 0);
+				
 		    if (contour != contours.get(contours.size()-1)) {	// Avoids to get the contours of the image border
 	 
 			    beginShape(LINES);
@@ -70,7 +80,7 @@ public class ScanSketch extends PApplet {
 			    for (PVector point : contour.getPolygonApproximation().getPoints()) {
 			      fill(0,0,0);
 			      if(firstPaint) {
-			    	  ellipses.add(new RelativePoint(point.x, point.y, 0, 5, 0, 0));
+			    	  ellipses.add(new RelativePoint(point.x, point.y, 0, actualFlow1, actualFlow2, actualFlow3));
 			    	  // We only get ellipses by pairs, to save the lines
 			    	  if (contourCounter % 2 != 0) {
 			    		  RelativePoint p1 = ellipses.get(contourCounter-1);
@@ -143,6 +153,26 @@ public class ScanSketch extends PApplet {
 	/** Sends the points from the scanned sketch **/
 	public ArrayList<RelativePoint> getPoints() { 
 		return ellipses;
+	}
+	
+	/** Sets the actual flow value
+	 *	@param flow - quantity of flow
+	 *	@param flavour - flavor to increase the flow
+	 **/
+	public void setActualFlow(long flow, int flavour) {
+		switch(flavour) {
+		case 1:	// Chocolate
+			actualFlow1 = flow;
+			break;
+		case 2:	// Strawberry
+			actualFlow2 = flow;
+			break;
+		case 3:	// Other flavor
+			actualFlow2 = flow;
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public void captureEvent(Capture c) {
