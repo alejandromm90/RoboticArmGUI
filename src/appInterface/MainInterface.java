@@ -550,7 +550,23 @@ public class MainInterface extends javax.swing.JFrame {
 		menuModes.add(mItemScanSketch);
 		menuModes.add(mItemPredefinedModels);
 		menuModes.add(mItemDrawingCanvas);
+		
+		
+		
+		JMenu menuTools = new JMenu("Tools");		
+		JMenuItem mItemStepperManual = new JMenuItem("Steppers Manual Control");
+		mItemStepperManual.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				new ManualControl(MainInterface.this);
+			}
+		});
+		menuTools.add(mItemStepperManual);
+		
+		
+		
 		mBar.add(menuModes);
+		mBar.add(menuTools);
+
 		return mBar;
 	}
 
