@@ -5,6 +5,8 @@ import geometric.RelativePoint;
 
 import java.util.ArrayList;
 
+import ArduinoComm.TalkWithArduino;
+import appInterface.MainInterface;
 import math.Calculate;
 import math.Move;
 import processing.core.PApplet;
@@ -22,7 +24,6 @@ public class Simulation extends PApplet {
 	private ArrayList<RelativePoint> pointsDraw;
 	private RelativePoint point;
 	private Angles angles;
-	private Serial port;
 	private long[] flowBefore;
 	public static boolean finishPrint = false;
 
@@ -51,8 +52,14 @@ public class Simulation extends PApplet {
 		size(Constants.SIZE_WIDTH, Constants.SIZE_HEIGHT);
 		background(255);
 
-		port = new Serial(this, Serial.list()[9], 19200); // TODO
-
+		
+		try {
+			Thread.sleep(100);//TODO maybe there is something better to do than learn to program as indian... 
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		
 		point = null;
 		angles = null;
 
@@ -82,7 +89,7 @@ public class Simulation extends PApplet {
 		angles = Calculate.calculateAngles(point);
 
 		controlFlow();
-		sendToArduino(angles, point.getFlow1(), point.getFlow2(),
+		TalkWithArduino.sendToArduino(angles, point.getFlow1(), point.getFlow2(),
 				point.getFlow3()); // TODO
 
 		if ((point.getFlow1() + point.getFlow2() + point.getFlow3()) > 0) {
@@ -132,7 +139,7 @@ public class Simulation extends PApplet {
 				}
 			}
 
-			sendFlowToArduino(flow[0], flow[1], flow[2]); // TODO
+			TalkWithArduino.sendFlowToArduino(flow[0], flow[1], flow[2]); // TODO
 
 			delay(Constants.FLOW_WAIT);
 		}
@@ -322,44 +329,4 @@ public class Simulation extends PApplet {
 		float diameter = 2 * radius;
 		ellipse(x, Constants.SIZE_HEIGHT - z, diameter, diameter);
 	}
-
-	/**
-	 * 
-	 * @param angles
-	 * @param flow1
-	 * @param flow2
-	 * @param flow3
-	 */
-	private void sendToArduino(Angles angles, long flow1, long flow2, long flow3) {
-		int thi = (int) Math.toDegrees(angles.getThi())
-				+ Constants.CORRECT_ANGLE_THI;
-		int theta = (int) Math.toDegrees(angles.getTheta())
-				+ Constants.CORRECT_ANGLE_THETA;
-		int kappa = (int) -Math.toDegrees(angles.getKappa())
-				+ Constants.CORRECT_ANGLE_KAPPA;
-
-		port.write(thi + "a");
-		port.write(theta + "b");
-		port.write(kappa + "c");
-
-		sendFlowToArduino(flow1, flow2, flow3);
-	}
-
-	/**
-	 * 
-	 * @param flow1
-	 * @param flow2
-	 * @param flow3
-	 */
-	private void sendFlowToArduino(long flow1, long flow2, long flow3) {
-		flow1 = (100 * flow1) + 12000;
-		port.write(flow1 + "d");
-
-		flow2 = (-100 * flow2) + 12000;
-		port.write(flow2 + "e");
-
-		// flow3 = (100 * flow2) + 12000; // TODO
-		// port.write(flow3 + "f");
-	}
-
 }
