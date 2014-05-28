@@ -34,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
@@ -158,11 +159,12 @@ public class MainInterface extends javax.swing.JFrame {
 			manualPrinting = false;
 			mainPanel.remove(bigPanel);
 			bigPanel = setDrawingCanvasPanel();
-			mainPanel.add(bigPanel, BorderLayout.CENTER);	
+			mainPanel.add(bigPanel, BorderLayout.CENTER);
+			this.pack();	// I am not sure if this works absolutely good
+			this.setVisible(true);
 			break;
 		case 4: // Color Detection
 			manualPrinting = false;
-			// TODO ADD Color Detection PApplet
 	        mainPanel.remove(bigPanel);
 	        bigPanel = setColorTrackingPanel();
 	        mainPanel.add(bigPanel, BorderLayout.CENTER);
@@ -365,7 +367,8 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		JLabel title = new JLabel("Scan Sketch");
 		title.setFont(new Font("Arial", Font.BOLD, 20));
-		
+		title.setAlignmentX(CENTER_ALIGNMENT);
+
 		JPanel scanPanel = new JPanel();
 		scanSketch = new ScanSketch();
 		scanPanel.setBounds(20, 20, 600, 600);
@@ -457,6 +460,7 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		JLabel title = new JLabel("Drawing Canvas");
 		title.setFont(new Font("Arial", Font.BOLD, 20));
+		title.setAlignmentX(CENTER_ALIGNMENT);
 		
 		JPanel drawingPanel = new JPanel();
 		sketchDrawing = new DrawingCanvas();
@@ -475,25 +479,29 @@ public class MainInterface extends javax.swing.JFrame {
 	private JPanel setButtonsDrawingCanvasPanel() {
 		JPanel buttonsPanel = new JPanel();
 		
-		final JButton leapMotionButton = new JButton("Leap Motion Mode");
-		leapMotionButton.setFont(buttonsFont);
+		final JButton leapMotionButton = new JButton();//"Leap Motion Mode");
+		leapMotionButton.setIcon(new ImageIcon("icons/leap_motion_icon.png"));
 		leapMotionButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				
 				if (firstClickLeapMotionMode) {
 					((DrawingCanvas) sketchDrawing).setLeapMotionMode(true); 
 					firstClickLeapMotionMode = false;
-					leapMotionButton.setText("Disable Leap Motion Mode");
+					leapMotionButton.setIcon(new ImageIcon("icons/leap_motion_icon_pressed.png"));
+//					leapMotionButton.setText("Disable Leap Motion Mode");
 				} else {
 					((DrawingCanvas) sketchDrawing).setLeapMotionMode(false);
 					firstClickLeapMotionMode = true;
-					leapMotionButton.setText("Leap Motion Mode");
+					leapMotionButton.setIcon(new ImageIcon("icons/leap_motion_icon.png"));
+//					leapMotionButton.setText("Leap Motion Mode");
 				}
 			}
 		});
 		
-		JButton printButton = new JButton("Print");
+		JButton printButton = new JButton("Print", new ImageIcon("icons/print_icon.png"));
 		printButton.setFont(buttonsFont);
+		printButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+		printButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		printButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 //				((DrawingCanvas) sketchDrawing).pauseLeapMotionMode(true);
@@ -501,15 +509,20 @@ public class MainInterface extends javax.swing.JFrame {
 			}
 		});
 		
-		JButton cleanButton = new JButton("Clean Canvas");
+		JButton cleanButton = new JButton("Clean Canvas", new ImageIcon("icons/clean_canvas_icon.png"));
 		cleanButton.setFont(buttonsFont);
+		cleanButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+		cleanButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		cleanButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				((DrawingCanvas) sketchDrawing).cleanCanvas();
 			}
 		});
 		
-		JButton splitButton = new JButton("Split");
+		JButton splitButton = new JButton("Split", new ImageIcon("icons/split_icon.png"));
+		splitButton.setFont(buttonsFont);
+		splitButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+		splitButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		splitButton.setFont(buttonsFont);
 		splitButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -631,7 +644,8 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		JLabel title = new JLabel("Color Tracking Canvas");
 		title.setFont(new Font("Arial", Font.BOLD, 20));
-		
+		title.setAlignmentX(CENTER_ALIGNMENT);
+
 		JPanel trackingPanel = new JPanel();
 		
 		JPanel buttonsPanel = setButtonsColorTrackingPanel();
@@ -762,7 +776,7 @@ public class MainInterface extends javax.swing.JFrame {
 	/** Used for the Images to change flavors **/
 	private JButton getFlavorButton(final Flavor newFlavor){
 		
-		ImageIcon image = new ImageIcon(newFlavor.getFlavor() + ".png");
+		ImageIcon image = new ImageIcon("icons/" + newFlavor.getFlavor() + ".png");
 		ImageIcon imageRedefined = redefineImagen(image);
 		JButton flavorButton = new JButton();
 		flavorButton.addActionListener(new ActionListener(){
