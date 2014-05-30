@@ -60,7 +60,7 @@ public class MainInterface extends javax.swing.JFrame {
 	private int numberFlavor;
 	private JLabel printingLabel;
 	private JPanel bigPanel, mainPanel;
-	private boolean firstTimeManuallyPrinting, firstClickLeapMotionMode, manualPrinting, firstClickStartLeapMotion, firstClickScanMode, firstClickPauseColorTracking;
+	private boolean firstTimeManuallyPrinting, firstClickLeapMotionMode, manualPrinting, firstClickStartLeapMotion, firstClickScanMode, firstClickPauseColorTracking, firstClickLiveMode;
 	private processing.core.PApplet sketchDrawing, scanSketch, armSimulationSketch;
 	private Font buttonsFont = new Font("Arial", Font.PLAIN, 15);
 	private int actualFlow1, actualFlow2, actualFlow3, actualFlow;
@@ -317,48 +317,51 @@ public class MainInterface extends javax.swing.JFrame {
 	
 	/** Sets the arm simulation JPanel to show how the arm will get the coordinates **/
 	private JFrame setSimulationPanel(ArrayList<RelativePoint> points) {
-		final JFrame simJFrame = new JFrame();
-		simJFrame.setTitle("ARM SIMULATION");
-				
-        JPanel mainPanel = new JPanel();
-//		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-//		mainPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
-		
-//		JLabel title = new JLabel("Arm Simulation");
-//		title.setFont(new Font("Arial", Font.BOLD, 20));
-//		
-		JPanel printPanel = new JPanel();
-		System.out.println(points);
-		armSimulationSketch = new Simulation(Calculate.transformCoordinates(points));
-//		((ArmSimulationSide) armSimulationSideSketch).setPoints(points);
-		printPanel.setBounds(20, 20, 600, 600);
-		printPanel.setVisible(true);
-		printPanel.add(armSimulationSketch);
-		
-//		mainPanel.add(title);
-		mainPanel.add(printPanel);
-
-		simJFrame.setContentPane(mainPanel);
-		armSimulationSketch.init(); 
-		
-		simJFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		simJFrame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				if(Simulation.finishPrint) {
-					armSimulationSketch.destroy();	
-					simJFrame.setVisible(false);
-					simJFrame.dispose();
+		if (!points.isEmpty()) {
+			final JFrame simJFrame = new JFrame();
+			simJFrame.setTitle("ARM SIMULATION");
 					
-				}else { 
-					JOptionPane.showMessageDialog(null, "Printing in process");
+	        JPanel mainPanel = new JPanel();
+	//		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+	//		mainPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+			
+	//		JLabel title = new JLabel("Arm Simulation");
+	//		title.setFont(new Font("Arial", Font.BOLD, 20));
+	//		
+			JPanel printPanel = new JPanel();
+			System.out.println(points);
+			armSimulationSketch = new Simulation(Calculate.transformCoordinates(points));
+	//		((ArmSimulationSide) armSimulationSideSketch).setPoints(points);
+			printPanel.setBounds(20, 20, 600, 600);
+			printPanel.setVisible(true);
+			printPanel.add(armSimulationSketch);
+			
+	//		mainPanel.add(title);
+			mainPanel.add(printPanel);
+	
+			simJFrame.setContentPane(mainPanel);
+			armSimulationSketch.init(); 
+			
+			simJFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			simJFrame.addWindowListener(new WindowAdapter() {
+				public void windowClosing(WindowEvent e) {
+					if(Simulation.finishPrint) {
+						armSimulationSketch.destroy();	
+						simJFrame.setVisible(false);
+						simJFrame.dispose();
+						
+					}else { 
+						JOptionPane.showMessageDialog(null, "Printing in process");
+					}
 				}
-			}
-		});
-		simJFrame.setSize(Constants.SIZE_WIDTH + 80 ,Constants.SIZE_HEIGHT + 80);
-		simJFrame.setEnabled(true);
-		simJFrame.setVisible(true);
-
-		return simJFrame;
+			});
+			simJFrame.setSize(Constants.SIZE_WIDTH + 80 ,Constants.SIZE_HEIGHT + 80);
+			simJFrame.setEnabled(true);
+			simJFrame.setVisible(true);
+	
+			return simJFrame;
+		}
+		return null;
 	}
 	
 	
@@ -566,12 +569,29 @@ public class MainInterface extends javax.swing.JFrame {
 		flowPanel.add(flowLabel);
 		flowPanel.add(spinnerFlow);
 		
+		final JButton liveButton = new JButton("Live Mode");
+		liveButton.setFont(buttonsFont);
+		liveButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if (firstClickLiveMode) {
+					((DrawingCanvas) sketchDrawing).setLiveMode(false);	//TODO
+					liveButton.setText("Live Mode");
+					firstClickLiveMode = false;
+				} else {
+					((DrawingCanvas) sketchDrawing).setLiveMode(true);	
+					liveButton.setText("Stop Live Mode");
+					firstClickLiveMode = true;
+				}
+			}
+		});
+		
 		buttonsPanel.add(leapMotionButton);
 		buttonsPanel.add(printButton);
 		buttonsPanel.add(cleanButton);
 		buttonsPanel.add(splitButton);
 		buttonsPanel.add(checkPanel);
 		buttonsPanel.add(flowPanel);
+		buttonsPanel.add(liveButton);
 		
 		return buttonsPanel;
 	}

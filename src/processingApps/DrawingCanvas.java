@@ -9,7 +9,11 @@ import geometric.RelativePoint;
 
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import leapMotion.LeapMotionListener;
+import math.Calculate;
 import processing.core.PApplet;
 import appInterface.Flavor;
 
@@ -27,7 +31,7 @@ public class DrawingCanvas extends PApplet{
 	private double lastX, lastY;
 	private int width = Constants.DRAWING_APPLET_SIZE_WIDTH * 2;
 	private int height = Constants.DRAWING_APPLET_SIZE_HEIGHT * 2;
-	private boolean firstClick, leapMotionMode;
+	private boolean firstClick, leapMotionMode, liveMode;
 	private ArrayList<RelativePoint> lastEllipse, ellipsesRedo, ellipsesLeapMotion;
 	private ArrayList<Line> lastLine, linesRedo;
 	private Controller leapController;
@@ -35,6 +39,7 @@ public class DrawingCanvas extends PApplet{
 	private ArrayList<Flavor> flavors;
 	private Controller controller;
 	private int actualFlow1, actualFlow2, actualFlow3;
+	private processing.core.PApplet simulationPApplet;
 	
 	public void setup() {
 	  frameRate(30);
@@ -59,6 +64,8 @@ public class DrawingCanvas extends PApplet{
 	  actualFlow2 = 0;
 	  actualFlow3 = 0;
 
+	  liveMode = false;
+	  
 //	  leapMotionMode = true;
 	  drawBorder();
 	  strokeWeight(Constants.DEFAULT_FLOW - 5);
@@ -168,7 +175,7 @@ public class DrawingCanvas extends PApplet{
 		    	 
 		        controller.removeListener(listener);	// Remove the Leap Motion listener to avoid gestures mistakes
 		        RelativePoint newPoint = null;
-		        if (!newPointEqualToLast(x, y)) {	// We check if the point is the same to the last one
+		        if (!newPointEqualToLast(ellipsesLeapMotion, x, y)) {	// We check if the point is the same to the last one
 			        switch (numberFlavor) {
 			        case 0:	// Chocolate
 			        	newPoint = new RelativePoint(x, y, 0, flow, 0, 0);
@@ -217,9 +224,9 @@ public class DrawingCanvas extends PApplet{
 	 *  @params x
 	 *  @params y
 	**/
-	private boolean newPointEqualToLast(float x, float y) { 
-		if (!ellipsesLeapMotion.isEmpty()) {
-			RelativePoint lastPoint = ellipsesLeapMotion.get(ellipsesLeapMotion.size()-1);
+	private boolean newPointEqualToLast(ArrayList<RelativePoint> pointList, float x, float y) { 
+		if (!pointList.isEmpty()) {
+			RelativePoint lastPoint = pointList.get(pointList.size()-1);
 	        if (((int)lastPoint.getX() == (int)x) && ((int)lastPoint.getY() == (int)y)) {
 	        	return true;
 	        	
@@ -289,8 +296,18 @@ public class DrawingCanvas extends PApplet{
 //	    } else {
 //	    	lastEllipse.add(new Point(mouseX, mouseY, 0));
 //	    }
-		lastEllipse.add(new RelativePoint(mX/2, mY/2, -50, flow1, flow2, flow3));	// Z = -50
+		RelativePoint newPoint = new RelativePoint(mX/2, mY/2, -50, flow1, flow2, flow3);	// Z = -50
+		System.out.println(newPoint);
 
+		if (liveMode) {	// We check if we are in Live Mode
+			if (!newPointEqualToLast(lastEllipse, (float)newPoint.getX(), (float)newPoint.getY())) {
+				System.out.println(newPoint);
+
+				((Simulation) simulationPApplet).addPoint(newPoint);
+			}
+		}
+		lastEllipse.add(newPoint);	
+		
 	}
 
 	
@@ -546,6 +563,47 @@ public class DrawingCanvas extends PApplet{
 		} else {
 			return ellipsesLeapMotion;
 		}
+	}
+	
+	/** Sets the live mode **/
+	public void setLiveMode(boolean liveMode) {
+		if (liveMode) {
+			if (!lastEllipse.isEmpty()) {
+				simulationPApplet = new Simulation(Calculate.transformCoordinates(lastEllipse));
+			} else if (!ellipsesLeapMotion.isEmpty()) {
+				simulationPApplet = new Simulation(Calculate.transformCoordinates(ellipsesLeapMotion));
+			} else { // There are no points yet
+				simulationPApplet = new Simulation(new ArrayList<RelativePoint>());
+			}
+			
+			// TODO try to remove this frame
+			final JFrame simJFrame = new JFrame();
+			simJFrame.setTitle("ARM SIMULATION");
+					
+	        JPanel mainPanel = new JPanel();
+			JPanel printPanel = new JPanel();
+//			((ArmSimulationSide) armSimulationSideSketch).setPoints(points);
+			printPanel.setBounds(20, 20, 600, 600);
+			printPanel.setVisible(true);
+			printPanel.add(simulationPApplet);
+			
+//			mainPanel.add(title);
+			mainPanel.add(printPanel);
+
+			simJFrame.setContentPane(mainPanel);
+			simulationPApplet.init(); 
+			
+			simJFrame.setSize(0,0);
+			simJFrame.setEnabled(true);
+			simJFrame.setVisible(true);
+
+		} else {
+			if (simulationPApplet != null) {
+				simulationPApplet.destroy();
+			}
+		}
+		Simulation.liveMode = liveMode;
+		this.liveMode = liveMode;
 	}
 	
 }

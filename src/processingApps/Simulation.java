@@ -25,86 +25,112 @@ public class Simulation extends PApplet {
 	private RelativePoint point;
 	private Angles angles;
 	private long[] flowBefore;
-	public static boolean finishPrint = false;
+	public static boolean finishPrint = true;
+	public static boolean liveMode = false;
 
 	/**
 	 * 
 	 * @param points
 	 */
 	public Simulation(ArrayList<RelativePoint> points) {
-		RelativePoint point1 = points.get(points.size() - 1);
-
-		points.add(new RelativePoint(point1.getX(), point1.getY(), point1
-				.getZ(), 0, 0, 0));
-
-		points.add(new RelativePoint(Constants.START_X, Constants.START_Y,
-				Constants.START_Z, 0, 0, 0));
-
-		this.points = Move.smoothMovement(Calculate
-				.transformRelativePoint(points));
-		pointsDraw = new ArrayList<RelativePoint>();
+		if (!points.isEmpty()) {
+			
+			RelativePoint point1 = points.get(points.size() - 1);
+	
+			points.add(new RelativePoint(point1.getX(), point1.getY(), point1
+					.getZ(), 0, 0, 0));
+	
+			points.add(new RelativePoint(Constants.START_X, Constants.START_Y,
+					Constants.START_Z, 0, 0, 0));
+	
+			this.points = Move.smoothMovement(Calculate
+					.transformRelativePoint(points));
+			pointsDraw = new ArrayList<RelativePoint>();
+		} else {
+			this.points = new ArrayList<RelativePoint>();
+			pointsDraw = new ArrayList<RelativePoint>();
+		}
 	}
 
 	/**
 	 * 
 	 */
 	public void setup() {
-		size(Constants.SIZE_WIDTH, Constants.SIZE_HEIGHT);
-		background(255);
-
+		if (liveMode == false) {
+			size(Constants.SIZE_WIDTH, Constants.SIZE_HEIGHT);
+			background(255);	
+		}
 		
 		try {
 			Thread.sleep(100);//TODO maybe there is something better to do than learn to program as indian... 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		
-		point = null;
-		angles = null;
 
 		flowBefore = new long[Constants.NUMBER_OF_FLAVOURS];
 		for (int i = 0; i < flowBefore.length; i++) {
 			flowBefore[i] = 0;
 		}
+		
+		point = null;
+		angles = null;
+		
 	}
 
 	/**
 	 *
 	 */
 	public void draw() {
-		background(255);
-
-		if (points.size() > 0) {
-			finishPrint = false;
-			RelativePoint point1 = points.remove(0);
-
-			point = new RelativePoint(point1.getX(), point1.getY(),
-					point1.getZ(), point1.getFlow1(), point1.getFlow2(),
-					point1.getFlow3());
-		} else if (points.size() == 0){
-			finishPrint = true;
+		if (!liveMode) {
+			background(255);
+	
+			if (points.size() > 0) {
+				finishPrint = false;
+				RelativePoint point1 = points.remove(0);
+	
+				point = new RelativePoint(point1.getX(), point1.getY(),
+						point1.getZ(), point1.getFlow1(), point1.getFlow2(),
+						point1.getFlow3());
+			} else if (points.size() == 0){
+				finishPrint = true;
+			}
+	
+			angles = Calculate.calculateAngles(point);
+	
+			controlFlow();
+			TalkWithArduino.sendToArduino(angles, point.getFlow1(), point.getFlow2(),
+					point.getFlow3()); // TODO
+	
+			if ((point.getFlow1() + point.getFlow2() + point.getFlow3()) > 0) {
+				pointsDraw.add(point);
+			}
+	
+			drawBorders();
+			drawParameters();
+			drawHistoryPoints();
+	
+			drawArmTop((float) angles.getThi(), (float) angles.getTheta(),
+					(float) angles.getKappa());
+			drawArmSide((float) angles.getTheta(), (float) angles.getKappa());
+	
+			delay(Constants.SIMULATION_SPEED);
+		} else {
+			// Live Mode
+			if (points.size() > 0) {
+				RelativePoint point1 = points.remove(0);
+	
+				point = new RelativePoint(point1.getX(), point1.getY(),
+						point1.getZ(), point1.getFlow1(), point1.getFlow2(),
+						point1.getFlow3());
+			
+				angles = Calculate.calculateAngles(point);
+				
+				controlFlow();
+				TalkWithArduino.sendToArduino(angles, point.getFlow1(), point.getFlow2(),
+						point.getFlow3()); // TODO
+				delay(Constants.SIMULATION_SPEED);
+			} 
 		}
-
-		angles = Calculate.calculateAngles(point);
-
-		controlFlow();
-		TalkWithArduino.sendToArduino(angles, point.getFlow1(), point.getFlow2(),
-				point.getFlow3()); // TODO
-
-		if ((point.getFlow1() + point.getFlow2() + point.getFlow3()) > 0) {
-			pointsDraw.add(point);
-		}
-
-		drawBorders();
-		drawParameters();
-		drawHistoryPoints();
-
-		drawArmTop((float) angles.getThi(), (float) angles.getTheta(),
-				(float) angles.getKappa());
-		drawArmSide((float) angles.getTheta(), (float) angles.getKappa());
-
-		delay(Constants.SIMULATION_SPEED);
 	}
 
 	/**
@@ -329,4 +355,14 @@ public class Simulation extends PApplet {
 		float diameter = 2 * radius;
 		ellipse(x, Constants.SIZE_HEIGHT - z, diameter, diameter);
 	}
+	
+	public void addPoint(RelativePoint point) {
+		ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
+		pts.add(point);
+//		points = Calculate.transformRelativePoint(pts);
+		System.out.println(point);
+		points.addAll(Calculate.transformRelativePoint(pts));	
+		System.out.println(points+" ddddd");
+	}
+	
 }
