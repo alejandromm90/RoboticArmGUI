@@ -88,6 +88,7 @@ public abstract class Calculate {
 
 		return points2;
 	}
+	
 
 	/**
 	 * 
@@ -120,6 +121,18 @@ public abstract class Calculate {
 							.getFlow2(), point.getFlow3()));
 		}
 
+		return points2;
+	}
+	
+	public static ArrayList<RelativePoint> transformHundred(
+			ArrayList<RelativePoint> points) {
+		ArrayList<RelativePoint> points2 = new ArrayList<RelativePoint>();
+
+		for (int i = 0; i < points.size(); i++) {
+			points2.add(new RelativePoint(points.get(i).getX(), points.get(i).getY() +100, points.get(i).getZ(),
+					points.get(i).getFlow1(), points.get(i).getFlow2(), points.get(i).getFlow3()));
+		}
+		
 		return points2;
 	}
 

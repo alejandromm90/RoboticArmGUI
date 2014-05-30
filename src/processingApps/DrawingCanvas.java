@@ -192,7 +192,14 @@ public class DrawingCanvas extends PApplet{
 			        }
 			    	newPoint.setX(x/2);
 			    	newPoint.setY(y/2);
-			    	ellipsesLeapMotion.add(newPoint);
+			    	
+			    	if (liveMode) {	// We check if we are in Live Mode
+				    	ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
+						pts.add(newPoint);				
+						((Simulation) simulationPApplet).addPoint(pts);
+					}
+
+			    	ellipsesLeapMotion.add(newPoint);	//TODO
 		        } 
 		    	drawing = true;
 
@@ -216,6 +223,8 @@ public class DrawingCanvas extends PApplet{
 	    
 		    if(!drawing) {
 		    	addLastPoint();
+		    	ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
+				((Simulation) simulationPApplet).addPoint(pts);
 		    }
     	}
 	}
@@ -577,7 +586,7 @@ public class DrawingCanvas extends PApplet{
 			}
 			
 			// TODO try to remove this frame
-			final JFrame simJFrame = new JFrame();
+			JFrame simJFrame = new JFrame();
 			simJFrame.setTitle("ARM SIMULATION");
 					
 	        JPanel mainPanel = new JPanel();
@@ -586,7 +595,6 @@ public class DrawingCanvas extends PApplet{
 			printPanel.setVisible(true);
 			printPanel.add(simulationPApplet);
 			
-//			mainPanel.add(title);
 			mainPanel.add(printPanel);
 
 			simJFrame.setContentPane(mainPanel);
@@ -598,7 +606,11 @@ public class DrawingCanvas extends PApplet{
 
 		} else {
 			if (simulationPApplet != null) {
-				simulationPApplet.destroy();
+				ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
+				((Simulation) simulationPApplet).addPoint(pts);
+
+//				simulationPApplet.destroy();
+				
 			}
 		}
 		Simulation.liveMode = liveMode;
