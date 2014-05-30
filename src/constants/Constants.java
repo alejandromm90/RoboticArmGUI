@@ -28,7 +28,7 @@ public abstract class Constants {
 	/**
 	 * Flavour relevant
 	 */
-	public static final int DEFAULT_FLAVOUR = 1; // Chocolate by default
+//	public static final int DEFAULT_FLAVOUR = 1; // Chocolate by default
 	
 	
 	/****************************************************************************************************
@@ -88,12 +88,12 @@ public abstract class Constants {
 	 * Move the drawing applet grid in the print applet
 	 */
 	public static final int DRAWING_APPLET_RELATIVE_X = -341;
-	public static final int DRAWING_APPLET_RELATIVE_Y = 100;
+	public static final int DRAWING_APPLET_RELATIVE_Y = 200; //100;
 
 	/**
 	 * Only for drawing in the applet
 	 */
-	public static final double BASE_X = 280;
+	public static final double BASE_X = 350; //280;
 	public static final double BASE_Y = 230;
 	public static final double BASE_Z = 109;
 }

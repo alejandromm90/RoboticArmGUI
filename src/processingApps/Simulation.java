@@ -356,13 +356,13 @@ public class Simulation extends PApplet {
 		ellipse(x, Constants.SIZE_HEIGHT - z, diameter, diameter);
 	}
 	
-	public void addPoint(RelativePoint point) {
-		ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
-		pts.add(point);
-//		points = Calculate.transformRelativePoint(pts);
-		System.out.println(point);
-		points.addAll(Calculate.transformRelativePoint(pts));	
-		System.out.println(points+" ddddd");
+	/** Adds a Point from the Live Mode 
+	 * @params pts - ArrayList of one point
+	 * **/
+	public void addPoint(ArrayList<RelativePoint> pts) {
+		ArrayList<RelativePoint> pts2 = Calculate.transformCoordinates(pts);
+		ArrayList<RelativePoint> pts3 = Calculate.transformRelativePoint(pts2);				
+		this.points.addAll(pts3);	
 	}
 	
 }

@@ -301,9 +301,9 @@ public class DrawingCanvas extends PApplet{
 
 		if (liveMode) {	// We check if we are in Live Mode
 			if (!newPointEqualToLast(lastEllipse, (float)newPoint.getX(), (float)newPoint.getY())) {
-				System.out.println(newPoint);
-
-				((Simulation) simulationPApplet).addPoint(newPoint);
+		    	ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
+				pts.add(newPoint);				
+				((Simulation) simulationPApplet).addPoint(pts);
 			}
 		}
 		lastEllipse.add(newPoint);	
@@ -582,7 +582,6 @@ public class DrawingCanvas extends PApplet{
 					
 	        JPanel mainPanel = new JPanel();
 			JPanel printPanel = new JPanel();
-//			((ArmSimulationSide) armSimulationSideSketch).setPoints(points);
 			printPanel.setBounds(20, 20, 600, 600);
 			printPanel.setVisible(true);
 			printPanel.add(simulationPApplet);
