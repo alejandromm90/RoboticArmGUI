@@ -40,6 +40,13 @@ public class DrawingCanvas extends PApplet{
 	private Controller controller;
 	private int actualFlow1, actualFlow2, actualFlow3;
 	private processing.core.PApplet simulationPApplet;
+	private int mode;
+	private float diameter;
+	
+	public DrawingCanvas(int mode, float diameter) {	// Mode for drawing the background shape
+		this.mode = mode;
+		this.diameter = diameter; 
+	}
 	
 	public void setup() {
 	  frameRate(30);
@@ -110,6 +117,9 @@ public class DrawingCanvas extends PApplet{
 				  
 				drawFlavourPoint(mouseX, mouseY, actualFlow1, actualFlow2, actualFlow3);
 			    addEllipseToArray(mouseX, mouseY, actualFlow1, actualFlow2, actualFlow3);    
+				
+				} else if (liveMode) {
+				    addEllipseToArray(mouseX, mouseY, actualFlow1, actualFlow2, actualFlow3);    
 				}
 			}
 		}
@@ -438,8 +448,19 @@ public class DrawingCanvas extends PApplet{
 	  stroke(0); // black color line
 	  strokeWeight(2);  // Increases the weight of the line
 	  fill(255);	// fill the ellipse with white
-	  ellipseMode(CENTER);
-	  ellipse(width/2, height + (80 * 2), width, width);
+	  
+	  switch(mode) {
+	  case 0:	// Half ellipse mode
+		  ellipseMode(CENTER);
+		  ellipse(width/2, height + (80 * 2), width, width);
+		  break;
+	  case 1:	// Cake mode
+		  ellipseMode(CENTER);
+		  diameter = (float) (diameter * 15.85);
+		  ellipse(width/2, height/2, diameter, diameter);
+		  break;
+	  }
+
 	  line(0, 0, width, 0);
 	  line(0, 0, 0, height-1);
 	  line(0, height-1, width-1, height-1);
