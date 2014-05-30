@@ -139,7 +139,7 @@ public class MainInterface extends javax.swing.JFrame {
 		
 		// Depending on the menuItem you choose, it will show each panel
 //		bigPanel = setManuallyPrintingPanel();
-		bigPanel = setDrawingCanvasPanel();
+		bigPanel = setDrawingCanvasPanel(0, 0);
 //		bigPanel = setColorTrackingPanel();
 //		bigPanel = setScanSketchPanel();
 		mainPanel.add(bigPanel, BorderLayout.CENTER);
@@ -163,15 +163,28 @@ public class MainInterface extends javax.swing.JFrame {
 			mainPanel.add(bigPanel, BorderLayout.CENTER);
 			break;
 		case 2:	// Predefined Sketch
-//			manualPrinting = false;
-//			mainPanel.remove(bigPanel);
-//			bigPanel = setDrawingCanvasPanel();
-//			mainPanel.add(bigPanel, BorderLayout.CENTER);
+			manualPrinting = false;
+			mainPanel.remove(bigPanel);	// TODO
+			boolean correctValue = false;
+			float diameter = 0;
+			while (!correctValue) {
+				String cakeDiameter = JOptionPane.showInputDialog("Diameter cake's length (between 20 and 5 cm): ", 20);
+				try {
+					diameter = Float.parseFloat(cakeDiameter);
+					if (diameter <= 20 && diameter >= 5)
+						correctValue = true;	
+				}catch (NumberFormatException e){
+//					System.out.println("exception");
+				}					
+			}
+			
+			bigPanel = setDrawingCanvasPanel(1, diameter);
+			mainPanel.add(bigPanel, BorderLayout.CENTER);
 			break;
 		case 3:	// Drawing Canvas
 			manualPrinting = false;
 			mainPanel.remove(bigPanel);
-			bigPanel = setDrawingCanvasPanel();
+			bigPanel = setDrawingCanvasPanel(0, 0);
 			mainPanel.add(bigPanel, BorderLayout.CENTER);
 			this.pack();	// I am not sure if this works absolutely good
 			this.setVisible(true);
@@ -206,11 +219,17 @@ public class MainInterface extends javax.swing.JFrame {
 				scanSketch.destroy();
 			}
 			break;
-		case 2: // Predefined sketch mode
+		case 2: // cake drawing mode
+			if (scanSketch != null) {
+				scanSketch.destroy();
+			}
+			if (sketchDrawing != null) { 
+				sketchDrawing.destroy();
+			} 
 			break;
 		case 3: // Drawing Canvas mode
 			if (scanSketch != null) {
-					scanSketch.destroy();
+				scanSketch.destroy();
 			}
 			if (sketchDrawing != null) { 
 				sketchDrawing.destroy();
@@ -261,7 +280,7 @@ public class MainInterface extends javax.swing.JFrame {
 			}
 		});
 		
-		JMenuItem mItemPredefinedModels = new JMenuItem("Predefined Sketch"); 
+		JMenuItem mItemPredefinedModels = new JMenuItem("Cake Drawing Mode"); 
 		mItemPredefinedModels.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				destroyPAppletThreads(2);
@@ -468,7 +487,7 @@ public class MainInterface extends javax.swing.JFrame {
 	
 	
 	/** This method sets the Panel of the Drawing Canvas mode **/
-	private JPanel setDrawingCanvasPanel() {
+	private JPanel setDrawingCanvasPanel(int mode, float diameter) {
 				
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -479,7 +498,14 @@ public class MainInterface extends javax.swing.JFrame {
 		title.setAlignmentX(CENTER_ALIGNMENT);
 		
 		JPanel drawingPanel = new JPanel();
-		sketchDrawing = new DrawingCanvas();
+		switch (mode) {
+		case 0:	// Half ellipse mode
+			sketchDrawing = new DrawingCanvas(0, diameter);
+			break;
+		case 1:	// Cake mode
+			sketchDrawing = new DrawingCanvas(1, diameter);	
+			break;
+		}
 		drawingPanel.add(sketchDrawing);
 		JPanel buttonsPanel = setButtonsDrawingCanvasPanel();
 
@@ -573,12 +599,14 @@ public class MainInterface extends javax.swing.JFrame {
 		flowPanel.add(flowLabel);
 		flowPanel.add(spinnerFlow);
 		
-		final JButton liveButton = new JButton("Live Mode");
+		final JButton liveButton = new JButton("Live Mode", new ImageIcon("icons/live_mode_icon.png"));
 		liveButton.setFont(buttonsFont);
+		liveButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+		liveButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		liveButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (firstClickLiveMode) {
-					((DrawingCanvas) sketchDrawing).setLiveMode(false);	//TODO
+					((DrawingCanvas) sketchDrawing).setLiveMode(false);	
 					liveButton.setText("Live Mode");
 					firstClickLiveMode = false;
 				} else {

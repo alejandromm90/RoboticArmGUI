@@ -88,7 +88,7 @@ public abstract class Constants {
 	 * Move the drawing applet grid in the print applet
 	 */
 	public static final int DRAWING_APPLET_RELATIVE_X = -341;
-	public static final int DRAWING_APPLET_RELATIVE_Y = 200; //100;
+	public static final int DRAWING_APPLET_RELATIVE_Y = 100; //100;
 
 	/**
 	 * Only for drawing in the applet

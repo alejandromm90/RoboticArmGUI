@@ -357,12 +357,20 @@ public class Simulation extends PApplet {
 	}
 	
 	/** Adds a Point from the Live Mode 
-	 * @params pts - ArrayList of one point
-	 * **/
+	 * @param pts - ArrayList of one point. 
+	 * If you add an empty array of points it stops printing
+	 */
 	public void addPoint(ArrayList<RelativePoint> pts) {
-		ArrayList<RelativePoint> pts2 = Calculate.transformCoordinates(pts);
-		ArrayList<RelativePoint> pts3 = Calculate.transformRelativePoint(pts2);				
-		this.points.addAll(pts3);	
+		if (!pts.isEmpty()) {
+			ArrayList<RelativePoint> pts2 = Calculate.transformCoordinates(pts);
+			ArrayList<RelativePoint> pts3 = Calculate.transformRelativePoint(pts2);				
+			this.points.addAll(Calculate.transformHundred(pts3));	
+		} else { // Stop live mode
+			pts.add(new RelativePoint(Constants.START_X,
+					Constants.START_Y, Constants.START_Z, 0, 0, 0));	
+			
+			this.points.addAll(pts);
+		}
 	}
 	
 }
