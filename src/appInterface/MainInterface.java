@@ -94,9 +94,18 @@ public class MainInterface extends javax.swing.JFrame {
 		this.setContentPane(getMainPanel());
 		this.setTitle("PRINTER USER INTERFACE");
 		
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				System.exit(0);
+				if(!Simulation.finishPrint) {
+					// If we are printing it doesn't close
+					JOptionPane.showMessageDialog(null, "Printing in process");
+
+				}else { 
+					// If not, we close the system
+					System.exit(0);	
+
+				}
 			}
 		});
 		
