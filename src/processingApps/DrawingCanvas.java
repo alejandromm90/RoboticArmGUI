@@ -25,8 +25,8 @@ public class DrawingCanvas extends PApplet{
 	private static final int MAX_BRUSH_SIZE = 260;
 	private static final int MIN_BRUSH_SIZE = 160;
 	private double lastX, lastY;
-	private int width = 682;
-	private int height = 270;
+	private int width = Constants.DRAWING_APPLET_SIZE_WIDTH * 2;
+	private int height = Constants.DRAWING_APPLET_SIZE_HEIGHT * 2;
 	private boolean firstClick, leapMotionMode;
 	private ArrayList<RelativePoint> lastEllipse, ellipsesRedo, ellipsesLeapMotion;
 	private ArrayList<Line> lastLine, linesRedo;
@@ -183,7 +183,8 @@ public class DrawingCanvas extends PApplet{
 				    	drawFlavourPoint(x, y, flow, flow, 0);
 			        	break;
 			        }
-			    	
+			    	newPoint.setX(x/2);
+			    	newPoint.setY(y/2);
 			    	ellipsesLeapMotion.add(newPoint);
 		        } 
 		    	drawing = true;
@@ -203,7 +204,7 @@ public class DrawingCanvas extends PApplet{
 			    	drawFlavourPoint(x, y, Constants.DEFAULT_FLOW, Constants.DEFAULT_FLOW, 0);
 		        	break;
 		    	}
-		    	repaintCanvas(ellipsesLeapMotion, new ArrayList<Line>(), false);
+		    	repaintCanvas(ellipsesLeapMotion, new ArrayList<Line>(), false, true);	// Leap mode true
 		    }
 	    
 		    if(!drawing) {
@@ -256,10 +257,10 @@ public class DrawingCanvas extends PApplet{
 	/** Checks if two points are inside the arm range **/
 	private boolean insideCanvas(int mouseX, int mouseY) {
 		// Converts coordinates to the same that are in the arm canvas
-		int x = mouseX + Constants.DRAWING_APPLET_RELATIVE_X;// - 80; 
-		int y = Constants.DRAWING_APPLET_SIZE_HEIGHT - mouseY + 80;
+		int x = mouseX + Constants.DRAWING_APPLET_RELATIVE_X * 2;// - 80; 
+		int y = Constants.DRAWING_APPLET_SIZE_HEIGHT * 2 - mouseY + (80 * 2);
 		
-		double ratio = Constants.DRAWING_APPLET_SIZE_WIDTH/2; // 341
+		double ratio = Constants.DRAWING_APPLET_SIZE_WIDTH; // 642
 		double xCenter = 0;
 		double yCenter = 0;
 
@@ -288,7 +289,7 @@ public class DrawingCanvas extends PApplet{
 //	    } else {
 //	    	lastEllipse.add(new Point(mouseX, mouseY, 0));
 //	    }
-		lastEllipse.add(new RelativePoint(mX, mY, -50, flow1, flow2, flow3));	// Z = -50
+		lastEllipse.add(new RelativePoint(mX/2, mY/2, -50, flow1, flow2, flow3));	// Z = -50
 
 	}
 
@@ -322,59 +323,69 @@ public class DrawingCanvas extends PApplet{
 	
 	
 	/** UNDO function. Not used in the end **/
-	public void undoCanvas() {
-		drawBorder();
-		if (!lastEllipse.isEmpty()) {
-			
-			RelativePoint undoEllipse = lastEllipse.remove(lastEllipse.size() - 1);
-			if (!ellipsesRedo.contains(undoEllipse)) {
-				ellipsesRedo.add(undoEllipse);
-			}
-			if (!lastLine.isEmpty()) {
-				Line undoLine = lastLine.remove(lastLine.size() - 1); 
-				if (!linesRedo.contains(undoLine)) {
-					linesRedo.add(undoLine);
-				}
-			}
-			if (lastEllipse.isEmpty()) {
-				firstClick = true;
-			} else {
-				repaintCanvas(lastEllipse, lastLine, false);
-			}	
-		}	
-	}
+//	public void undoCanvas() {
+//		drawBorder();
+//		if (!lastEllipse.isEmpty()) {
+//			
+//			RelativePoint undoEllipse = lastEllipse.remove(lastEllipse.size() - 1);
+//			if (!ellipsesRedo.contains(undoEllipse)) {
+//				ellipsesRedo.add(undoEllipse);
+//			}
+//			if (!lastLine.isEmpty()) {
+//				Line undoLine = lastLine.remove(lastLine.size() - 1); 
+//				if (!linesRedo.contains(undoLine)) {
+//					linesRedo.add(undoLine);
+//				}
+//			}
+//			if (lastEllipse.isEmpty()) {
+//				firstClick = true;
+//			} else {
+//				repaintCanvas(lastEllipse, lastLine, false, false);
+//			}	
+//		}	
+//	}
 	
 	/** REDO function. Not used in the end **/
-	public void redoCanvas() {
-		drawBorder();
-		firstClick = false;
-		
-		if (lastEllipse.isEmpty()) {
-			repaintCanvas(ellipsesRedo, new ArrayList<Line>(), true);
-			if (!ellipsesRedo.isEmpty()) {
-				lastEllipse.add(ellipsesRedo.remove(ellipsesRedo.size() - 1));
-			}
-		} else {
-			repaintCanvas(lastEllipse, lastLine, false);
-
-			repaintCanvas(ellipsesRedo, linesRedo, true);
-		
-			if (!ellipsesRedo.isEmpty()) {
-				lastEllipse.add(ellipsesRedo.remove(ellipsesRedo.size() - 1));
-			}
-			if (!linesRedo.isEmpty()) {
-				lastLine.add(linesRedo.remove(linesRedo.size() - 1));
-			}
-		}
-	}
+//	public void redoCanvas() {
+//		drawBorder();
+//		firstClick = false;
+//		
+//		if (lastEllipse.isEmpty()) {
+//			repaintCanvas(ellipsesRedo, new ArrayList<Line>(), true, false);
+//			if (!ellipsesRedo.isEmpty()) {
+//				lastEllipse.add(ellipsesRedo.remove(ellipsesRedo.size() - 1));
+//			}
+//		} else {
+//			repaintCanvas(lastEllipse, lastLine, false, false);
+//
+//			repaintCanvas(ellipsesRedo, linesRedo, true, false);
+//		
+//			if (!ellipsesRedo.isEmpty()) {
+//				lastEllipse.add(ellipsesRedo.remove(ellipsesRedo.size() - 1));
+//			}
+//			if (!linesRedo.isEmpty()) {
+//				lastLine.add(linesRedo.remove(linesRedo.size() - 1));
+//			}
+//		}
+//	}
 	
-	private void repaintCanvas(ArrayList<RelativePoint> ellipses, ArrayList<Line> lines, boolean redo) {
+	private void repaintCanvas(ArrayList<RelativePoint> ellipses, ArrayList<Line> lines, boolean redo, boolean leapMode) {
 		int i = 0;
+		double x = 0;
+		double y = 0;
 		if (redo && !ellipses.isEmpty()) {
 			i = ellipses.size() - 1;
 		}
 		while (i < ellipses.size()) {
 			RelativePoint lastE = ellipses.get(i);
+			if (leapMode) {
+				x = lastE.getX() * 2;
+				y = lastE.getY() * 2;	// We multiply by 2 because we added them divided by 2
+			} else {
+				x = lastE.getX();
+				y = lastE.getY();
+			}
+				
 			if (lastE.getFlow1() > 0 || lastE.getFlow2() > 0 || lastE.getFlow3() > 0) {
 				
 				Line lastL = null;
@@ -382,15 +393,14 @@ public class DrawingCanvas extends PApplet{
 					lastL = lines.get(i);
 				}
 				
-				drawFlavourPoint((float)lastE.getX(), (float)lastE.getY(), lastE.getFlow1(), lastE.getFlow2(), lastE.getFlow3());
+				drawFlavourPoint((float)x, (float)y, lastE.getFlow1(), lastE.getFlow2(), lastE.getFlow3());
 //				ellipse((float)lastE.getX(), (float)lastE.getY(), 5, 5);
 				if (lastL != null) {
 					line((float)lastL.getX(), (float)lastL.getY(), (float)lastL.getxE(), (float)lastL.getyE());
 				}
 	
-				lastX = lastE.getX();
-				lastY = lastE.getY();
-				
+				lastX = x;
+				lastY = y;
 			}
 			i++;
 
@@ -403,7 +413,7 @@ public class DrawingCanvas extends PApplet{
 	  strokeWeight(2);  // Increases the weight of the line
 	  fill(255);	// fill the ellipse with white
 	  ellipseMode(CENTER);
-	  ellipse(width/2, height + 80, width, width);
+	  ellipse(width/2, height + (80 * 2), width, width);
 	  line(0, 0, width, 0);
 	  line(0, 0, 0, height-1);
 	  line(0, height-1, width-1, height-1);
