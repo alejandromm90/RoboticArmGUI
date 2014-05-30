@@ -1,0 +1,822 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGBUS (0xa) at pc=0x00007fff7901c3c8, pid=671, tid=1287
+#
+# JRE version: Java(TM) SE Runtime Environment (7.0_51-b13) (build 1.7.0_51-b13)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (24.51-b03 mixed mode bsd-amd64 compressed oops)
+# Problematic frame:
+# C  [Foundation+0xe58c63c8]  OBJC_METACLASS_$_NSLock+0x0
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.sun.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007f84f4822000):  JavaThread "AppKit Thread" daemon [_thread_in_native, id=1287, stack(0x00007fff580b9000,0x00007fff58139000)]
+
+siginfo:si_signo=SIGBUS: si_errno=0, si_code=2 (BUS_ADRERR), si_addr=0x00007fff7901c3c8
+
+Registers:
+RAX=0x00007fff7901c3c8, RBX=0x00007f84f79c00c0, RCX=0x0000000000000000, RDX=0x00007f84f2e0eae0
+RSP=0x00007fff58132bc8, RBP=0x00007fff58133010, RSI=0x00007f84f79c0288, RDI=0x00007f84f79c00c0
+R8 =0x0000000000000040, R9 =0x00007fff58132600, R10=0x000000001d79ac3c, R11=0x000000003589166a
+R12=0x00007f84f9ce7290, R13=0x00007f84f9ce7200, R14=0x0000000000000000, R15=0x00007f84f9ca93d0
+RIP=0x00007fff7901c3c8, EFLAGS=0x0000000000010286, ERR=0x0000000000000015
+  TRAPNO=0x000000000000000e
+
+Top of Stack: (sp=0x00007fff58132bc8)
+0x00007fff58132bc8:   000000011eb6d0bb 0000000000000014
+0x00007fff58132bd8:   00007fff87542c12 0000000000000007
+0x00007fff58132be8:   00007f84f5527c70 0000000000000000
+0x00007fff58132bf8:   0000000000000008 00007fff58132e88
+0x00007fff58132c08:   00007fff9078e4a9 00007fff58132c30
+0x00007fff58132c18:   00007fff58132cb4 00007fff58132cb0
+0x00007fff58132c28:   0000000000000000 00007fff58132cac
+0x00007fff58132c38:   00007f84f55273b4 0000000000003e02
+0x00007fff58132c48:   0000010000000000 00007f84f55273b0
+0x00007fff58132c58:   0000206000527380 00007fff58132e94
+0x00007fff58132c68:   00007f84f5527398 00007f84f5527380
+0x00007fff58132c78:   00007f84f5527a01 00007f84f5527398
+0x00007fff58132c88:   0000000000000000 00007fff58132cd0
+0x00007fff58132c98:   00007fff9078e8f3 00007fff58132e98
+0x00007fff58132ca8:   00002060f5527438 000a5600000a5600
+0x00007fff58132cb8:   00007f84f5527398 0000000000000021
+0x00007fff58132cc8:   00007f84f5527c70 00007fff58132cf0
+0x00007fff58132cd8:   000000011d04b982 000000011d0702f0
+0x00007fff58132ce8:   00007fff9078e4a9 0000000000000000
+0x00007fff58132cf8:   00007fff58132d94 00007fff58132d90
+0x00007fff58132d08:   0000000000000000 00007fff58132d8c
+0x00007fff58132d18:   00007f84f7999024 0000000000003e02
+0x00007fff58132d28:   0000010058132e94 00007f84f7999020
+0x00007fff58132d38:   0000206000527ac0 00007f84f7999008
+0x00007fff58132d48:   0000000000000000 00007f84f5527ac0
+0x00007fff58132d58:   00007f84f7998e10 00007f84f7999008
+0x00007fff58132d68:   0000000000000000 00007fff58132db0
+0x00007fff58132d78:   00007fff9078e8f3 00007f84f7999008
+0x00007fff58132d88:   00002060f7999000 000b6d00000b6d00
+0x00007fff58132d98:   0000000000000000 00007f84f5527ac0
+0x00007fff58132da8:   00007f84f7999000 00007fff58132de0
+0x00007fff58132db8:   00007fff8c9be8f8 0000000000000000 
+
+Instructions: (pc=0x00007fff7901c3c8)
+0x00007fff7901c3a8:   10 a8 d3 78 ff 7f 00 00 b0 5b f2 f2 84 7f 00 00
+0x00007fff7901c3b8:   07 00 00 00 06 00 00 00 00 ad c0 f2 84 7f 00 00
+0x00007fff7901c3c8:   38 a8 d3 78 ff 7f 00 00 38 a8 d3 78 ff 7f 00 00
+0x00007fff7901c3d8:   40 ad c0 f2 84 7f 00 00 03 00 00 00 03 00 00 00 
+
+Register to memory mapping:
+
+RAX=0x00007fff7901c3c8: OBJC_METACLASS_$_NSLock+0 in /System/Library/Frameworks/Foundation.framework/Versions/C/Foundation at 0x00007fff93756000
+RBX=0x00007f84f79c00c0 is an unknown value
+RCX=0x0000000000000000 is an unknown value
+RDX=0x00007f84f2e0eae0 is an unknown value
+RSP=0x00007fff58132bc8 is pointing into the stack for thread: 0x00007f84f4822000
+RBP=0x00007fff58133010 is pointing into the stack for thread: 0x00007f84f4822000
+RSI=0x00007f84f79c0288 is an unknown value
+RDI=0x00007f84f79c00c0 is an unknown value
+R8 =0x0000000000000040 is an unknown value
+R9 =0x00007fff58132600 is pointing into the stack for thread: 0x00007f84f4822000
+R10=0x000000001d79ac3c is an unknown value
+R11=0x000000003589166a is an unknown value
+R12=0x00007f84f9ce7290 is an unknown value
+R13=0x00007f84f9ce7200 is an unknown value
+R14=0x0000000000000000 is an unknown value
+R15=0x00007f84f9ca93d0 is an unknown value
+
+
+Stack: [0x00007fff580b9000,0x00007fff58139000],  sp=0x00007fff58132bc8,  free space=486k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [Foundation+0xe58c63c8]  OBJC_METACLASS_$_NSLock+0x0
+C  [CMIOUnits+0x79a91]  CMIOUnitInputFromProcsEntry+0xa47
+C  [CMIOUnits+0x4b9ab]  CMIOUnitMPEG2DemuxEntry+0xfe87
+C  [CoreMediaIO+0x1dfa2]  _ZN9CMIOGraph5StartEv+0xf74
+C  [QTKit+0x3f3e]  -[QTCaptureSession _buildAndRunGraph]+0x479
+C  [CoreFoundation+0x11ce0c]  __CFNOTIFICATIONCENTER_IS_CALLING_OUT_TO_AN_OBSERVER__+0xc
+C  [CoreFoundation+0x108dd]  _CFXNotificationPost+0xb4d
+C  [Foundation+0x6270d]  postQueueNotifications+0x2e6
+C  [CoreFoundation+0x7ee17]  __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__+0x17
+C  [CoreFoundation+0x7ed87]  __CFRunLoopDoObservers+0x187
+C  [CoreFoundation+0x6ff44]  CFRunLoopRunSpecific+0x154
+C  [HIToolbox+0x2ea0d]  RunCurrentEventLoopInMode+0xe2
+C  [HIToolbox+0x2e7b7]  ReceiveNextEventCommon+0x1df
+C  [HIToolbox+0x2e5bc]  _BlockUntilNextEventMatchingListInModeWithFilter+0x41
+C  [AppKit+0x243de]  _DPSNextEvent+0x59a
+C  [AppKit+0x23a2b]  -[NSApplication nextEventMatchingMask:untilDate:inMode:dequeue:]+0x7a
+C  [libosxapp.dylib+0x16f4]  -[NSApplicationAWT nextEventMatchingMask:untilDate:inMode:dequeue:]+0x7c
+C  [AppKit+0x17b2c]  -[NSApplication run]+0x229
+C  [libosxapp.dylib+0x1557]  +[NSApplicationAWT runAWTLoopWithApp:]+0x9c
+C  [liblwawt.dylib+0xdba9]  -[AWTStarter starter:]+0x369
+C  [Foundation+0x6313e]  __NSThreadPerformPerform+0xe5
+C  [CoreFoundation+0x7f661]  __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__+0x11
+C  [CoreFoundation+0x70d12]  __CFRunLoopDoSources0+0xf2
+C  [CoreFoundation+0x7049f]  __CFRunLoopRun+0x33f
+C  [CoreFoundation+0x6ff25]  CFRunLoopRunSpecific+0x135
+C  [java+0x73b0]  CreateExecutionEnvironment+0x367
+C  [java+0x1b5c]  JLI_Launch+0x7a0
+C  [java+0x770d]  main+0x65
+C  [java+0x13b4]  start+0x34
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x00007f850100a800 JavaThread "Animation Thread" [_thread_blocked, id=76055, stack(0x0000000121a19000,0x0000000121b19000)]
+  0x00007f84f315e000 JavaThread "TimerQueue" daemon [_thread_blocked, id=78931, stack(0x0000000117884000,0x0000000117984000)]
+  0x00007f84f4095800 JavaThread "gstreamer service thread 1" daemon [_thread_blocked, id=72487, stack(0x0000000117ad3000,0x0000000117bd3000)]
+  0x00007f84f420f800 JavaThread "DestroyJavaVM" [_thread_blocked, id=5379, stack(0x0000000108619000,0x0000000108719000)]
+  0x00007f84f420f000 JavaThread "Animation Thread" [_thread_in_native, id=52999, stack(0x00000001180a4000,0x00000001181a4000)]
+  0x00007f84f4158000 JavaThread "AWT-EventQueue-0" [_thread_blocked, id=51983, stack(0x0000000116f7e000,0x000000011707e000)]
+  0x00007f84f4187000 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=48179, stack(0x0000000115ccf000,0x0000000115dcf000)]
+  0x00007f84f4142800 JavaThread "Java2D Queue Flusher" daemon [_thread_blocked, id=46855, stack(0x0000000114f48000,0x0000000115048000)]
+  0x00007f84f4038000 JavaThread "AWT-Shutdown" [_thread_blocked, id=28171, stack(0x0000000112367000,0x0000000112467000)]
+=>0x00007f84f4822000 JavaThread "AppKit Thread" daemon [_thread_in_native, id=1287, stack(0x00007fff580b9000,0x00007fff58139000)]
+  0x00007f84f3038800 JavaThread "Service Thread" daemon [_thread_blocked, id=19459, stack(0x0000000110760000,0x0000000110860000)]
+  0x00007f84f3038000 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=18947, stack(0x000000011065d000,0x000000011075d000)]
+  0x00007f84f3818000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=18435, stack(0x000000011055a000,0x000000011065a000)]
+  0x00007f84f3030800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=17923, stack(0x0000000110457000,0x0000000110557000)]
+  0x00007f84f4820800 JavaThread "Finalizer" daemon [_thread_blocked, id=12547, stack(0x000000011019a000,0x000000011029a000)]
+  0x00007f84f481d800 JavaThread "Reference Handler" daemon [_thread_blocked, id=12035, stack(0x0000000110097000,0x0000000110197000)]
+
+Other Threads:
+  0x00007f84f481d000 VMThread [stack: 0x000000010ff94000,0x0000000110094000] [id=11523]
+  0x00007f84f3031800 WatcherThread [stack: 0x0000000110863000,0x0000000110963000] [id=19971]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ PSYoungGen      total 18432K, used 6293K [0x00000007eaa80000, 0x00000007ebf00000, 0x0000000800000000)
+  eden space 16896K, 33% used [0x00000007eaa80000,0x00000007eaffd420,0x00000007ebb00000)
+  from space 1536K, 43% used [0x00000007ebd80000,0x00000007ebe28000,0x00000007ebf00000)
+  to   space 2048K, 0% used [0x00000007ebb00000,0x00000007ebb00000,0x00000007ebd00000)
+ ParOldGen       total 34304K, used 12764K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 37% used [0x00000007c0000000,0x00000007c0c77200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15906K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd88b28,0x00000007bcd80000)
+
+Card table byte_map: [0x000000010c0c0000,0x000000010c2ea000] byte_map_base: 0x00000001082e9000
+
+Polling page: 0x000000010876e000
+
+Code Cache  [0x0000000109000000, 0x0000000109270000, 0x000000010c000000)
+ total_blobs=1084 nmethods=410 adapters=628 free_code_cache=47708Kb largest_free_block=48824832
+
+Compilation events (10 events):
+Event: 55.870 Thread 0x00007f84f3818000  431             sun.lwawt.LWComponentPeer::localToWindow (62 bytes)
+Event: 55.880 Thread 0x00007f84f3818000 nmethod 431 0x0000000109133ad0 code [0x0000000109133c40, 0x00000001091344f8]
+Event: 56.016 Thread 0x00007f84f3038000  432             sun.java2d.loops.CompositeType::isDerivedFrom (26 bytes)
+Event: 56.017 Thread 0x00007f84f3038000 nmethod 432 0x00000001090e7450 code [0x00000001090e75a0, 0x00000001090e7658]
+Event: 56.756 Thread 0x00007f84f3818000  434             java.lang.StringBuilder::append (8 bytes)
+Event: 56.756 Thread 0x00007f84f3818000 nmethod 434 0x000000010912dcd0 code [0x000000010912de20, 0x000000010912dea8]
+Event: 57.161 Thread 0x00007f84f3038000  435             sun.java2d.pipe.RenderBuffer::putDouble (26 bytes)
+Event: 57.162 Thread 0x00007f84f3038000 nmethod 435 0x0000000109133490 code [0x00000001091335c0, 0x0000000109133658]
+Event: 57.173 Thread 0x00007f84f3818000  436             sun.java2d.SurfaceData::getNativeOps (5 bytes)
+Event: 57.174 Thread 0x00007f84f3818000 nmethod 436 0x0000000109134ed0 code [0x0000000109135000, 0x0000000109135058]
+
+GC Heap History (10 events):
+Event: 51.538 GC heap before
+{Heap before GC invocations=93 (full 1):
+ PSYoungGen      total 17920K, used 17568K [0x00000007eaa80000, 0x00000007ec000000, 0x0000000800000000)
+  eden space 16896K, 100% used [0x00000007eaa80000,0x00000007ebb00000,0x00000007ebb00000)
+  from space 1024K, 65% used [0x00000007ebb00000,0x00000007ebba8000,0x00000007ebc00000)
+  to   space 2560K, 0% used [0x00000007ebd80000,0x00000007ebd80000,0x00000007ec000000)
+ ParOldGen       total 34304K, used 12636K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 36% used [0x00000007c0000000,0x00000007c0c57200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15892K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd851b0,0x00000007bcd80000)
+Event: 51.541 GC heap after
+Heap after GC invocations=93 (full 1):
+ PSYoungGen      total 19456K, used 672K [0x00000007eaa80000, 0x00000007ec000000, 0x0000000800000000)
+  eden space 16896K, 0% used [0x00000007eaa80000,0x00000007eaa80000,0x00000007ebb00000)
+  from space 2560K, 26% used [0x00000007ebd80000,0x00000007ebe28000,0x00000007ec000000)
+  to   space 2560K, 0% used [0x00000007ebb00000,0x00000007ebb00000,0x00000007ebd80000)
+ ParOldGen       total 34304K, used 12668K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 36% used [0x00000007c0000000,0x00000007c0c5f200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15892K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd851b0,0x00000007bcd80000)
+}
+Event: 52.321 GC heap before
+{Heap before GC invocations=94 (full 1):
+ PSYoungGen      total 19456K, used 17568K [0x00000007eaa80000, 0x00000007ec000000, 0x0000000800000000)
+  eden space 16896K, 100% used [0x00000007eaa80000,0x00000007ebb00000,0x00000007ebb00000)
+  from space 2560K, 26% used [0x00000007ebd80000,0x00000007ebe28000,0x00000007ec000000)
+  to   space 2560K, 0% used [0x00000007ebb00000,0x00000007ebb00000,0x00000007ebd80000)
+ ParOldGen       total 34304K, used 12668K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 36% used [0x00000007c0000000,0x00000007c0c5f200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15893K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd85670,0x00000007bcd80000)
+Event: 52.324 GC heap after
+Heap after GC invocations=94 (full 1):
+ PSYoungGen      total 19456K, used 672K [0x00000007eaa80000, 0x00000007ec000000, 0x0000000800000000)
+  eden space 16896K, 0% used [0x00000007eaa80000,0x00000007eaa80000,0x00000007ebb00000)
+  from space 2560K, 26% used [0x00000007ebb00000,0x00000007ebba8000,0x00000007ebd80000)
+  to   space 2560K, 0% used [0x00000007ebd80000,0x00000007ebd80000,0x00000007ec000000)
+ ParOldGen       total 34304K, used 12692K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 37% used [0x00000007c0000000,0x00000007c0c65200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15893K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd85670,0x00000007bcd80000)
+}
+Event: 53.104 GC heap before
+{Heap before GC invocations=95 (full 1):
+ PSYoungGen      total 19456K, used 17568K [0x00000007eaa80000, 0x00000007ec000000, 0x0000000800000000)
+  eden space 16896K, 100% used [0x00000007eaa80000,0x00000007ebb00000,0x00000007ebb00000)
+  from space 2560K, 26% used [0x00000007ebb00000,0x00000007ebba8000,0x00000007ebd80000)
+  to   space 2560K, 0% used [0x00000007ebd80000,0x00000007ebd80000,0x00000007ec000000)
+ ParOldGen       total 34304K, used 12692K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 37% used [0x00000007c0000000,0x00000007c0c65200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15898K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd868b8,0x00000007bcd80000)
+Event: 53.108 GC heap after
+Heap after GC invocations=95 (full 1):
+ PSYoungGen      total 19456K, used 672K [0x00000007eaa80000, 0x00000007ec000000, 0x0000000800000000)
+  eden space 16896K, 0% used [0x00000007eaa80000,0x00000007eaa80000,0x00000007ebb00000)
+  from space 2560K, 26% used [0x00000007ebd80000,0x00000007ebe28000,0x00000007ec000000)
+  to   space 2560K, 0% used [0x00000007ebb00000,0x00000007ebb00000,0x00000007ebd80000)
+ ParOldGen       total 34304K, used 12716K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 37% used [0x00000007c0000000,0x00000007c0c6b200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15898K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd868b8,0x00000007bcd80000)
+}
+Event: 53.886 GC heap before
+{Heap before GC invocations=96 (full 1):
+ PSYoungGen      total 19456K, used 17568K [0x00000007eaa80000, 0x00000007ec000000, 0x0000000800000000)
+  eden space 16896K, 100% used [0x00000007eaa80000,0x00000007ebb00000,0x00000007ebb00000)
+  from space 2560K, 26% used [0x00000007ebd80000,0x00000007ebe28000,0x00000007ec000000)
+  to   space 2560K, 0% used [0x00000007ebb00000,0x00000007ebb00000,0x00000007ebd80000)
+ ParOldGen       total 34304K, used 12716K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 37% used [0x00000007c0000000,0x00000007c0c6b200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15901K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd875a8,0x00000007bcd80000)
+Event: 53.890 GC heap after
+Heap after GC invocations=96 (full 1):
+ PSYoungGen      total 19456K, used 640K [0x00000007eaa80000, 0x00000007ec000000, 0x0000000800000000)
+  eden space 16896K, 0% used [0x00000007eaa80000,0x00000007eaa80000,0x00000007ebb00000)
+  from space 2560K, 25% used [0x00000007ebb00000,0x00000007ebba0000,0x00000007ebd80000)
+  to   space 2560K, 0% used [0x00000007ebd80000,0x00000007ebd80000,0x00000007ec000000)
+ ParOldGen       total 34304K, used 12740K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 37% used [0x00000007c0000000,0x00000007c0c71200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15901K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd875a8,0x00000007bcd80000)
+}
+Event: 54.672 GC heap before
+{Heap before GC invocations=97 (full 1):
+ PSYoungGen      total 19456K, used 17536K [0x00000007eaa80000, 0x00000007ec000000, 0x0000000800000000)
+  eden space 16896K, 100% used [0x00000007eaa80000,0x00000007ebb00000,0x00000007ebb00000)
+  from space 2560K, 25% used [0x00000007ebb00000,0x00000007ebba0000,0x00000007ebd80000)
+  to   space 2560K, 0% used [0x00000007ebd80000,0x00000007ebd80000,0x00000007ec000000)
+ ParOldGen       total 34304K, used 12740K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 37% used [0x00000007c0000000,0x00000007c0c71200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15904K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd88290,0x00000007bcd80000)
+Event: 54.676 GC heap after
+Heap after GC invocations=97 (full 1):
+ PSYoungGen      total 18432K, used 672K [0x00000007eaa80000, 0x00000007ebf00000, 0x0000000800000000)
+  eden space 16896K, 0% used [0x00000007eaa80000,0x00000007eaa80000,0x00000007ebb00000)
+  from space 1536K, 43% used [0x00000007ebd80000,0x00000007ebe28000,0x00000007ebf00000)
+  to   space 2048K, 0% used [0x00000007ebb00000,0x00000007ebb00000,0x00000007ebd00000)
+ ParOldGen       total 34304K, used 12764K [0x00000007c0000000, 0x00000007c2180000, 0x00000007eaa80000)
+  object space 34304K, 37% used [0x00000007c0000000,0x00000007c0c77200,0x00000007c2180000)
+ PSPermGen       total 32256K, used 15904K [0x00000007bae00000, 0x00000007bcd80000, 0x00000007c0000000)
+  object space 32256K, 49% used [0x00000007bae00000,0x00000007bbd88290,0x00000007bcd80000)
+}
+
+Deoptimization events (10 events):
+Event: 38.949 Thread 0x00007f850100a800 Uncommon trap: reason=unreached action=reinterpret pc=0x0000000109115c14 method=sun.java2d.pipe.AAShapePipe.renderPath(Lsun/java2d/SunGraphics2D;Ljava/awt/Shape;Ljava/awt/BasicStroke;)V @ 71
+Event: 38.949 Thread 0x00007f850100a800 Uncommon trap: reason=unreached action=reinterpret pc=0x000000010912a7fc method=sun.java2d.pipe.AAShapePipe.renderPath(Lsun/java2d/SunGraphics2D;Ljava/awt/Shape;Ljava/awt/BasicStroke;)V @ 71
+Event: 39.516 Thread 0x00007f84f4158000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x0000000109162180 method=java.awt.Container.findComponentAtImpl(IIZ)Ljava/awt/Component; @ 84
+Event: 44.376 Thread 0x00007f84f481d800 Uncommon trap: reason=unreached action=reinterpret pc=0x000000010911241c method=java.lang.ref.Reference$ReferenceHandler.run()V @ 74
+Event: 44.386 Thread 0x00007f84f4820800 Uncommon trap: reason=unreached action=reinterpret pc=0x0000000109118d78 method=java.util.WeakHashMap.eq(Ljava/lang/Object;Ljava/lang/Object;)Z @ 2
+Event: 49.354 Thread 0x00007f84f420f000 Uncommon trap: reason=array_check action=maybe_recompile pc=0x000000010912ede8 method=org.gstreamer.lowlevel.GNative$Handler$1.run()V @ 46
+Event: 49.372 Thread 0x00007f84f420f000 Uncommon trap: reason=array_check action=maybe_recompile pc=0x000000010912ede8 method=org.gstreamer.lowlevel.GNative$Handler$1.run()V @ 46
+Event: 49.389 Thread 0x00007f84f420f000 Uncommon trap: reason=array_check action=maybe_recompile pc=0x000000010912ede8 method=org.gstreamer.lowlevel.GNative$Handler$1.run()V @ 46
+Event: 49.406 Thread 0x00007f84f420f000 Uncommon trap: reason=array_check action=maybe_recompile pc=0x000000010912ede8 method=org.gstreamer.lowlevel.GNative$Handler$1.run()V @ 46
+Event: 54.783 Thread 0x00007f84f420f000 Uncommon trap: reason=null_check action=make_not_entrant pc=0x0000000109110af0 method=org.gstreamer.lowlevel.GTypeMapper.getToNativeConverter(Ljava/lang/Class;)Lcom/sun/jna/ToNativeConverter; @ 18
+
+Internal exceptions (10 events):
+Event: 26.620 Thread 0x00007f84f420f000 Threw 0x00000007eb1a77d0 at /HUDSON/workspace/7u-2-build-macosx-x86_64/jdk7u51/527/hotspot/src/share/vm/prims/jvm.cpp:1244
+Event: 27.444 Thread 0x00007f84f4820800 Implicit null exception at 0x000000010914bc0b to 0x000000010914c52d
+Event: 33.991 Thread 0x00007f84f4eb5000 Implicit null exception at 0x0000000109164a84 to 0x0000000109165291
+Event: 35.606 Thread 0x00007f84f4a2a000 Implicit null exception at 0x000000010915d0f3 to 0x000000010915d285
+Event: 35.796 Thread 0x00007f850116f000 Implicit null exception at 0x000000010916b0cb to 0x000000010916b7d1
+Event: 38.896 Thread 0x00007f84f4158000 Threw 0x00000007eb2de150 at /HUDSON/workspace/7u-2-build-macosx-x86_64/jdk7u51/527/hotspot/src/share/vm/interpreter/linkResolver.cpp:969
+Event: 38.915 Thread 0x00007f850100a800 Threw 0x00000007eb300360 at /HUDSON/workspace/7u-2-build-macosx-x86_64/jdk7u51/527/hotspot/src/share/vm/prims/jvm.cpp:1244
+Event: 38.916 Thread 0x00007f850100a800 Threw 0x00000007eb302638 at /HUDSON/workspace/7u-2-build-macosx-x86_64/jdk7u51/527/hotspot/src/share/vm/prims/jvm.cpp:1244
+Event: 38.917 Thread 0x00007f850100a800 Threw 0x00000007eb304d18 at /HUDSON/workspace/7u-2-build-macosx-x86_64/jdk7u51/527/hotspot/src/share/vm/prims/jvm.cpp:1244
+Event: 54.783 Thread 0x00007f84f420f000 Implicit null exception at 0x0000000109110976 to 0x0000000109110add
+
+Events (10 events):
+Event: 54.783 Thread 0x00007f84f420f000 DEOPT PACKING pc=0x0000000109110af0 sp=0x00000001181a1450
+Event: 54.783 Thread 0x00007f84f420f000 DEOPT UNPACKING pc=0x0000000109039045 sp=0x00000001181a1410 mode 2
+Event: 57.830 Thread 0x00007f84f4a19800 Thread added: 0x00007f84f4a19800
+Event: 57.830 Thread 0x00007f84f4a19800 Thread exited: 0x00007f84f4a19800
+Event: 57.830 Thread 0x00007f84f4a19800 Thread added: 0x00007f84f4a19800
+Event: 57.831 Thread 0x00007f84f4a19800 Thread exited: 0x00007f84f4a19800
+Event: 57.858 Thread 0x00007f84f38a4000 Thread added: 0x00007f84f38a4000
+Event: 57.859 Thread 0x00007f84f38a4000 Thread exited: 0x00007f84f38a4000
+Event: 57.859 Thread 0x00007f84f38a4000 Thread added: 0x00007f84f38a4000
+Event: 57.859 Thread 0x00007f84f38a4000 Thread exited: 0x00007f84f38a4000
+
+
+Dynamic libraries:
+0x00000000074d2000 	/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
+0x00000000074d2000 	/System/Library/Frameworks/Security.framework/Versions/A/Security
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices
+0x00000000074d2000 	/usr/lib/libz.1.dylib
+0x00000000074d2000 	/usr/lib/libSystem.B.dylib
+0x00000000074d2000 	/usr/lib/libobjc.A.dylib
+0x00000000074d2000 	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x00000000074d2000 	/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+0x00000000074d2000 	/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
+0x00000000074d2000 	/System/Library/Frameworks/CoreData.framework/Versions/A/CoreData
+0x00000000074d2000 	/System/Library/PrivateFrameworks/RemoteViewServices.framework/Versions/A/RemoteViewServices
+0x00000000074d2000 	/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox
+0x00000000074d2000 	/System/Library/Frameworks/AudioUnit.framework/Versions/A/AudioUnit
+0x00000000074d2000 	/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore
+0x00000000074d2000 	/System/Library/PrivateFrameworks/DesktopServicesPriv.framework/Versions/A/DesktopServicesPriv
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/HIToolbox
+0x00000000074d2000 	/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SpeechRecognition.framework/Versions/A/SpeechRecognition
+0x00000000074d2000 	/usr/lib/libauto.dylib
+0x00000000074d2000 	/usr/lib/libicucore.A.dylib
+0x00000000074d2000 	/usr/lib/libxml2.2.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CoreUI.framework/Versions/A/CoreUI
+0x00000000074d2000 	/System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio
+0x00000000074d2000 	/System/Library/Frameworks/DiskArbitration.framework/Versions/A/DiskArbitration
+0x00000000074d2000 	/usr/lib/liblangid.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/MultitouchSupport.framework/Versions/A/MultitouchSupport
+0x00000000074d2000 	/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+0x00000000074d2000 	/usr/lib/libDiagnosticMessagesClient.dylib
+0x00000000074d2000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices
+0x00000000074d2000 	/System/Library/PrivateFrameworks/PerformanceAnalysis.framework/Versions/A/PerformanceAnalysis
+0x00000000074d2000 	/System/Library/PrivateFrameworks/GenerationalStorage.framework/Versions/A/GenerationalStorage
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL
+0x00000000074d2000 	/System/Library/PrivateFrameworks/Sharing.framework/Versions/A/Sharing
+0x00000000074d2000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO
+0x00000000074d2000 	/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText
+0x00000000074d2000 	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics
+0x00000000074d2000 	/System/Library/PrivateFrameworks/Backup.framework/Versions/A/Backup
+0x00000000074d2000 	/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork
+0x00000000074d2000 	/System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration
+0x00000000074d2000 	/usr/lib/libCRFSuite.dylib
+0x00000000074d2000 	/usr/lib/libc++.1.dylib
+0x00000000074d2000 	/usr/lib/libc++abi.dylib
+0x00000000074d2000 	/usr/lib/system/libcache.dylib
+0x00000000074d2000 	/usr/lib/system/libcommonCrypto.dylib
+0x00000000074d2000 	/usr/lib/system/libcompiler_rt.dylib
+0x00000000074d2000 	/usr/lib/system/libcopyfile.dylib
+0x00000000074d2000 	/usr/lib/system/libcorecrypto.dylib
+0x00000000074d2000 	/usr/lib/system/libdispatch.dylib
+0x00000000074d2000 	/usr/lib/system/libdyld.dylib
+0x00000000074d2000 	/usr/lib/system/libkeymgr.dylib
+0x00000000074d2000 	/usr/lib/system/liblaunch.dylib
+0x00000000074d2000 	/usr/lib/system/libmacho.dylib
+0x00000000074d2000 	/usr/lib/system/libquarantine.dylib
+0x00000000074d2000 	/usr/lib/system/libremovefile.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_asl.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_blocks.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_c.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_configuration.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_dnssd.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_info.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_kernel.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_m.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_malloc.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_network.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_notify.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_platform.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_pthread.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_sandbox.dylib
+0x00000000074d2000 	/usr/lib/system/libsystem_stats.dylib
+0x00000000074d2000 	/usr/lib/system/libunc.dylib
+0x00000000074d2000 	/usr/lib/system/libunwind.dylib
+0x00000000074d2000 	/usr/lib/system/libxpc.dylib
+0x00000000074d2000 	/usr/lib/libbsm.0.dylib
+0x00000000074d2000 	/usr/lib/libsqlite3.dylib
+0x00000000074d2000 	/usr/lib/libxar.1.dylib
+0x00000000074d2000 	/usr/lib/libpam.2.dylib
+0x00000000074d2000 	/usr/lib/libOpenScriptingUtil.dylib
+0x00000000074d2000 	/usr/lib/libbz2.1.0.dylib
+0x00000000074d2000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+0x00000000074d2000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+0x00000000074d2000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+0x00000000074d2000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+0x00000000074d2000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+0x00000000074d2000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+0x00000000074d2000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+0x00000000074d2000 	/System/Library/Frameworks/NetFS.framework/Versions/A/NetFS
+0x00000000074d2000 	/usr/lib/system/libkxld.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/NetAuth.framework/Versions/A/NetAuth
+0x00000000074d2000 	/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC
+0x00000000074d2000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/Frameworks/CFOpenDirectory.framework/Versions/A/CFOpenDirectory
+0x00000000074d2000 	/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement
+0x00000000074d2000 	/usr/lib/libxslt.1.dylib
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Ink.framework/Versions/A/Ink
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/ATS
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ColorSync.framework/Versions/A/ColorSync
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/HIServices
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/LangAnalysis.framework/Versions/A/LangAnalysis
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A/PrintCore
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/QD.framework/Versions/A/QD
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/SpeechSynthesis.framework/Versions/A/SpeechSynthesis
+0x00000000074d2000 	/System/Library/Frameworks/IOSurface.framework/Versions/A/IOSurface
+0x00000000074d2000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate
+0x00000000074d2000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
+0x00000000074d2000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
+0x00000000074d2000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
+0x00000000074d2000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvMisc.dylib
+0x00000000074d2000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
+0x00000000074d2000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontParser.dylib
+0x00000000074d2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontRegistry.dylib
+0x00000000074d2000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJPEG.dylib
+0x00000000074d2000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libTIFF.dylib
+0x00000000074d2000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libPng.dylib
+0x00000000074d2000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libGIF.dylib
+0x00000000074d2000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJP2.dylib
+0x00000000074d2000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libRadiance.dylib
+0x00000000074d2000 	/usr/lib/libcups.2.dylib
+0x00000000074d2000 	/System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos
+0x00000000074d2000 	/System/Library/Frameworks/GSS.framework/Versions/A/GSS
+0x00000000074d2000 	/usr/lib/libresolv.9.dylib
+0x00000000074d2000 	/usr/lib/libiconv.2.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/Heimdal.framework/Versions/A/Heimdal
+0x00000000074d2000 	/System/Library/PrivateFrameworks/TrustEvaluationAgent.framework/Versions/A/TrustEvaluationAgent
+0x00000000074d2000 	/usr/lib/libheimdal-asn1.dylib
+0x00000000074d2000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/OpenDirectory
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CommonAuth.framework/Versions/A/CommonAuth
+0x00000000074d2000 	/System/Library/Frameworks/SecurityFoundation.framework/Versions/A/SecurityFoundation
+0x00000000074d2000 	/System/Library/PrivateFrameworks/Bom.framework/Versions/A/Bom
+0x00000000074d2000 	/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo
+0x00000000074d2000 	/System/Library/Frameworks/QuartzCore.framework/Versions/A/Frameworks/CoreImage.framework/Versions/A/CoreImage
+0x00000000074d2000 	/System/Library/Frameworks/QuartzCore.framework/Versions/A/Frameworks/ScalableUserInterface.framework/Versions/A/ScalableUserInterface
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGFXShared.dylib
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLImage.dylib
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCVMSPluginSupport.dylib
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreVMClient.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/FaceCore.framework/Versions/A/FaceCore
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CrashReporterSupport.framework/Versions/A/CrashReporterSupport
+0x00000000074d2000 	/System/Library/Frameworks/OpenCL.framework/Versions/A/OpenCL
+0x00000000074d2000 	/System/Library/PrivateFrameworks/AppleFSCompression.framework/Versions/A/AppleFSCompression
+0x00000000074d2000 	/System/Library/PrivateFrameworks/Ubiquity.framework/Versions/A/Ubiquity
+0x00000000074d2000 	/System/Library/PrivateFrameworks/IconServices.framework/Versions/A/IconServices
+0x00000000074d2000 	/System/Library/PrivateFrameworks/ChunkingLibrary.framework/Versions/A/ChunkingLibrary
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/CoreSymbolication
+0x00000000074d2000 	/System/Library/PrivateFrameworks/Symbolication.framework/Versions/A/Symbolication
+0x00000000074d2000 	/System/Library/PrivateFrameworks/DebugSymbols.framework/Versions/A/DebugSymbols
+0x0000000107bc5000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/server/libjvm.dylib
+0x00000000074d2000 	/usr/lib/libstdc++.6.dylib
+0x0000000108731000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libverify.dylib
+0x000000010873e000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libjava.dylib
+0x0000000108778000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libzip.dylib
+0x000000011029c000 	/System/Library/Frameworks/JavaVM.framework/Frameworks/JavaRuntimeSupport.framework/JavaRuntimeSupport
+0x00000001087e9000 	/System/Library/Frameworks/JavaVM.framework/Versions/A/Frameworks/JavaNativeFoundation.framework/Versions/A/JavaNativeFoundation
+0x00000001102b4000 	/System/Library/Frameworks/JavaVM.framework/Versions/A/JavaVM
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon
+0x00000001102c1000 	/System/Library/PrivateFrameworks/JavaLaunching.framework/Versions/A/JavaLaunching
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/CommonPanels.framework/Versions/A/CommonPanels
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Help.framework/Versions/A/Help
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/ImageCapture.framework/Versions/A/ImageCapture
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/OpenScripting.framework/Versions/A/OpenScripting
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Print.framework/Versions/A/Print
+0x00000000074d2000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SecurityHI.framework/Versions/A/SecurityHI
+0x00000001109d9000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libawt.dylib
+0x0000000110a88000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/./libmlib_image.dylib
+0x0000000110b54000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/lwawt/liblwawt.dylib
+0x0000000110c08000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libosxapp.dylib
+0x00000000074d2000 	/System/Library/Frameworks/ExceptionHandling.framework/Versions/A/ExceptionHandling
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CoreServicesInternal.framework/Versions/A/CoreServicesInternal
+0x00000000074d2000 	/System/Library/PrivateFrameworks/Librarian.framework/Versions/A/Librarian
+0x000000011246a000 	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/Resources/libCGCMS.A.dylib
+0x000000011257c000 	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/Resources/libRIP.A.dylib
+0x00000001134af000 	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/Resources/libCGXType.A.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/FamilyControls.framework/Versions/A/FamilyControls
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Frameworks/CommerceCore.framework/Versions/A/CommerceCore
+0x00000000074d2000 	/System/Library/PrivateFrameworks/SystemAdministration.framework/Versions/A/SystemAdministration
+0x00000000074d2000 	/System/Library/Frameworks/DirectoryService.framework/Versions/A/DirectoryService
+0x00000000074d2000 	/System/Library/PrivateFrameworks/DiskImages.framework/Versions/A/DiskImages
+0x00000000074d2000 	/System/Library/PrivateFrameworks/LoginUIKit.framework/Versions/A/Frameworks/LoginUICore.framework/Versions/A/LoginUICore
+0x00000000074d2000 	/usr/lib/libCoreStorage.dylib
+0x00000000074d2000 	/usr/lib/libcsfde.dylib
+0x00000000074d2000 	/usr/lib/libodfde.dylib
+0x00000000074d2000 	/System/Library/Frameworks/DiscRecording.framework/Versions/A/DiscRecording
+0x00000000074d2000 	/usr/lib/libcurl.4.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/MediaKit.framework/Versions/A/MediaKit
+0x00000000074d2000 	/System/Library/PrivateFrameworks/EFILogin.framework/Versions/A/EFILogin
+0x00000000074d2000 	/usr/lib/libutil.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/AOSNotification.framework/Versions/A/AOSNotification
+0x00000000074d2000 	/System/Library/Frameworks/LDAP.framework/Versions/A/LDAP
+0x00000000074d2000 	/usr/lib/libsasl2.2.dylib
+0x00000000074d2000 	/usr/lib/libcrypto.0.9.8.dylib
+0x00000000074d2000 	/usr/lib/libssl.0.9.8.dylib
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Resources/GLEngine.bundle/GLEngine
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLProgrammability.dylib
+0x0000000000000000 	/System/Library/Extensions/AppleIntelHD4000GraphicsGLDriver.bundle/Contents/MacOS/AppleIntelHD4000GraphicsGLDriver
+0x00000000074d2000 	/System/Library/PrivateFrameworks/IOAccelerator.framework/Versions/A/IOAccelerator
+0x00000000074d2000 	/System/Library/PrivateFrameworks/GPUSupport.framework/Versions/A/Libraries/libGPUSupportMercury.dylib
+0x00000000074d2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Resources/GLRendererFloat.bundle/GLRendererFloat
+0x00000000074d2000 	/System/Library/Frameworks/OpenCL.framework/Versions/A/Libraries/libcldcpuengine.dylib
+0x0000000115dd1000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libfontmanager.dylib
+0x0000000115e38000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libosxui.dylib
+0x0000000118406000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libnet.dylib
+0x000000011821d000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libnio.dylib
+0x00000001185d8000 	/private/var/folders/jn/x773s_5j1b94qtq4gcqhdq380000gn/T/jna-erico/jna8874251844788064484.tmp
+0x00000001185ed000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstreamer-0.10.dylib
+0x00000001186e2000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libffi.dylib
+0x00000001186ea000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgobject-2.0.dylib
+0x00000001181cb000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgthread-2.0.dylib
+0x000000011873c000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgmodule-2.0.dylib
+0x0000000118744000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libglib-2.0.dylib
+0x0000000118868000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libintl.dylib
+0x0000000118877000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libiconv.dylib
+0x0000000118979000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libxml2.dylib
+0x0000000118ac2000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libz.dylib
+0x0000000118ad9000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstadder.so
+0x0000000118ae7000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstaudio-0.10.dylib
+0x0000000118b25000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstbase-0.10.dylib
+0x0000000118b81000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/liborc-0.4.dylib
+0x0000000118bfd000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstpbutils-0.10.dylib
+0x0000000118c23000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstinterfaces-0.10.dylib
+0x0000000118c58000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstadpcmdec.so
+0x0000000118c61000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstadpcmenc.so
+0x0000000118c69000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstaiff.so
+0x0000000118c7b000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgsttag-0.10.dylib
+0x0000000118cb4000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstalaw.so
+0x0000000118cbf000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstalpha.so
+0x0000000118cd6000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstvideo-0.10.dylib
+0x0000000118cf7000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstcontroller-0.10.dylib
+0x0000000118d24000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstalphacolor.so
+0x0000000118d30000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstannodex.so
+0x0000000118d44000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstapetag.so
+0x0000000118d4f000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstapexsink.so
+0x0000000118d5d000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libssl.dylib
+0x0000000118dc9000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libcrypto.dylib
+0x0000000118f87000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstapp.so
+0x0000000118f8e000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstapp-0.10.dylib
+0x0000000118f9f000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstapplemedia.so
+0x00000000074d2000 	/System/Library/Frameworks/QTKit.framework/Versions/A/QTKit
+0x00000000074d2000 	/System/Library/Frameworks/AVFoundation.framework/Versions/A/AVFoundation
+0x00000000074d2000 	/System/Library/Frameworks/CoreMedia.framework/Versions/A/CoreMedia
+0x00000000074d2000 	/System/Library/Frameworks/MediaToolbox.framework/Versions/A/MediaToolbox
+0x00000000074d2000 	/System/Library/Frameworks/VideoToolbox.framework/Versions/A/VideoToolbox
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CoreMediaAuthoring.framework/Versions/A/CoreMediaAuthoring
+0x00000000074d2000 	/System/Library/Frameworks/CoreMediaIO.framework/Versions/A/CoreMediaIO
+0x00000000074d2000 	/System/Library/Frameworks/AVFoundation.framework/Versions/A/Resources/libAVFAudio.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/MediaControlSender.framework/Versions/A/MediaControlSender
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CoreAVCHD.framework/Versions/A/CoreAVCHD
+0x00000000074d2000 	/System/Library/Frameworks/MediaAccessibility.framework/Versions/A/MediaAccessibility
+0x00000000074d2000 	/System/Library/PrivateFrameworks/Mangrove.framework/Versions/A/Mangrove
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CoreAUC.framework/Versions/A/CoreAUC
+0x00000000074d2000 	/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Apple80211
+0x00000000074d2000 	/System/Library/PrivateFrameworks/AppleSRP.framework/Versions/A/AppleSRP
+0x00000000074d2000 	/System/Library/PrivateFrameworks/CoreUtils.framework/Versions/A/CoreUtils
+0x00000000074d2000 	/System/Library/Frameworks/CoreWLAN.framework/Versions/A/CoreWLAN
+0x00000000074d2000 	/usr/lib/libpcap.A.dylib
+0x00000000074d2000 	/System/Library/Frameworks/CoreWiFi.framework/Versions/A/CoreWiFi
+0x00000000074d2000 	/System/Library/PrivateFrameworks/AppleVA.framework/Versions/A/AppleVA
+0x00000000074d2000 	/System/Library/PrivateFrameworks/XPCService.framework/Versions/A/XPCService
+0x00000000074d2000 	/System/Library/PrivateFrameworks/AppSandbox.framework/Versions/A/AppSandbox
+0x00000000074d2000 	/usr/lib/libsandbox.1.dylib
+0x00000000074d2000 	/System/Library/PrivateFrameworks/AppContainer.framework/Versions/A/AppContainer
+0x00000000074d2000 	/System/Library/PrivateFrameworks/SecCodeWrapper.framework/Versions/A/SecCodeWrapper
+0x00000000074d2000 	/usr/lib/libMatch.1.dylib
+0x0000000118fc1000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstasfmux.so
+0x0000000118fd8000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstrtp-0.10.dylib
+0x0000000118ff5000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstaudioconvert.so
+0x0000000119011000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstaudiofx.so
+0x0000000119034000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstfft-0.10.dylib
+0x0000000119043000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstaudioparsers.so
+0x000000011905f000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstaudiorate.so
+0x0000000119069000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstaudioresample.so
+0x000000011907f000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/liborc-test-0.4.dylib
+0x0000000119088000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstaudiotestsrc.so
+0x0000000119097000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstauparse.so
+0x00000001190a4000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstautoconvert.so
+0x00000001190b2000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstautodetect.so
+0x00000001190c1000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstavi.so
+0x00000001190ee000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstriff-0.10.dylib
+0x00000001190ff000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstbayer.so
+0x000000011910e000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstbz2.so
+0x0000000119118000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstcamerabin.so
+0x000000011913f000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstphotography-0.10.dylib
+0x000000011914a000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstcamerabin2.so
+0x0000000119163000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstbasecamerabinsrc-0.10.dylib
+0x000000011916f000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstcdxaparse.so
+0x000000011917a000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstcoloreffects.so
+0x0000000119187000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstcolorspace.so
+0x00000001191ba000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstcoreelements.so
+0x0000000119204000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstcoreindexers.so
+0x0000000119210000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstcutter.so
+0x000000011921c000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdataurisrc.so
+0x0000000119225000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdc1394.so
+0x0000000119233000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libdc1394.dylib
+0x00000001192a8000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libusb-1.0.dylib
+0x00000001192b9000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdccp.so
+0x00000001192c7000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdebug.so
+0x00000001192de000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdebugutilsbad.so
+0x00000001192ef000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdecodebin.so
+0x00000001192ff000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdecodebin2.so
+0x0000000119320000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdeinterlace.so
+0x0000000119369000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdtmf.so
+0x000000011937b000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdtsdec.so
+0x0000000119386000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libdca.dylib
+0x00000001193ad000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdv.so
+0x00000001193c1000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libdv.dylib
+0x00000001193f2000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdvbsuboverlay.so
+0x0000000119404000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstdvdspu.so
+0x0000000119416000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstefence.so
+0x0000000119420000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsteffectv.so
+0x000000011943a000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstencodebin.so
+0x000000011944e000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstequalizer.so
+0x000000011945e000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstfestival.so
+0x0000000119467000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstffmpeg.so
+0x0000000119f9a000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstffmpegcolorspace.so
+0x0000000119fe7000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstffmpegscale.so
+0x000000011a022000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstfieldanalysis.so
+0x000000011a032000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstbasevideo-0.10.dylib
+0x000000011a04c000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstflv.so
+0x000000011a069000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstflxdec.so
+0x000000011a074000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstfragmented.so
+0x000000011a084000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstfreeze.so
+0x000000011a08c000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstfrei0r.so
+0x000000011a09e000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstgaudieffects.so
+0x000000011a0ac000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstgdp.so
+0x000000011a0ba000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstdataprotocol-0.10.dylib
+0x000000011a0c4000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstgeometrictransform.so
+0x000000011a0d8000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstgio.so
+0x000000011c0ef000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgio-2.0.dylib
+0x000000011a0e8000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstgoom.so
+0x000000011a107000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstgoom2k1.so
+0x000000011a156000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstgsettingselements.so
+0x000000011c242000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsth264parse.so
+0x000000011a163000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsthdvparse.so
+0x000000011c254000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsticydemux.so
+0x000000011c260000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstid3demux.so
+0x000000011c26a000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstid3tag.so
+0x000000011c278000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstimagefreeze.so
+0x000000011c285000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstinterlace.so
+0x000000011c291000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstinterleave.so
+0x000000011c2a3000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstisomp4.so
+0x000000011c301000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstivfparse.so
+0x000000011c309000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstjp2k.so
+0x000000011c317000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libjasper.dylib
+0x000000011c371000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libjpeg.dylib
+0x000000011c3ac000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstjp2kdecimator.so
+0x000000011c3bb000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstjpegformat.so
+0x000000011c3ca000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstlegacyresample.so
+0x000000011c3da000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstlevel.so
+0x000000011c3e6000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstliveadder.so
+0x000000011c3f6000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmatroska.so
+0x000000011c43b000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmpegdemux.so
+0x000000011c479000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmpegpsmux.so
+0x000000011c48a000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmpegtsdemux.so
+0x000000011c4b4000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmpegtsmux.so
+0x000000011c4ca000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmpegvideoparse.so
+0x000000011c4d6000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmulaw.so
+0x000000011c4e0000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmultifile.so
+0x000000011c4f3000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmultipart.so
+0x000000011c501000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmusepack.so
+0x000000011c50c000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libmpcdec.dylib
+0x000000011c51a000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmve.so
+0x000000011c544000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstmxf.so
+0x000000011c5ab000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstnavigationtest.so
+0x000000011c5b6000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstnsf.so
+0x000000011c5d9000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstnuvdemux.so
+0x000000011c5e4000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstogg.so
+0x000000011c61b000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libogg.dylib
+0x000000011c622000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstoss4audio.so
+0x000000011c642000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstosxaudio.so
+0x000000011c651000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstosxvideosink.so
+0x000000011c661000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstpatchdetect.so
+0x000000011c66d000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstpcapparse.so
+0x000000011c677000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstplaybin.so
+0x000000011c6be000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstpnm.so
+0x000000011c6c8000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstpostproc.so
+0x000000011c6df000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstrawparse.so
+0x000000011c6ef000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstreal.so
+0x000000011c6fd000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstreplaygain.so
+0x000000011c70e000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstrfbsrc.so
+0x000000011c71f000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstrtp.so
+0x000000011c782000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstrtpmanager.so
+0x000000011c7c0000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstnetbuffer-0.10.dylib
+0x000000011c7c8000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstrtpmux.so
+0x000000011c7d5000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstrtpvp8.so
+0x000000011c7df000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstrtsp.so
+0x000000011c806000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstrtsp-0.10.dylib
+0x000000011c821000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstsdp-0.10.dylib
+0x000000011c82e000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstscaletempoplugin.so
+0x000000011c837000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstsdi.so
+0x000000011c840000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstsdpelem.so
+0x000000011c84e000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstsegmentclip.so
+0x000000011c859000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstshapewipe.so
+0x000000011c869000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstsiren.so
+0x000000011c888000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstsmpte.so
+0x000000011c89e000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstspectrum.so
+0x000000011c8ad000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstspeed.so
+0x000000011c8b6000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgststereo.so
+0x000000011c8be000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstsubenc.so
+0x000000011c8c7000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstsubparse.so
+0x000000011c8db000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsttcp.so
+0x000000011c8f6000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsttheora.so
+0x000000011c90e000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libtheoraenc.dylib
+0x000000011c947000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libtheoradec.dylib
+0x000000011ca8d000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsttta.so
+0x000000011ca99000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsttypefindfunctions.so
+0x000000011cab2000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstudp.so
+0x000000011cac8000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideobox.so
+0x000000011cae0000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideocrop.so
+0x000000011caf0000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideofilter.so
+0x000000011cb06000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideofiltersbad.so
+0x000000011cb10000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideomaxrate.so
+0x000000011cb18000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideomeasure.so
+0x000000011cb2a000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideomixer.so
+0x000000011cb4f000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideoparsersbad.so
+0x000000011cb6d000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libgstcodecparsers-0.10.dylib
+0x000000011cb9c000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideorate.so
+0x000000011cba9000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideoscale.so
+0x000000011cbcc000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideosignal.so
+0x000000011cbd7000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvideotestsrc.so
+0x000000011cbea000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvmnc.so
+0x000000011cbf5000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvolume.so
+0x000000011cc04000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstvorbis.so
+0x000000011cc17000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libvorbisenc.dylib
+0x000000011ced6000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libvorbis.dylib
+0x000000011cf03000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstwavenc.so
+0x000000011cf0f000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstwavparse.so
+0x000000011cf24000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgstxvid.so
+0x000000011cf36000 	/Users/erico/git/RoboticArmGUI/lib/video/macosx64/libxvidcore.dylib
+0x000000011d02a000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsty4mdec.so
+0x000000011d035000 	/Users/erico/git/RoboticArmGUI/lib/video//macosx64/plugins/libgsty4menc.so
+0x000000011d03f000 	/System/Library/Extensions/AppleHDA.kext/Contents/PlugIns/AppleHDAHALPlugIn.bundle/Contents/MacOS/AppleHDAHALPlugIn
+0x000000011d048000 	/System/Library/Frameworks/CoreMediaIO.framework/Resources/VDC.plugin/Contents/MacOS/VDC
+0x000000011d079000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_java245.dylib
+0x000000011d161000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_core.2.4.dylib
+0x000000011d3ea000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_imgproc.2.4.dylib
+0x000000011d6d0000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_highgui.2.4.dylib
+0x000000011d911000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_objdetect.2.4.dylib
+0x000000011d9a1000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_flann.2.4.dylib
+0x000000011da31000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_features2d.2.4.dylib
+0x000000011daec000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_video.2.4.dylib
+0x000000011db49000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_ml.2.4.dylib
+0x000000011dbcc000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_calib3d.2.4.dylib
+0x000000011dc80000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_photo.2.4.dylib
+0x000000011dca2000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_legacy.2.4.dylib
+0x000000011ddca000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_gpu.2.4.dylib
+0x000000011ddf7000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_ocl.2.4.dylib
+0x000000011e04d000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_nonfree.2.4.dylib
+0x000000011e085000 	/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64/libopencv_contrib.2.4.dylib
+0x000000011eb03000 	/System/Library/Frameworks/CoreMediaIO.framework/Resources/CMIOUnits.bundle/Contents/MacOS/CMIOUnits
+0x0000000117bd5000 	/System/Library/PrivateFrameworks/FWAVC.framework/Versions/A/FWAVC
+0x0000000117c21000 	/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/jre/lib/libdcpr.dylib
+0x000000011efd1000 	/System/Library/PrivateFrameworks/AppleGVA.framework/AppleGVA
+
+VM Arguments:
+jvm_args: -Djava.library.path=/Users/erico/git/RoboticArmGUI/lib/opencv/macosx64:/Users/erico/git/RoboticArmGUI/lib/video/macosx64 -Dfile.encoding=US-ASCII 
+java_command: appInterface.MainInterface
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+SHELL=/bin/bash
+
+Signal Handlers:
+SIGSEGV: [libjvm.dylib+0x525425], sa_mask[0]=0xfffefeff, sa_flags=0x00000043
+SIGBUS: [libjvm.dylib+0x525425], sa_mask[0]=0xfffefeff, sa_flags=0x00000042
+SIGFPE: [libjvm.dylib+0x41892a], sa_mask[0]=0xfffefeff, sa_flags=0x00000042
+SIGPIPE: [libjvm.dylib+0x41892a], sa_mask[0]=0xfffefeff, sa_flags=0x00000042
+SIGXFSZ: [libjvm.dylib+0x41892a], sa_mask[0]=0xfffefeff, sa_flags=0x00000042
+SIGILL: [libjvm.dylib+0x41892a], sa_mask[0]=0xfffefeff, sa_flags=0x00000042
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000002
+SIGUSR2: [libjvm.dylib+0x41841c], sa_mask[0]=0x00000004, sa_flags=0x00000042
+SIGHUP: [libjvm.dylib+0x4166ab], sa_mask[0]=0xfffefeff, sa_flags=0x00000042
+SIGINT: [libjvm.dylib+0x4166ab], sa_mask[0]=0xfffefeff, sa_flags=0x00000042
+SIGTERM: [libjvm.dylib+0x4166ab], sa_mask[0]=0xfffefeff, sa_flags=0x00000042
+SIGQUIT: [libjvm.dylib+0x4166ab], sa_mask[0]=0xfffefeff, sa_flags=0x00000042
+
+
+---------------  S Y S T E M  ---------------
+
+OS:Bsduname:Darwin 13.1.0 Darwin Kernel Version 13.1.0: Wed Apr  2 23:52:02 PDT 2014; root:xnu-2422.92.1~2/RELEASE_X86_64 x86_64
+rlimit: STACK 8192k, CORE 0k, NPROC 709, NOFILE 10240, AS infinity
+load average:2.42 1.90 1.56
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 58 stepping 9, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, aes, erms, ht, tsc, tscinvbit, tscinv
+
+Memory: 4k page, physical 4194304k(1048576k free)
+
+/proc/meminfo:
+
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (24.51-b03) for bsd-amd64 JRE (1.7.0_51-b13), built on Dec 18 2013 18:45:56 by "java_re" with gcc 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
+
+time: Mon May  5 19:12:12 2014
+elapsed time: 58 seconds
+
