@@ -14,7 +14,7 @@ import processing.core.PApplet;
 import processing.serial.Serial;
 
 public class TalkWithArduino {
-	public static Serial port =new Serial(new PApplet(), Serial.list()[Serial.list().length-1], 19200);
+	public static Serial port;// =new Serial(new PApplet(), Serial.list()[Serial.list().length-1], 19200);
 	
 	private TalkWithArduino() {
 	}
@@ -28,6 +28,8 @@ public class TalkWithArduino {
 	 * @param flow3
 	 */
 	public static void sendToArduino(Angles angles, long flow1, long flow2, long flow3) {
+		if(port == null)return;
+		
 		int thi = (int) Math.toDegrees(angles.getThi())
 				+ Constants.CORRECT_ANGLE_THI;
 		int theta = (int) Math.toDegrees(angles.getTheta())
@@ -49,6 +51,9 @@ public class TalkWithArduino {
 	 * @param flow3
 	 */
 	public static void sendFlowToArduino(long flow1, long flow2, long flow3) {
+		if(port == null)return;
+
+		
 		flow1 = (100 * flow1) + 12000;
 		port.write(flow1 + "d");
 
@@ -65,13 +70,29 @@ public class TalkWithArduino {
 		if(port != null){
 			port.dispose();
 		}
-		port =new Serial(new PApplet(), portName, 19200);
+		if(portName == null){
+			port = null;
+		} else {
+			port =new Serial(new PApplet(), portName, 19200);
+		}
 	}
 	
 	public static JMenu getSelectPortMenu(){
 		
 		
 		JMenu menu = new JMenu("COM Port");	
+		
+		{
+		final String  itemName = "Only Simulation" ;
+		JMenuItem mItemStepperManual = new JMenuItem(itemName);
+		mItemStepperManual.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				setPort(null);
+			}
+		});
+		menu.add(mItemStepperManual);
+		}
+		
 		
 		for (String portName : Serial.list()) {
 			final String  itemName = portName;
