@@ -96,4 +96,6 @@ public abstract class Constants {
 	public static final double BASE_X = 350; //280;
 	public static final double BASE_Y = 230;
 	public static final double BASE_Z = 109;
+	public static final double MIN_Z = -70;
+	public static final double MAX_Z = 90;
 }

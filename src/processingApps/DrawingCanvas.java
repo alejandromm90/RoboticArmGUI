@@ -6,16 +6,14 @@ package processingApps;
  * */
 
 import geometric.RelativePoint;
-
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import leapMotion.LeapMotionListener;
 import math.Calculate;
 import processing.core.PApplet;
 import appInterface.Flavor;
+import appInterface.SetZvalue;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
@@ -26,6 +24,7 @@ import com.leapmotion.leap.Vector;
 import constants.Constants;
 
 public class DrawingCanvas extends PApplet{
+	private static final long serialVersionUID = 1L;
 	private static final int MAX_BRUSH_SIZE = 260;
 	private static final int MIN_BRUSH_SIZE = 160;
 	private double lastX, lastY;
@@ -178,15 +177,15 @@ public class DrawingCanvas extends PApplet{
 		        if (!newPointEqualToLast(ellipsesLeapMotion, x, y)) {	// We check if the point is the same to the last one
 			        switch (numberFlavor) {
 			        case 0:	// Chocolate
-			        	newPoint = new RelativePoint(x, y, 0, flow, 0, 0);
+			        	newPoint = new RelativePoint(x, y, SetZvalue.getZValue(), flow, 0, 0);
 				    	drawFlavourPoint(x, y, flow, 0, 0);
 			        	break;
 			        case 1:	// Strawberry
-			        	newPoint = new RelativePoint(x, y, 0, 0, flow, 0);
+			        	newPoint = new RelativePoint(x, y, SetZvalue.getZValue(), 0, flow, 0);
 				    	drawFlavourPoint(x, y, 0, flow, 0);
 			        	break;
 			        case 2:	// Chocolate + Strawberry
-			        	newPoint = new RelativePoint(x, y, 0, flow, flow, 0);
+			        	newPoint = new RelativePoint(x, y, SetZvalue.getZValue(), flow, flow, 0);
 				    	drawFlavourPoint(x, y, flow, flow, 0);
 			        	break;
 			        }
@@ -296,7 +295,7 @@ public class DrawingCanvas extends PApplet{
 //	    } else {
 //	    	lastEllipse.add(new Point(mouseX, mouseY, 0));
 //	    }
-		RelativePoint newPoint = new RelativePoint(mX/2, mY/2, -50, flow1, flow2, flow3);	// Z = -50
+		RelativePoint newPoint = new RelativePoint(mX/2, mY/2, SetZvalue.getZValue(), flow1, flow2, flow3);	// Z = -50
 		System.out.println(newPoint);
 
 		if (liveMode) {	// We check if we are in Live Mode
@@ -604,5 +603,5 @@ public class DrawingCanvas extends PApplet{
 		Simulation.liveMode = liveMode;
 		this.liveMode = liveMode;
 	}
-	
+
 }
