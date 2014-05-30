@@ -129,7 +129,7 @@ public abstract class Calculate {
 		ArrayList<RelativePoint> points2 = new ArrayList<RelativePoint>();
 
 		for (int i = 0; i < points.size(); i++) {
-			points2.add(new RelativePoint(points.get(i).getX(), points.get(i).getY() +100, points.get(i).getZ(),
+			points2.add(new RelativePoint(points.get(i).getX(), points.get(i).getY() + 100, points.get(i).getZ(),
 					points.get(i).getFlow1(), points.get(i).getFlow2(), points.get(i).getFlow3()));
 		}
 		
@@ -240,5 +240,11 @@ public abstract class Calculate {
 				0, 0, 0));
 
 		return points;
+	}
+	
+	
+	public static float transformToPixels(float cm) {
+		cm = (float) (cm * 13.3);
+		return cm;
 	}
 }

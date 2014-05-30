@@ -5,6 +5,10 @@ import geometric.RelativePoint;
 
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import ArduinoComm.TalkWithArduino;
 import appInterface.MainInterface;
 import math.Calculate;
@@ -27,12 +31,18 @@ public class Simulation extends PApplet {
 	private long[] flowBefore;
 	public static boolean finishPrint = true;
 	public static boolean liveMode = false;
+	private static Simulation singleton = null;
 
 	/**
 	 * 
 	 * @param points
 	 */
 	public Simulation(ArrayList<RelativePoint> points) {
+		if (singleton!= null){
+		((JFrame) singleton.getParent().getParent().getParent().getParent().getParent()).dispose();
+		System.out.println(singleton);
+		singleton.destroy();
+	}
 		if (!points.isEmpty()) {
 			
 			RelativePoint point1 = points.get(points.size() - 1);
@@ -50,6 +60,7 @@ public class Simulation extends PApplet {
 			this.points = new ArrayList<RelativePoint>();
 			pointsDraw = new ArrayList<RelativePoint>();
 		}
+		singleton = this;
 	}
 
 	/**
@@ -80,7 +91,7 @@ public class Simulation extends PApplet {
 	/**
 	 *
 	 */
-	public void draw() {
+	public void draw() {		
 		if (!liveMode) {
 			background(255);
 	
@@ -361,10 +372,20 @@ public class Simulation extends PApplet {
 	 * If you add an empty array of points it stops printing
 	 */
 	public void addPoint(ArrayList<RelativePoint> pts) {
+		
 		if (!pts.isEmpty()) {
 			ArrayList<RelativePoint> pts2 = Calculate.transformCoordinates(pts);
 			ArrayList<RelativePoint> pts3 = Calculate.transformRelativePoint(pts2);				
-			this.points.addAll(Calculate.transformHundred(pts3));	
+			this.points.addAll(Calculate.transformHundred(pts3));
+//			RelativePoint point1 = pts.get(0);
+//			long flow1 = point1.getFlow1();
+//			long flow2 = point1.getFlow2();
+//			long flow3 = point1.getFlow3();
+//			if (flow1 > 0 || flow2 > 0 || flow3 > 0) {
+//				ArrayList<RelativePoint> pts2 = Calculate.transformCoordinates(pts);
+//				ArrayList<RelativePoint> pts3 = Calculate.transformRelativePoint(pts2);				
+//				this.points.addAll(Calculate.transformHundred(pts3));
+//			}
 		} else { // Stop live mode
 			pts.add(new RelativePoint(Constants.START_X,
 					Constants.START_Y, Constants.START_Z, 0, 0, 0));	
@@ -372,5 +393,4 @@ public class Simulation extends PApplet {
 			this.points.addAll(pts);
 		}
 	}
-	
 }

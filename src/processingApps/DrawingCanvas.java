@@ -41,6 +41,7 @@ public class DrawingCanvas extends PApplet{
 	private processing.core.PApplet simulationPApplet;
 	private int mode;
 	private float diameter;
+	private JFrame simJFrame;
 	
 	public DrawingCanvas(int mode, float diameter) {	// Mode for drawing the background shape
 		this.mode = mode;
@@ -208,7 +209,7 @@ public class DrawingCanvas extends PApplet{
 						((Simulation) simulationPApplet).addPoint(pts);
 					}
 
-			    	ellipsesLeapMotion.add(newPoint);	//TODO
+			    	ellipsesLeapMotion.add(newPoint);	
 		        } 
 		    	drawing = true;
 
@@ -323,8 +324,9 @@ public class DrawingCanvas extends PApplet{
 				pts.add(newPoint);				
 				((Simulation) simulationPApplet).addPoint(pts);
 			}
-		}
-		lastEllipse.add(newPoint);	
+		} 
+		if (newPoint.getFlow1() > 0 || newPoint.getFlow2() > 0 || newPoint.getFlow3() > 0)	// To not add points when we are in Live Mode without flavour
+			lastEllipse.add(newPoint);	
 		
 	}
 
@@ -347,6 +349,7 @@ public class DrawingCanvas extends PApplet{
 	
 	public void cleanCanvas() {
 		drawBorder();
+		strokeWeight(Constants.DEFAULT_FLOW - 5);
 		setActualFlow(actualFlow1, 0, 0); // actualFlow1, only chocolate by defaults flow and flavour
 		firstClick = true;
 		lastEllipse = new ArrayList<RelativePoint>();
@@ -455,7 +458,7 @@ public class DrawingCanvas extends PApplet{
 		  break;
 	  case 1:	// Cake mode
 		  ellipseMode(CENTER);
-		  diameter = (float) (diameter * 15.85);
+		  diameter = (float) (diameter * 15.85);	// TODO add Calculate.transform...
 		  ellipse(width/2, height/2, diameter, diameter);
 		  break;
 	  }
@@ -596,6 +599,7 @@ public class DrawingCanvas extends PApplet{
 	
 	/** Sets the live mode **/
 	public void setLiveMode(boolean liveMode) {
+		
 		if (liveMode) {
 			if (!lastEllipse.isEmpty()) {
 				simulationPApplet = new Simulation(Calculate.transformCoordinates(lastEllipse));
@@ -606,7 +610,7 @@ public class DrawingCanvas extends PApplet{
 			}
 			
 			// TODO try to remove this frame
-			JFrame simJFrame = new JFrame();
+			 simJFrame = new JFrame();
 			simJFrame.setTitle("ARM SIMULATION");
 					
 	        JPanel mainPanel = new JPanel();
@@ -628,9 +632,6 @@ public class DrawingCanvas extends PApplet{
 			if (simulationPApplet != null) {
 				ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
 				((Simulation) simulationPApplet).addPoint(pts);
-
-//				simulationPApplet.destroy();
-				
 			}
 		}
 		Simulation.liveMode = liveMode;
