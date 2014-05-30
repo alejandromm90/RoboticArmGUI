@@ -153,16 +153,19 @@ public class DrawingCanvas extends PApplet{
     	int numberFlavor = listener.getNumberFlavor();
     	if (insideCanvas((int)x, (int)y)) {
 		    System.out.println(brushSize);
-		    if (brushSize > 240 && brushSize <= MAX_BRUSH_SIZE) {
-		    	flow = 20;
-		    } else if (brushSize > 180 && brushSize <= 240) {
-		    	flow = 15;
-		    } else if (brushSize > MIN_BRUSH_SIZE && brushSize <= 180) {
-		    	flow = 10;
-		    } 
+		   
 		    
 		    if (brushSize > MIN_BRUSH_SIZE) {
 		    	// We are drawing
+		    	// We set the flow value depending on the distance to the screen
+		    	if (brushSize > 240 && brushSize <= MAX_BRUSH_SIZE) {
+			    	flow = 20;
+			    } else if (brushSize > 180 && brushSize <= 240) {
+			    	flow = 15;
+			    } else if (brushSize > MIN_BRUSH_SIZE && brushSize <= 180) {
+			    	flow = 10;
+			    } 
+		    	 
 		        controller.removeListener(listener);	// Remove the Leap Motion listener to avoid gestures mistakes
 		        RelativePoint newPoint = null;
 		        if (!newPointEqualToLast(x, y)) {	// We check if the point is the same to the last one

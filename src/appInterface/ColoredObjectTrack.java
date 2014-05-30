@@ -13,8 +13,6 @@ import static com.googlecode.javacv.cpp.opencv_imgproc.cvGetCentralMoment;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvGetSpatialMoment;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvMoments;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvSmooth;
-import static com.googlecode.javacv.cpp.opencv_highgui.*;
-
 import geometric.RelativePoint;
 
 import java.awt.Color;
@@ -30,6 +28,8 @@ import com.googlecode.javacv.OpenCVFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.CvScalar;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import com.googlecode.javacv.cpp.opencv_imgproc.CvMoments;
+
+import constants.Constants;
 
 public class ColoredObjectTrack implements Runnable {
     final int INTERVAL = 1000;// 1sec
@@ -50,15 +50,18 @@ public class ColoredObjectTrack implements Runnable {
     JPanel jp; 
     
     ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
-
+    boolean paused = false;
 
     public ColoredObjectTrack(JPanel jp) {
     	path.dispose();
-    	canvas.setLocation(750, 100);
+    	canvas.setLocation(700, 100);
 //        canvas.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 //        path.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
     	this.jp = jp;
         path.setContentPane(jp);
+        this.jp.setSize(canvas.getSize().width, canvas.getSize().height);	// ??????
+        path.setSize(canvas.getSize().width, canvas.getSize().height);
+
     }
 
     @Override
@@ -85,9 +88,11 @@ public class ColoredObjectTrack implements Runnable {
                     posX = (int) (mom10 / area);
                     posY = (int) (mom01 / area);
                     // only if its a valid position
-                    if (posX > 0 && posY > 0) {
+                    if (posX > 0 && posY > 0 && !paused){
                         paint(img, posX, posY);
-                    }
+                    } 
+                    
+                    repaintPoints();	// Repaints the points already saved
                 }
                 // Thread.sleep(INTERVAL);
             }
@@ -104,27 +109,26 @@ public class ColoredObjectTrack implements Runnable {
 
     private void paint(IplImage img, int posX, int posY) {
         Graphics g = jp.getGraphics();
-        path.setSize(img.width(), img.height());
-//    	paintMouse(g, img, posX, posY);
-        RelativePoint point = new RelativePoint(posX, posY, 0, 0, 15, 0); // Strawberry points
+        g.setColor(Color.RED);
+    	RelativePoint point = new RelativePoint(posX, posY, -50, 0, Constants.DEFAULT_FLOW, 0); // Strawberry points
         points.add(point);
-//        drawPoints(g, points);
         g.fillOval(posX, posY, 20, 20);
         g.drawOval(posX, posY, 20, 20);
+        
         System.out.println(posX + " , " + posY);
 
     }
 
-    private void drawPoints(Graphics g, ArrayList<RelativePoint> points) {
-		g.setColor(Color.RED);
+    private void repaintPoints() {
+        Graphics g = jp.getGraphics();
 
+        g.setColor(Color.RED);
     	for (int i = 0; i < points.size(); i++){
     		RelativePoint point = points.get(i);
     		
             g.fillOval((int)point.getX(), (int)point.getY(), 20, 20);
             g.drawOval((int)point.getX(), (int)point.getY(), 20, 20);
     	}
-    	
     }
     
     private IplImage getThresholdImage(IplImage orgImg) {
@@ -150,5 +154,13 @@ public class ColoredObjectTrack implements Runnable {
         cvCvtColor(iploriginal, srcimg, CV_BGR2GRAY);
         cvEqualizeHist(srcimg, destimg);
         return destimg;
+    }
+    
+    public ArrayList<RelativePoint> getPoints() {
+    	return points;
+    }
+    
+    public void setPauseMode(boolean pause) {
+    	this.paused = pause;
     }
 }
