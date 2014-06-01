@@ -20,6 +20,8 @@ public class ManualControl extends JDialog implements MouseListener {
 	private JButton stepper1BW;
 	private JButton stepper2FW;
 	private JButton stepper2BW;
+	private JButton bothFW;
+	private JButton bothBW;
 
 	public ManualControl(JFrame frame) {
 		super(frame, "manual syringue control");
@@ -31,15 +33,25 @@ public class ManualControl extends JDialog implements MouseListener {
 		stepper1BW = new JButton("1 backward");
 		stepper2BW = new JButton("2 backward");
 
+		
+		bothFW = new JButton("both forward");
+		bothBW = new JButton("both backward");
+		
 		stepper1FW.addMouseListener(this);
 		stepper2FW.addMouseListener(this);
 		stepper1BW.addMouseListener(this);
 		stepper2BW.addMouseListener(this);
+		
+		bothFW.addMouseListener(this);
+		bothBW.addMouseListener(this);
 
 		myPanel.add(stepper1FW);
 		myPanel.add(stepper2FW); 
 		myPanel.add(stepper1BW); 
-		myPanel.add(stepper2BW); 
+		myPanel.add(stepper2BW);
+		myPanel.add(bothFW);
+		myPanel.add(		bothBW);
+		
 
 		pack();
 		setLocationRelativeTo(frame);
@@ -62,6 +74,14 @@ public class ManualControl extends JDialog implements MouseListener {
 		} else if(stepper2BW == e.getSource()){
 			flow2 = -120;
 
+		}else if (bothBW == e.getSource()){
+			flow2 = -120;
+			flow1 = -120;
+
+		}else if (bothFW == e.getSource()){
+			flow2 = 120;
+			flow1 = -120;
+
 		}
 		TalkWithArduino.sendFlowToArduino(flow1, flow2, flow3);
 	}
@@ -70,7 +90,10 @@ public class ManualControl extends JDialog implements MouseListener {
 		if(stepper1FW == e.getSource()
 				|| stepper1BW == e.getSource()
 				|| stepper2FW == e.getSource()
-				|| stepper2BW == e.getSource()){
+				|| stepper2BW == e.getSource()
+				|| bothBW == e.getSource()
+				|| bothFW == e.getSource()
+				){
 			TalkWithArduino.sendFlowToArduino(0, 0, 0);
 		}
 	}

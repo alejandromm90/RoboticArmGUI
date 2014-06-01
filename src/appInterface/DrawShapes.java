@@ -70,7 +70,7 @@ public class DrawShapes extends JDialog  implements ActionListener{
 			points = Calculate.pointsOfRectangle(x, y, z, answer[1], answer[2], flow1, flow2, flow3);
 			break;
 		case 3:
-			points = Calculate.pointsOfSpiral(x, y, z, answer[1], flow1, flow2, flow3);
+			points = Calculate.pointsOfSpiral(x, y, z, answer[1], answer[2], answer[3], flow1, flow2, flow3);
 			break;
 		case 4:
 			points = Calculate.pointsOfStar(x, y, z, answer[1], answer[2], answer[3], flow1, flow2, flow3);
@@ -139,11 +139,17 @@ public class DrawShapes extends JDialog  implements ActionListener{
 			break;
 			
 		case 3:
-			myPanel.setLayout(new GridLayout(2, 2));
+			myPanel.setLayout(new GridLayout(4, 2));
 
 			myPanel.add(radiusL);
 			myPanel.add(radius);
 
+			myPanel.add(widthL);
+			myPanel.add(width);
+			
+			tipsL.setText("degree:");
+			myPanel.add(tipsL);
+			myPanel.add(tips);
 
 			break;
 			
@@ -185,8 +191,8 @@ public class DrawShapes extends JDialog  implements ActionListener{
 			switch (answer[0]) {
 			case 0:
 				answer[1] = Calculate.transformToPixels(Double.valueOf(radius.getText()));
-				answer[2] = Calculate.transformToPixels(Double.valueOf(startdegree.getText()));
-				answer[3] = Calculate.transformToPixels(Double.valueOf(enddegree.getText()));
+				answer[2] = Integer.valueOf(startdegree.getText());
+				answer[3] = Integer.valueOf(enddegree.getText());
 				
 				
 				break;
@@ -200,7 +206,9 @@ public class DrawShapes extends JDialog  implements ActionListener{
 				break;
 			case 3:
 				answer[1] = Calculate.transformToPixels(Double.valueOf(radius.getText()));
-				
+				answer[2] = Calculate.transformToPixels(Double.valueOf(width.getText()));
+				answer[3] = Integer.valueOf(tips.getText());
+
 				break;
 			case 4:
 				answer[1] = Calculate.transformToPixels(Double.valueOf(radius.getText()));

@@ -258,10 +258,11 @@ public abstract class Calculate {
 	 * @param flow1
 	 * @param flow2
 	 * @param flow3
+	 * @param  
 	 * @return
 	 */
 	public static ArrayList<RelativePoint> pointsOfSpiral(double x, double y,
-			double z, double radius, long flow1, long flow2, long flow3) {
+			double z, double radius, double width, double degreedelta, long flow1, long flow2, long flow3) {
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
 		int degree = 0;
@@ -269,8 +270,8 @@ public abstract class Calculate {
 			points.add(new RelativePoint(x + radius * Math.cos(Math.toRadians(degree)),
 					y + radius * Math.sin(Math.toRadians(degree)), z, flow1,
 					flow2, flow3));
-			radius -= 1;
-			degree += 10;
+			radius -= width;
+			degree += degreedelta;
 		}
 
 		RelativePoint point = points.get(points.size() - 1);
