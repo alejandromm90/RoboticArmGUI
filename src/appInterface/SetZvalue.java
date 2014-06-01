@@ -8,10 +8,13 @@ import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.print.attribute.standard.Sides;
+
 import math.Calculate;
 import ArduinoComm.TalkWithArduino;
 import constants.Constants;
 import processingApps.DrawingCanvas;
+import processingApps.Simulation;
 
 public class SetZvalue implements MouseListener {
 
@@ -78,8 +81,14 @@ public class SetZvalue implements MouseListener {
 	}
 	
 	private static void showheight(){
-		 Angles angles = Calculate.calculateAngles(new RelativePoint(Constants.START_X, Constants.START_Y, zValue, 0, 0, 0));
-		 TalkWithArduino.sendToArduino(angles, 0, 0, 0);
+		RelativePoint actualPos = Simulation.getActualPointZ();
+		if (actualPos == null){
+			actualPos = new RelativePoint(Constants.START_X, Constants.START_Y, zValue, 0, 0, 0);
+		} else {
+			actualPos.setZ(zValue);
+		}
+		Angles angles = Calculate.calculateAngles(actualPos);
+		TalkWithArduino.sendToArduino(angles, 0, 0, 0);
 	}
 
 	public static double getZValue() {

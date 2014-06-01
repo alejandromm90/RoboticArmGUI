@@ -21,14 +21,17 @@ public abstract class Calculate {
 	 * @return angles
 	 */
 	public static Angles calculateAngles(RelativePoint point) {
-		double x = point.getX();
+		double x = (point.getX() * Constants.X_FACTOR) ;//+ Constants.X_SHIFT;
 		double y = point.getY();
-		double z = point.getZ();
+		double z = point.getZ() ;
 
 		double thi = Math.atan2(y, x);
 		double length = Math.sqrt(x * x + y * y) - Constants.BASE_BOTTOM_LENGTH
 				- Constants.BASE_TOP_LENGTH;
 
+		
+		
+		
 		double kappa = 2 * Math
 				.atan(-Math
 						.sqrt(((Constants.ARM_LENGTH_ELBOW + Constants.ARM_LENGTH_SHOULDER)

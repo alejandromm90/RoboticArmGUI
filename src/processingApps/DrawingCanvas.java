@@ -92,6 +92,8 @@ public class DrawingCanvas extends PApplet{
 	
 	
 	public void draw() { 
+		line(0, this.size().height/2, this.size().width, this.size().height/2);
+		line(this.size().width/2, 0, this.size().width/2, this.size().height);
 
 	  if (leapMotionMode) { 
 		  drawWithLeapMotion();	  

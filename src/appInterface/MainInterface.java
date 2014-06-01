@@ -569,8 +569,8 @@ public class MainInterface extends javax.swing.JFrame {
 		});
 
 		// Create the check box
-		JCheckBox chocolateButton = setFlavourCheckBox(1); 
-		JCheckBox strawberryButton = setFlavourCheckBox(2);
+		final JCheckBox chocolateButton = setFlavourCheckBox(1); 
+		final JCheckBox strawberryButton = setFlavourCheckBox(2);
 
 		JPanel checkPanel = new JPanel(new GridLayout(0, 1));
 		JLabel flavoursLabel = new JLabel("Select flavours: ");
@@ -609,6 +609,8 @@ public class MainInterface extends javax.swing.JFrame {
 					((DrawingCanvas) sketchDrawing).setLiveMode(true);	
 					liveButton.setText("Stop Live Mode");
 					firstClickLiveMode = true;
+					chocolateButton.setSelected(false);
+					strawberryButton.setSelected(false);
 				}
 			}
 		});

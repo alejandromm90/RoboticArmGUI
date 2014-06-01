@@ -98,4 +98,8 @@ public abstract class Constants {
 	public static final double BASE_Z = 109;
 	public static final double MIN_Z = -70;
 	public static final double MAX_Z = 90;
+	
+	
+	public static final double X_FACTOR = 0.8;
+	public static final double Z_FACTOR = 0.9;
 }
