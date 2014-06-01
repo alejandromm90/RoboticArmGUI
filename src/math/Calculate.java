@@ -246,7 +246,7 @@ public abstract class Calculate {
 	}
 
 	public static int transformToPixels(Double double1) {
-		return (int) (double1 * 11.77);
+		return (int) (double1 * 23.54);
 	}
 
 	/**

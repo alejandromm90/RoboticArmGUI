@@ -34,7 +34,7 @@ public class DrawingCanvas extends PApplet{
 	private double lastX, lastY;
 	private int width = Constants.DRAWING_APPLET_SIZE_WIDTH * 2;
 	private int height = Constants.DRAWING_APPLET_SIZE_HEIGHT * 2;
-	private boolean firstClick, leapMotionMode, liveMode;
+	private boolean firstClick, leapMotionMode, liveMode, flavourChanged, split;
 	private ArrayList<RelativePoint> lastEllipse, ellipsesRedo, ellipsesLeapMotion;
 	private ArrayList<Line> lastLine, linesRedo;
 	private Controller leapController;
@@ -61,6 +61,9 @@ public class DrawingCanvas extends PApplet{
 		actualFlow1 = Constants.DEFAULT_FLOW1;
 		actualFlow2 = 0;
 		actualFlow3 = 0;
+		
+		flavourChanged = false;
+		split = false;
 	}
 
 	public void setup() {
@@ -87,7 +90,7 @@ public class DrawingCanvas extends PApplet{
 		//	  actualFlow3 = 0;
 
 		liveMode = false;
-
+		
 		//	  leapMotionMode = true;
 		drawBorder();
 		strokeWeight(Constants.DEFAULT_FLOW1 - 5);
@@ -277,7 +280,7 @@ public class DrawingCanvas extends PApplet{
 				
 				if (liveMode) {	// To control the arm in Live Mode without printing 
 				 	 addEllipseToArray(x, y, 0, 0, 0); 
-				 	 }
+				}
 				
 				controller.addListener(listener);	// Add the Leap Motion listener to enable gestures recognition
 				drawBorder();
@@ -360,7 +363,7 @@ public class DrawingCanvas extends PApplet{
 			ratio = Constants.DRAWING_APPLET_SIZE_WIDTH; // 642
 			break;
 		case 1:
-			ratio = diameter;
+			ratio = diameter/2;
 			xCenter = 0;
 			yCenter = Constants.DRAWING_APPLET_SIZE_HEIGHT + (80 * 2);	
 			break;
@@ -394,19 +397,28 @@ public class DrawingCanvas extends PApplet{
 
 		if (liveMode) {	// We check if we are in Live Mode
 		 	 if (!newPointEqualToLast(lastEllipse, (float)newPoint.getX(), (float)newPoint.getY())) {
-		 	 ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
-		 	 pts.add(newPoint);	  
-		 	 ((Simulation) simulationPApplet).addPoint(pts);
+			 	 ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
+			 	 pts.add(newPoint);	  
+			 	 ((Simulation) simulationPApplet).addPoint(pts);
 		 	 }
 		 	 if (newPoint.getFlow1() > 0 || newPoint.getFlow2() > 0 || newPoint.getFlow3() > 0)	// To not add points when we are in Live Mode without flavour
-		 	 lastEllipse.add(newPoint); 
-		 	} else {
-		 	 lastEllipse.add(newPoint); 
+		 		 lastEllipse.add(newPoint); 
+		 	 
+		 } else {
+			 if ((!split) && (flavourChanged) && (!lastEllipse.isEmpty())){ // If we change the flavor, we add a last point with the new flavor 
+				 RelativePoint lastPoint = new RelativePoint(lastEllipse.get(lastEllipse.size()-1).getX(), lastEllipse.get(lastEllipse.size()-1).getY(),
+						 lastEllipse.get(lastEllipse.size()-1).getZ(), flow1, flow2, flow3);
+				 lastEllipse.add(lastPoint);
+				 flavourChanged = false;
+			 } else if (split) {	// If we had split we only add a flow 0 point 
+				 RelativePoint lastPoint = new RelativePoint(lastEllipse.get(lastEllipse.size()-1).getX(), lastEllipse.get(lastEllipse.size()-1).getY(),
+						 lastEllipse.get(lastEllipse.size()-1).getZ(), 0, 0, 0);
+				 lastEllipse.add(lastPoint);
+				 split = false;
+			 }
+			 lastEllipse.add(newPoint); 
 
-		 	}
-
-
-
+		 }
 	}
 
 
@@ -537,7 +549,7 @@ public class DrawingCanvas extends PApplet{
 			break;
 		case 1:	// Cake mode
 			ellipseMode(CENTER);
-			ellipse(width/2, height/2, diameter * 2, diameter * 2);
+			ellipse(width/2, height/2, diameter, diameter);
 			break;
 		}
 
@@ -615,23 +627,18 @@ public class DrawingCanvas extends PApplet{
 		case 2:	// Strawberry
 			actualFlow2 = flow;
 			break;
-		case 4:	// Chocolate + Strawberry
-			actualFlow1 = flow;
-			actualFlow2 = flow;
-			break;
 		}	 
+		
+		flavourChanged = true;
 
-		if (!firstClick) {	// We add a last point to the array with the actual flavour's flow
-			addEllipseToArray(lastEllipse.get(lastEllipse.size()-1).getX(), lastEllipse.get(lastEllipse.size()-1).getY(),
-					actualFlow1, actualFlow2, actualFlow3); 
-		}
 	}
 
 	/** Splits the drawn figure to start a new one in the same canvas **/
 	public void splitDraw() {
 		if (!firstClick) {	// We add a last point to the array with the flow 0 value
-			addLastPoint(lastEllipse);
+//			addLastPoint(lastEllipse);
 			firstClick = true;
+			split = true;
 		}
 	}
 
@@ -641,18 +648,18 @@ public class DrawingCanvas extends PApplet{
 	 * **/
 	public void setActualFlow(int flow1, int flow2, int flow3) {
 
-		if (!lastEllipse.isEmpty()) {	// if is not the first point, we add a new one with the new flow value
-			RelativePoint lastPoint = lastEllipse.get(lastEllipse.size()-1);
-			if (flow1 > 0) {	// Chocolate
-				lastPoint.setFlow1(flow1);
-
-			} if (flow2 > 0) {	// Strawberry
-				lastPoint.setFlow2(flow2);
-
-			} if (flow3 > 0) {	// Other flavour
-				lastPoint.setFlow3(flow3);
-			}
-		}
+//		if (!lastEllipse.isEmpty()) {	// if is not the first point, we add a new one with the new flow value
+//			RelativePoint lastPoint = lastEllipse.get(lastEllipse.size()-1);
+//			if (flow1 > 0) {	// Chocolate
+//				lastPoint.setFlow1(flow1);
+//
+//			} if (flow2 > 0) {	// Strawberry
+//				lastPoint.setFlow2(flow2);
+//
+//			} if (flow3 > 0) {	// Other flavour
+//				lastPoint.setFlow3(flow3);
+//			}
+//		}
 
 		// We change the color and set the actualFlow values
 		if (flow1 > 0) {	// Chocolate
