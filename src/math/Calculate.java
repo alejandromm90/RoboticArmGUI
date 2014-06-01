@@ -171,11 +171,13 @@ public abstract class Calculate {
 			long flow2, long flow3) {
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
-		for (int degree = angle1; degree < angle2;) {
+		double angleStep = (Constants.DRAWING_APPLET_SIZE_HEIGHT/2.0)/radius * 7;
+		
+		for (int degree = angle1; degree <= angle2;) {
 			points.add(new RelativePoint(x + radius
 					* Math.cos(Math.toRadians(degree)), y - radius
 					* Math.sin(Math.toRadians(degree)), z, flow1, flow2, flow3));
-			degree += 4;
+			degree += angleStep;
 		}
 
 		RelativePoint point = points.get(points.size() - 1);

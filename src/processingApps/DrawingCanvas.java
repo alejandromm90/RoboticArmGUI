@@ -117,36 +117,41 @@ public class DrawingCanvas extends PApplet{
 			if (insideCanvas(mouseX, mouseY)) {
 				if (actualFlow1 > 0 || actualFlow2 > 0 || actualFlow3 > 0) {
 
-					// add shape
+					//add shape
 					ArrayList<RelativePoint> shapePoints = DrawShapes.getShapePoints(mouseX, mouseY, SetZvalue.getZValue(), actualFlow1, actualFlow2, actualFlow3);
 					if(shapePoints != null){
 						isDrawingShape = true;
+						boolean firstP = true;
+						
 						for (RelativePoint relativePoint : shapePoints) {
 							int x = (int) relativePoint.getX();
 							int y = (int) relativePoint.getY();
 
-							if (firstClick) {
+							if (firstP) {
+								//force to split the line before starting drawing the shape.
+								drawFlavourPoint((int)lastX, (int)lastY, 0,0,0);
+								addEllipseToArray(lastX, lastY, 0,0,0);
 								lastX = x;  
 								lastY = y;
+								firstP = false;
 
 							} else {
 								if (!((x==lastX) && (y==lastY))) {
-									addLineToArray(x, y, lastX, lastY);
 									// draw line between points
+									addLineToArray(x, y, lastX, lastY);
 									drawLine(x, y,(float)lastX, (float)lastY, (int)relativePoint.getFlow1(), (int)relativePoint.getFlow2(), (int)relativePoint.getFlow3());
 								}
 
 								lastX = x;
 								lastY = y;
 							}
-
-							firstClick = false;
 							drawFlavourPoint(x, y, (int)relativePoint.getFlow1(), (int)relativePoint.getFlow2(), (int)relativePoint.getFlow3());
 							addEllipseToArray(x, y, (int)relativePoint.getFlow1(), (int)relativePoint.getFlow2(), (int)relativePoint.getFlow3());
 						}
+						//make sure to spilt the line after the shape drawing
+						firstClick = true;
 
-					} else {
-						// end add shape
+					} else { // end add shape
 
 						if (firstClick) {
 							lastX = mouseX;  
@@ -154,21 +159,13 @@ public class DrawingCanvas extends PApplet{
 
 						} else {
 							if (!((mouseX==lastX) && (mouseY==lastY))){
-								addLineToArray(mouseX, mouseY, lastX, lastY);
 								// draw line between points
+								addLineToArray(mouseX, mouseY, lastX, lastY);
 								drawLine(mouseX, mouseY,(float)lastX, (float)lastY, actualFlow1, actualFlow2, actualFlow3);
 							}
-
 							lastX = mouseX;
 							lastY = mouseY;
 						}
-
-
-
-
-
-
-
 						firstClick = false;
 
 						drawFlavourPoint(mouseX, mouseY, actualFlow1, actualFlow2, actualFlow3);

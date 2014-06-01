@@ -26,7 +26,7 @@ public class ManualControl extends JDialog implements MouseListener {
 	public ManualControl(JFrame frame) {
 		super(frame, "manual syringue control");
 		myPanel = new JPanel();
-		myPanel.setLayout(new GridLayout(2, 2));
+		myPanel.setLayout(new GridLayout(2, 3));
 		getContentPane().add(myPanel);
 		stepper1FW = new JButton("1 forward");
 		stepper2FW = new JButton("2 forward");
@@ -46,11 +46,11 @@ public class ManualControl extends JDialog implements MouseListener {
 		bothBW.addMouseListener(this);
 
 		myPanel.add(stepper1FW);
-		myPanel.add(stepper2FW); 
+		myPanel.add(stepper2FW);
+		myPanel.add(bothFW);
 		myPanel.add(stepper1BW); 
 		myPanel.add(stepper2BW);
-		myPanel.add(bothFW);
-		myPanel.add(		bothBW);
+		myPanel.add(bothBW);
 		
 
 		pack();
@@ -80,7 +80,7 @@ public class ManualControl extends JDialog implements MouseListener {
 
 		}else if (bothFW == e.getSource()){
 			flow2 = 120;
-			flow1 = -120;
+			flow1 = 120;
 
 		}
 		TalkWithArduino.sendFlowToArduino(flow1, flow2, flow3);
