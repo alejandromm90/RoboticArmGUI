@@ -248,7 +248,7 @@ public abstract class Calculate {
 	}
 
 	public static int transformToPixels(Double double1) {
-		return (int) (double1 * 23.54);
+		return (int) (double1 * Constants.PIXEL_CENTIMETER);
 	}
 
 	/**
