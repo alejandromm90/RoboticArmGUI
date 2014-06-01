@@ -23,7 +23,8 @@ public abstract class Constants {
 	public static final long[] FLOW_WAIT_SPEED_START = {80, 80}; // TODO have to test the chocolate	
 	public static final long[] FLOW_WAIT_SPEED_END = {20, 51};	
 	public static final int FLOW_WAIT = 1000;
-	public static final int DEFAULT_FLOW = 15;
+	public static final int DEFAULT_FLOW1 = 10;
+	public static final int DEFAULT_FLOW2 = 15;
 	
 	/**
 	 * Flavour relevant

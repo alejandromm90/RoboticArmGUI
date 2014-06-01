@@ -63,8 +63,12 @@ public class MainInterface extends javax.swing.JFrame {
 	private boolean firstTimeManuallyPrinting, firstClickLeapMotionMode, manualPrinting, firstClickStartLeapMotion, firstClickScanMode, firstClickPauseColorTracking, firstClickLiveMode;
 	private processing.core.PApplet sketchDrawing, scanSketch, armSimulationSketch;
 	private Font buttonsFont = new Font("Arial", Font.PLAIN, 15);
-	private int actualFlow1, actualFlow2, actualFlow3, actualFlow;
+	private int actualFlow1, actualFlow2, actualFlow3;
 	private ColoredObjectTrack colorTrackingObject;
+	
+	private SpinnerNumberModel flows = new SpinnerNumberModel(Constants.DEFAULT_FLOW1, 5, 20, 5); // initial, min, max, step 
+	private SpinnerNumberModel flows2 = new SpinnerNumberModel(Constants.DEFAULT_FLOW2, 5, 20, 5); // initial, min, max, step 
+
 
 	public static void main(String[] args) {			
 		MainInterface inter = new MainInterface();
@@ -86,8 +90,7 @@ public class MainInterface extends javax.swing.JFrame {
 		firstClickPauseColorTracking = false;
 		manualPrinting = true;
 		printingLabel = new JLabel();
-		actualFlow = Constants.DEFAULT_FLOW;
-		actualFlow1 = Constants.DEFAULT_FLOW;	
+		actualFlow1 = Constants.DEFAULT_FLOW1;	
 		actualFlow2 = 0;
 		actualFlow3 = 0;
 
@@ -322,38 +325,54 @@ public class MainInterface extends javax.swing.JFrame {
 		/****************************************
 		 * 					figures				*
 		 * **************************************/
-		
+
 		JMenuItem arc = new JMenuItem("arc");
 		arc.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				new DrawShapes(MainInterface.this,0);
 			}
 		});
-		
+
 		JMenuItem circle = new JMenuItem("circle");
 		circle.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				new DrawShapes(MainInterface.this,1);
 			}
 		});
-		
-		
+
+
 		JMenuItem rectangle = new JMenuItem("rectangle");
 		rectangle.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				new DrawShapes(MainInterface.this,2);
 			}
 		});
-
 		
+		JMenuItem spiral = new JMenuItem("spiral");
+		spiral.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				new DrawShapes(MainInterface.this,3);
+			}
+		});
+		
+		JMenuItem star = new JMenuItem("star");
+		star.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				new DrawShapes(MainInterface.this,4);
+			}
+		});
+
+
 		JMenu menuFigures = new JMenu("Figures");	
 
 		menuFigures.add(arc);
 		menuFigures.add(circle);
 		menuFigures.add(rectangle);
-		
-		
-		
+		menuFigures.add(spiral);
+		menuFigures.add(star);
+
+
+
 		///////
 
 
@@ -617,20 +636,30 @@ public class MainInterface extends javax.swing.JFrame {
 		checkPanel.add(strawberryButton);
 
 		JPanel flowPanel = new JPanel();
+		flowPanel.setLayout(new GridLayout(3, 1) );
 		JLabel flowLabel = new JLabel("Set Flow: ");
 		flowLabel.setFont(buttonsFont);
 
-		SpinnerNumberModel flows = new SpinnerNumberModel(Constants.DEFAULT_FLOW, 5, 20, 5); // initial, min, max, step 
+		
 		JSpinner spinnerFlow = new JSpinner(flows);
 		spinnerFlow.addChangeListener( new ChangeListener() {
 			@Override
 			public void stateChanged( ChangeEvent e ) {
-				setSpinnerFlow(e);	// We set the flow value from the spinner value
+				setSpinnerFlow();	// We set the flow value from the spinner value
+			}
+		} );
+
+		JSpinner spinner2Flow = new JSpinner(flows2);
+		spinner2Flow.addChangeListener( new ChangeListener() {
+			@Override
+			public void stateChanged( ChangeEvent e ) {
+				setSpinnerFlow();	// We set the flow value from the spinner value
 			}
 		} );
 
 		flowPanel.add(flowLabel);
 		flowPanel.add(spinnerFlow);
+		flowPanel.add(spinner2Flow);
 
 		final JButton liveButton = new JButton("Live Mode", new ImageIcon("icons/live_mode_icon.png"));
 		liveButton.setFont(buttonsFont);
@@ -687,18 +716,9 @@ public class MainInterface extends javax.swing.JFrame {
 	/** Sets the flow from the spinner change event value 
 	 * @params event - from ChangeEvent
 	 **/
-	private void setSpinnerFlow(ChangeEvent event) {
-		JSpinner spinner = ( JSpinner ) event.getSource();
-		SpinnerNumberModel spinnerModel = (SpinnerNumberModel) spinner.getModel();
-		actualFlow = (Integer) spinnerModel.getValue();
-		if (actualFlow1 > 0) {	// Here we check which flows we have, to set them on the canvas 
-			actualFlow1 = actualFlow;
-		} if (actualFlow2 > 0) {
-			actualFlow2 = actualFlow;
-		} if (actualFlow3 > 0) {
-			actualFlow3 = actualFlow;
-		}
-		System.out.println(actualFlow);
+	private void setSpinnerFlow() {
+			if (actualFlow1 > 0) actualFlow1 = (Integer) flows.getValue();
+			if (actualFlow2 > 0) actualFlow2 = (Integer) flows2.getValue();
 		((DrawingCanvas) sketchDrawing).setActualFlow(actualFlow1, actualFlow2, actualFlow3); 
 	}
 
@@ -715,7 +735,7 @@ public class MainInterface extends javax.swing.JFrame {
 				public void itemStateChanged(ItemEvent itemEvent) {
 					int state = itemEvent.getStateChange();
 					if (state == ItemEvent.SELECTED) {
-						actualFlow1 = actualFlow;	// We need to update flow1 to know that we are on chocolate
+						actualFlow1 = (Integer) flows.getValue();	// We need to update flow1 to know that we are on chocolate
 						((DrawingCanvas) sketchDrawing).setActualFlavour(1, actualFlow1); // Activate Chocolate
 					} else if (state == ItemEvent.DESELECTED) {
 						actualFlow1 = 0;
@@ -734,7 +754,7 @@ public class MainInterface extends javax.swing.JFrame {
 					int state = itemEvent.getStateChange();
 
 					if (state == ItemEvent.SELECTED) {
-						actualFlow2 = actualFlow;	// We need to update flow2 to know that we are on strawberry
+						actualFlow2 = (Integer) flows2.getValue();;	// We need to update flow2 to know that we are on strawberry
 						((DrawingCanvas) sketchDrawing).setActualFlavour(2, actualFlow2); // Activate Strawberry
 					} else if (state == ItemEvent.DESELECTED) {
 						actualFlow2 = 0;

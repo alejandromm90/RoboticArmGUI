@@ -110,7 +110,7 @@ public class ColoredObjectTrack implements Runnable {
     private void paint(IplImage img, int posX, int posY) {
         Graphics g = jp.getGraphics();
         g.setColor(Color.RED);
-    	RelativePoint point = new RelativePoint(posX, posY, -50, 0, Constants.DEFAULT_FLOW, 0); // Strawberry points
+    	RelativePoint point = new RelativePoint(posX, posY, -50, 0, Constants.DEFAULT_FLOW1, 0); // Strawberry points
         points.add(point);
         g.fillOval(posX, posY, 20, 20);
         g.drawOval(posX, posY, 20, 20);

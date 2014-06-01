@@ -51,7 +51,7 @@ public class ScanSketch extends PApplet {
 	  actualFlow2 = 0;
 	  actualFlow3 = 0;
 	  
-	  setActualFlow(1, Constants.DEFAULT_FLOW);	// Chocolate by default
+	  setActualFlow(1, Constants.DEFAULT_FLOW1);	// Chocolate by default
 	}
 
 	public void draw() {

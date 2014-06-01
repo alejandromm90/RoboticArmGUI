@@ -25,23 +25,26 @@ public class DrawShapes extends JDialog  implements ActionListener{
 	private JButton ok;
 	private JButton cancel;
 
-	JLabel radiusL = new JLabel("radius:");
+	JLabel radiusL = new JLabel("radius cm:");
 	JTextField  radius = new JTextField();
 
-	JLabel radiusAL = new JLabel("radius:");
-	JLabel startdegreeL = new JLabel("start angle:");
-	JLabel enddegreeL = new JLabel("end angle:");
+	JLabel startdegreeL = new JLabel("start angle deg:");
+	JLabel enddegreeL = new JLabel("end angle deg:");
 
-	JTextField  radiusA = new JTextField();
 	JTextField  startdegree = new JTextField();
 	JTextField  enddegree = new JTextField();
 
 
-	JLabel widthL = new JLabel("width:");
-	JLabel heightL = new JLabel("height:");
+	JLabel widthL = new JLabel("width cm:");
+	JLabel heightL = new JLabel("height cm:");
 
 	JTextField  width = new JTextField();
 	JTextField  height = new JTextField();
+	
+	JLabel tipsL = new JLabel("tips number");
+	JTextField  tips = new JTextField();
+	
+	
 
 
 
@@ -65,7 +68,12 @@ public class DrawShapes extends JDialog  implements ActionListener{
 			break;
 		case 2:
 			points = Calculate.pointsOfRectangle(x, y, z, answer[1], answer[2], flow1, flow2, flow3);
-
+			break;
+		case 3:
+			points = Calculate.pointsOfSpiral(x, y, z, answer[1], flow1, flow2, flow3);
+			break;
+		case 4:
+			points = Calculate.pointsOfStar(x, y, z, answer[1], answer[2], answer[3], flow1, flow2, flow3);
 			break;
 
 		default:
@@ -101,8 +109,8 @@ public class DrawShapes extends JDialog  implements ActionListener{
 			myPanel.setLayout(new GridLayout(4, 2));
 
 
-			myPanel.add(radiusAL);
-			myPanel.add(radiusA);
+			myPanel.add(radiusL);
+			myPanel.add(radius);
 			myPanel.add(startdegreeL);
 			myPanel.add(startdegree);
 			myPanel.add(enddegreeL);
@@ -129,6 +137,30 @@ public class DrawShapes extends JDialog  implements ActionListener{
 			myPanel.add(height);
 
 			break;
+			
+		case 3:
+			myPanel.setLayout(new GridLayout(2, 2));
+
+			myPanel.add(radiusL);
+			myPanel.add(radius);
+
+
+			break;
+			
+		case 4:
+			myPanel.setLayout(new GridLayout(4, 2));
+
+			myPanel.add(radiusL);
+			myPanel.add(radius);
+			
+			myPanel.add(widthL);
+			myPanel.add(width);
+			
+			myPanel.add(tipsL);
+			myPanel.add(tips);
+
+
+			break;
 
 		default:
 			break;
@@ -152,26 +184,29 @@ public class DrawShapes extends JDialog  implements ActionListener{
 
 			switch (answer[0]) {
 			case 0:
-//				answer[1] = cmtopixel(Double.valueOf(radiusA.getText())); //TODO transform cm to pixel
-//				answer[2] = Double.valueOf(startdegree.getText());//TODO transform cm to pixel
-//				answer[3] = Double.valueOf(enddegree.getText());//TODO transform cm to pixel
+				answer[1] = Calculate.transformToPixels(Double.valueOf(radius.getText()));
+				answer[2] = Calculate.transformToPixels(Double.valueOf(startdegree.getText()));
+				answer[3] = Calculate.transformToPixels(Double.valueOf(enddegree.getText()));
 				
-				answer[1] = Integer.valueOf(radiusA.getText());
-				answer[2] = Integer.valueOf(startdegree.getText());
-				answer[3] = Integer.valueOf(enddegree.getText());
 				
 				break;
 			case 1:
-				answer[1] = Integer.valueOf(radius.getText());
-//				answer[1] = Double.valueOf(radius.getText()); //TODO transform cm to pixel
+				answer[1] = Calculate.transformToPixels(Double.valueOf(radius.getText()));
 				break;
 			case 2:
-				answer[1] = Integer.valueOf(width.getText());
-				answer[2] = Integer.valueOf(height.getText());
-				
-//				answer[1] = Double.valueOf(width.getText());//TODO transform cm to pixel
-//				answer[2] = Double.valueOf(height.getText());//TODO transform cm to pixel
+				answer[1] = Calculate.transformToPixels(Double.valueOf(width.getText()));
+				answer[2] = Calculate.transformToPixels(Double.valueOf(height.getText()));
 
+				break;
+			case 3:
+				answer[1] = Calculate.transformToPixels(Double.valueOf(radius.getText()));
+				
+				break;
+			case 4:
+				answer[1] = Calculate.transformToPixels(Double.valueOf(radius.getText()));
+				answer[2] = Calculate.transformToPixels(Double.valueOf(width.getText()));
+				answer[3] = Integer.valueOf(tips.getText());
+				
 				break;
 
 			default:

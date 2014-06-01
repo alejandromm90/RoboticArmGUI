@@ -49,7 +49,7 @@ public class DrawingCanvas extends PApplet{
 
 	public DrawingCanvas(int mode, float diameter) {	// Mode for drawing the background shape
 		this.mode = mode;
-		this.diameter = Calculate.transformToPixels(diameter);
+		this.diameter = Calculate.transformToPixels((double)diameter);
 		firstClick = true;
 		lastEllipse = new ArrayList<RelativePoint>();
 		lastLine = new ArrayList<Line>();
@@ -58,7 +58,7 @@ public class DrawingCanvas extends PApplet{
 		ellipsesLeapMotion = new ArrayList<RelativePoint>();
 
 		// Chocolate by default
-		actualFlow1 = Constants.DEFAULT_FLOW;
+		actualFlow1 = Constants.DEFAULT_FLOW1;
 		actualFlow2 = 0;
 		actualFlow3 = 0;
 	}
@@ -90,7 +90,7 @@ public class DrawingCanvas extends PApplet{
 
 		//	  leapMotionMode = true;
 		drawBorder();
-		strokeWeight(Constants.DEFAULT_FLOW - 5);
+		strokeWeight(Constants.DEFAULT_FLOW1 - 5);
 
 	}
 
@@ -224,7 +224,7 @@ public class DrawingCanvas extends PApplet{
 		float x = tip.getX() * width;
 		float y = height - tip.getY() * height;
 		float brushSize = MAX_BRUSH_SIZE - MAX_BRUSH_SIZE * tip.getZ();
-		int flow = Constants.DEFAULT_FLOW;
+		int flow = Constants.DEFAULT_FLOW1;
 
 		boolean drawing = false;
 		int numberFlavor = listener.getNumberFlavor();
@@ -274,17 +274,22 @@ public class DrawingCanvas extends PApplet{
 
 			} else {
 				// We just draw the brush (mouse)
+				
+				if (liveMode) {	// To control the arm in Live Mode without printing 
+				 	 addEllipseToArray(x, y, 0, 0, 0); 
+				 	 }
+				
 				controller.addListener(listener);	// Add the Leap Motion listener to enable gestures recognition
 				drawBorder();
 				switch(numberFlavor) {
 				case 0:	// Chocolate
-					drawFlavourPoint(x, y, Constants.DEFAULT_FLOW, 0, 0);
+					drawFlavourPoint(x, y, Constants.DEFAULT_FLOW1, 0, 0);
 					break;
 				case 1:	// Strawberry
-					drawFlavourPoint(x, y, 0, Constants.DEFAULT_FLOW, 0);
+					drawFlavourPoint(x, y, 0, Constants.DEFAULT_FLOW2, 0);
 					break;
 				case 2:	// Chocolate + Strawberry
-					drawFlavourPoint(x, y, Constants.DEFAULT_FLOW, Constants.DEFAULT_FLOW, 0);
+					drawFlavourPoint(x, y, Constants.DEFAULT_FLOW1, Constants.DEFAULT_FLOW2, 0);
 					break;
 				}
 				repaintCanvas(ellipsesLeapMotion, new ArrayList<Line>(), false, true);	// Leap mode true
@@ -292,10 +297,10 @@ public class DrawingCanvas extends PApplet{
 
 			if(!drawing) {
 				addLastPoint(ellipsesLeapMotion);
-				if (liveMode) {
-					ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
-					((Simulation) simulationPApplet).addPoint(pts);
-				}
+//				if (liveMode) {
+//					ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
+//					((Simulation) simulationPApplet).addPoint(pts);
+//				}
 			}
 		}
 	}
@@ -423,7 +428,7 @@ public class DrawingCanvas extends PApplet{
 
 	public void cleanCanvas() {
 		drawBorder();
-		strokeWeight(Constants.DEFAULT_FLOW - 5);
+		strokeWeight(Constants.DEFAULT_FLOW1 - 5);
 		setActualFlow(actualFlow1, 0, 0); // actualFlow1, only chocolate by defaults flow and flavour
 		firstClick = true;
 		lastEllipse = new ArrayList<RelativePoint>();
@@ -553,12 +558,14 @@ public class DrawingCanvas extends PApplet{
 	private void drawFlavourPoint(float x, float y, long flow1, long flow2, long flow3) {
 
 		if (flow1 > 0) { // Chocolate
+			strokeWeight(actualFlow1);
 			stroke(153, 76, 0);
 			fill(153, 76, 0);
 			float diameter = flow1; 
 			ellipse(x, y, diameter, diameter);
 
 		} if (flow2 > 0) { // Strawberry
+			strokeWeight(actualFlow2);
 			stroke(255, 0, 0);
 			fill(255, 0, 0);
 			float diameter = flow2;
@@ -576,11 +583,13 @@ public class DrawingCanvas extends PApplet{
 			int flow1, int flow2, int flow3) {
 
 		if (flow1 > 0) { // Chocolate
+			strokeWeight(actualFlow1);
 			stroke(153, 76, 0);
 			fill(153, 76, 0);
 			line(mouseX, mouseY,(float)lastX, (float)lastY);
 
 		} if (flow2 > 0) { // Strawberry
+			strokeWeight(actualFlow2);
 			stroke(255, 0, 0);
 			fill(255, 0, 0);
 			if (flow1 > 0 || flow3 > 0) { // if we have other flavours, we modify a bit to see better both lines

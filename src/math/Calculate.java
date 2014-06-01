@@ -21,9 +21,9 @@ public abstract class Calculate {
 	 * @return angles
 	 */
 	public static Angles calculateAngles(RelativePoint point) {
-		double x = (point.getX() * Constants.X_FACTOR) ;//+ Constants.X_SHIFT;
+		double x = (point.getX() * Constants.X_FACTOR);// + Constants.X_SHIFT;
 		double y = point.getY();
-		double z = point.getZ() ;
+		double z = point.getZ();
 
 		double thi = Math.atan2(y, x);
 		double length = Math.sqrt(x * x + y * y) - Constants.BASE_BOTTOM_LENGTH
@@ -88,7 +88,6 @@ public abstract class Calculate {
 
 		return points2;
 	}
-	
 
 	/**
 	 * 
@@ -123,16 +122,18 @@ public abstract class Calculate {
 
 		return points2;
 	}
-	
+
 	public static ArrayList<RelativePoint> transformHundred(
 			ArrayList<RelativePoint> points) {
 		ArrayList<RelativePoint> points2 = new ArrayList<RelativePoint>();
 
 		for (int i = 0; i < points.size(); i++) {
-			points2.add(new RelativePoint(points.get(i).getX(), points.get(i).getY() + 100, points.get(i).getZ(),
-					points.get(i).getFlow1(), points.get(i).getFlow2(), points.get(i).getFlow3()));
+			points2.add(new RelativePoint(points.get(i).getX(), points.get(i)
+					.getY() + 100, points.get(i).getZ(), points.get(i)
+					.getFlow1(), points.get(i).getFlow2(), points.get(i)
+					.getFlow3()));
 		}
-		
+
 		return points2;
 	}
 
@@ -167,13 +168,13 @@ public abstract class Calculate {
 	 */
 	public static ArrayList<RelativePoint> pointsOfArc(double x, double y,
 			double z, double radius, int angle1, int angle2, long flow1,
-			long flow2, long flow3) {		
+			long flow2, long flow3) {
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
 		for (int degree = angle1; degree < angle2;) {
-			points.add(new RelativePoint(x + radius * Math.cos(Math.toRadians(degree)),
-					y - radius * Math.sin(Math.toRadians(degree)), z, flow1,
-					flow2, flow3));
+			points.add(new RelativePoint(x + radius
+					* Math.cos(Math.toRadians(degree)), y - radius
+					* Math.sin(Math.toRadians(degree)), z, flow1, flow2, flow3));
 			degree += 4;
 		}
 
@@ -204,7 +205,8 @@ public abstract class Calculate {
 
 		points.add(new RelativePoint(x, y, z, flow1, flow2, flow3));
 		points.add(new RelativePoint(x, y - height, z, flow1, flow2, flow3));
-		points.add(new RelativePoint(x + width, y - height, z, flow1, flow2, flow3));
+		points.add(new RelativePoint(x + width, y - height, z, flow1, flow2,
+				flow3));
 		points.add(new RelativePoint(x + width, y, z, flow1, flow2, flow3));
 		points.add(new RelativePoint(x, y, z, flow1, flow2, flow3));
 
@@ -233,7 +235,8 @@ public abstract class Calculate {
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
 		points.add(new RelativePoint(x, y, z, flow1, flow2, flow3));
-		points.add(new RelativePoint(x + x_length, y + y_length, z, flow1, flow2, flow3));
+		points.add(new RelativePoint(x + x_length, y + y_length, z, flow1,
+				flow2, flow3));
 
 		RelativePoint point = points.get(points.size() - 1);
 		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),
@@ -241,10 +244,91 @@ public abstract class Calculate {
 
 		return points;
 	}
-	
-	
-	public static float transformToPixels(float cm) {
-		cm = (float) (cm * 13.3);
-		return cm;
+
+	public static int transformToPixels(Double double1) {
+		return (int) (double1 * 11.77);
+	}
+
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param radius
+	 * @param flow1
+	 * @param flow2
+	 * @param flow3
+	 * @return
+	 */
+	public static ArrayList<RelativePoint> pointsOfSpiral(double x, double y,
+			double z, double radius, long flow1, long flow2, long flow3) {
+		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
+
+		int degree = 0;
+		while (radius > 0) {
+			points.add(new RelativePoint(x + radius * Math.cos(Math.toRadians(degree)),
+					y + radius * Math.sin(Math.toRadians(degree)), z, flow1,
+					flow2, flow3));
+			radius -= 1;
+			degree += 10;
+		}
+
+		RelativePoint point = points.get(points.size() - 1);
+		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),
+				0, 0, 0));
+
+		return points;
+	}
+
+	/*
+	 * 
+	 * @param x
+	 * 
+	 * @param y
+	 * 
+	 * @param z
+	 * 
+	 * @param radius
+	 * 
+	 * @param width
+	 * 
+	 * @param flow1
+	 * 
+	 * @param flow2
+	 * 
+	 * @param flow3
+	 * 
+	 * @return
+	 */
+	public static ArrayList<RelativePoint> pointsOfStar(double x, double y,
+			double z, double radius, double width, int nbrTips, long flow1,
+			long flow2, long flow3) {
+
+		nbrTips *=2;
+		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
+
+		double radius2 = radius;
+
+		boolean tip = true;
+		for (int degree = 0; degree <= 360; degree += 360 / nbrTips) {
+			if (tip) {
+				radius2 = radius;
+			} else {
+
+				radius2 -= width;
+			}
+
+			points.add(new RelativePoint(x + radius2
+					* Math.cos(Math.toRadians(degree)), y + radius2
+					* Math.sin(Math.toRadians(degree)), z, flow1, flow2, flow3));
+
+			tip = !tip;
+		}
+
+		RelativePoint point = points.get(points.size() - 1);
+		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),
+				0, 0, 0));
+
+		return points;
 	}
 }
