@@ -11,7 +11,7 @@ public abstract class Constants {
 	 * Speed relevant
 	 */
 	public static final int SIMULATION_SPEED = 0;
-	public static final double STEP_RESOLUTION = 5.0;
+	public static final double STEP_RESOLUTION = 2.0;
 	
 	/**
 	 * Flow relevant
@@ -103,4 +103,5 @@ public abstract class Constants {
 	
 	public static final double X_FACTOR = 0.8;
 	public static final double Z_FACTOR = 0.9;
+	public static final Double PIXEL_CENTIMETER = 23.54;
 }
