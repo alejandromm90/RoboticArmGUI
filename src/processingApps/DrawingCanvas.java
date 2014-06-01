@@ -552,11 +552,34 @@ public class DrawingCanvas extends PApplet{
 			ellipse(width/2, height/2, diameter, diameter);
 			break;
 		}
+		
+		drawGrid(2, 0);
 
 		line(0, 0, width, 0);
 		line(0, 0, 0, height-1);
 		line(0, height-1, width-1, height-1);
 		line(width-1, 0, width-1, height-1);
+	}
+	
+	private void drawGrid(int strokeWeightBefore, int strokeBefore) {
+		strokeWeight(1);
+		stroke(162);
+
+		// Vertical lines
+		for(int i = width/2; i < width; i+=Constants.GRID_WIDTH) { // From middle to right
+			line(i, 0, i, height);
+		}
+		for(int i = width/2; i > 0; i-=Constants.GRID_WIDTH) { // From left to middle
+			line(i, 0, i, height);
+		}
+		
+		// Horizontal lines
+		for(int w=height; w>0; w-=Constants.GRID_WIDTH){
+		     line(0, w, width, w);
+		}
+
+		strokeWeight(strokeWeightBefore);
+		stroke(strokeBefore);
 	}
 
 	/**
