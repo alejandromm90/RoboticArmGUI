@@ -712,6 +712,9 @@ public class DrawingCanvas extends PApplet{
 			if (simulationPApplet != null) {
 				ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
 				((Simulation) simulationPApplet).addPoint(pts);
+				
+				simulationPApplet.destroy();
+				simJFrame.dispose();
 			}
 		}
 		Simulation.liveMode = liveMode;
