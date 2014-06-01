@@ -561,7 +561,7 @@ public class DrawingCanvas extends PApplet{
 	private void drawGrid(int strokeWeightBefore, int strokeBefore) {
 		strokeWeight(1);
 		stroke(162);
-
+		
 		// Vertical lines
 		for(int i = width/2; i < width; i+=Constants.GRID_WIDTH) { // From middle to right
 			line(i, 0, i, height);
@@ -571,8 +571,17 @@ public class DrawingCanvas extends PApplet{
 		}
 		
 		// Horizontal lines
-		for(int w=height; w>0; w-=Constants.GRID_WIDTH){
-		     line(0, w, width, w);
+		if (mode == 1) {	// Cake Drawing mode
+			for(int w=height/2; w>0; w-=Constants.GRID_WIDTH){
+			     line(0, w, width, w);
+			}
+			for(int w=height/2; w< height; w+=Constants.GRID_WIDTH){
+			     line(0, w, width, w);
+			}
+		} else {
+			for(int w=height; w>0; w-=Constants.GRID_WIDTH){
+			     line(0, w, width, w);
+			}
 		}
 
 		strokeWeight(strokeWeightBefore);
