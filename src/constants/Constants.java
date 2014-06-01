@@ -10,8 +10,8 @@ public abstract class Constants {
 	/**
 	 * Speed relevant
 	 */
-	public static final int SIMULATION_SPEED = 5;
-	public static final double STEP_RESOLUTION = 2.0;
+	public static final int SIMULATION_SPEED = 0;
+	public static final double STEP_RESOLUTION = 5.0;
 	
 	/**
 	 * Flow relevant
@@ -27,9 +27,9 @@ public abstract class Constants {
 	public static final int DEFAULT_FLOW2 = 15;
 	
 	/**
-	 * Flavour relevant
+	 * Grid relevant
 	 */
-//	public static final int DEFAULT_FLAVOUR = 1; // Chocolate by default
+	public static final double GRID_WIDTH = 116.5; 
 	
 	
 	/****************************************************************************************************
@@ -54,7 +54,7 @@ public abstract class Constants {
 	/**
 	 * Correct angle for 0 degree servo
 	 */
-	public static final int CORRECT_ANGLE_THI = 0;
+	public static final int CORRECT_ANGLE_THI = 3; //0;
 	public static final int CORRECT_ANGLE_THETA = 35;
 	public static final int CORRECT_ANGLE_KAPPA = 24;
 
