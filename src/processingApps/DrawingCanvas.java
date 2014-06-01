@@ -45,19 +45,30 @@ public class DrawingCanvas extends PApplet{
 	
 	public DrawingCanvas(int mode, float diameter) {	// Mode for drawing the background shape
 		this.mode = mode;
-		this.diameter = diameter; 
+		this.diameter = Calculate.transformToPixels(diameter);
+		firstClick = true;
+		lastEllipse = new ArrayList<RelativePoint>();
+		lastLine = new ArrayList<Line>();
+		ellipsesRedo = new ArrayList<RelativePoint>();
+		linesRedo = new ArrayList<Line>();
+	  	ellipsesLeapMotion = new ArrayList<RelativePoint>();
+	  	  
+		// Chocolate by default
+		actualFlow1 = Constants.DEFAULT_FLOW;
+		actualFlow2 = 0;
+		actualFlow3 = 0;
 	}
 	
 	public void setup() {
 	  frameRate(30);
 	  size(width, height);
 
-	  firstClick = true;
-	  lastEllipse = new ArrayList<RelativePoint>();
-	  lastLine = new ArrayList<Line>();
-	  ellipsesRedo = new ArrayList<RelativePoint>();
-	  linesRedo = new ArrayList<Line>();
-  	  ellipsesLeapMotion = new ArrayList<RelativePoint>();
+//	  firstClick = true;
+//	  lastEllipse = new ArrayList<RelativePoint>();
+//	  lastLine = new ArrayList<Line>();
+//	  ellipsesRedo = new ArrayList<RelativePoint>();
+//	  linesRedo = new ArrayList<Line>();
+//  	  ellipsesLeapMotion = new ArrayList<RelativePoint>();
 
 	  leapController = new Controller();
 	  flavors = new ArrayList<Flavor>();
@@ -67,9 +78,9 @@ public class DrawingCanvas extends PApplet{
 
 	  initializeLeapMotionListener();
 	  
-	  actualFlow1 = Constants.DEFAULT_FLOW;
-	  actualFlow2 = 0;
-	  actualFlow3 = 0;
+//	  actualFlow1 = Constants.DEFAULT_FLOW;
+//	  actualFlow2 = 0;
+//	  actualFlow3 = 0;
 
 	  liveMode = false;
 	  
@@ -233,8 +244,10 @@ public class DrawingCanvas extends PApplet{
 	    
 		    if(!drawing) {
 		    	addLastPoint();
-		    	ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
-				((Simulation) simulationPApplet).addPoint(pts);
+		    	if (liveMode) {
+			    	ArrayList<RelativePoint> pts = new ArrayList<RelativePoint>();
+					((Simulation) simulationPApplet).addPoint(pts);
+		    	}
 		    }
     	}
 	}
@@ -285,11 +298,20 @@ public class DrawingCanvas extends PApplet{
 		// Converts coordinates to the same that are in the arm canvas
 		int x = mouseX + Constants.DRAWING_APPLET_RELATIVE_X * 2;// - 80; 
 		int y = Constants.DRAWING_APPLET_SIZE_HEIGHT * 2 - mouseY + (80 * 2);
-		
-		double ratio = Constants.DRAWING_APPLET_SIZE_WIDTH; // 642
+		double ratio = 0;
 		double xCenter = 0;
 		double yCenter = 0;
 
+		switch(mode) {
+		case 0:
+			ratio = Constants.DRAWING_APPLET_SIZE_WIDTH; // 642
+			break;
+		case 1:
+			ratio = diameter;
+			xCenter = 0;
+			yCenter = Constants.DRAWING_APPLET_SIZE_HEIGHT + (80 * 2);	
+			break;
+		}
 		if (Math.sqrt (((xCenter-x)*(xCenter-x)) + ((yCenter-y)*(yCenter-y))) <= ratio) { 
 			return true;
 		} else { 
@@ -458,8 +480,7 @@ public class DrawingCanvas extends PApplet{
 		  break;
 	  case 1:	// Cake mode
 		  ellipseMode(CENTER);
-		  diameter = (float) (diameter * 15.85);	// TODO add Calculate.transform...
-		  ellipse(width/2, height/2, diameter, diameter);
+		  ellipse(width/2, height/2, diameter * 2, diameter * 2);
 		  break;
 	  }
 
@@ -609,8 +630,7 @@ public class DrawingCanvas extends PApplet{
 				simulationPApplet = new Simulation(new ArrayList<RelativePoint>());
 			}
 			
-			// TODO try to remove this frame
-			 simJFrame = new JFrame();
+			simJFrame = new JFrame();
 			simJFrame.setTitle("ARM SIMULATION");
 					
 	        JPanel mainPanel = new JPanel();

@@ -160,7 +160,7 @@ public class MainInterface extends javax.swing.JFrame {
 			break;
 		case 2:	// Predefined Sketch
 			manualPrinting = false;
-			mainPanel.remove(bigPanel);	// TODO
+			mainPanel.remove(bigPanel);
 			boolean correctValue = false;
 			float diameter = 0;
 			while (!correctValue) {
@@ -170,12 +170,12 @@ public class MainInterface extends javax.swing.JFrame {
 					if (diameter <= 20 && diameter >= 5)
 						correctValue = true;	
 				}catch (NumberFormatException e){
-//					System.out.println("exception");
 				}					
 			}
 			
 			bigPanel = setDrawingCanvasPanel(1, diameter);
 			mainPanel.add(bigPanel, BorderLayout.CENTER);
+			this.pack();	// I am not sure if this works absolutely good
 			break;
 		case 3:	// Drawing Canvas
 			manualPrinting = false;
