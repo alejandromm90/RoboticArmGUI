@@ -29,9 +29,6 @@ public abstract class Calculate {
 		double length = Math.sqrt(x * x + y * y) - Constants.BASE_BOTTOM_LENGTH
 				- Constants.BASE_TOP_LENGTH;
 
-		
-		
-		
 		double kappa = 2 * Math
 				.atan(-Math
 						.sqrt(((Constants.ARM_LENGTH_ELBOW + Constants.ARM_LENGTH_SHOULDER)
@@ -170,12 +167,12 @@ public abstract class Calculate {
 	 */
 	public static ArrayList<RelativePoint> pointsOfArc(double x, double y,
 			double z, double radius, int angle1, int angle2, long flow1,
-			long flow2, long flow3) {
+			long flow2, long flow3) {		
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
 		for (int degree = angle1; degree < angle2;) {
-			points.add(new Point(x + radius * Math.cos(Math.toRadians(degree)),
-					y + radius * Math.sin(Math.toRadians(degree)), z, flow1,
+			points.add(new RelativePoint(x + radius * Math.cos(Math.toRadians(degree)),
+					y - radius * Math.sin(Math.toRadians(degree)), z, flow1,
 					flow2, flow3));
 			degree += 4;
 		}
@@ -205,11 +202,11 @@ public abstract class Calculate {
 			long flow3) {
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
-		points.add(new Point(x, y, z, flow1, flow2, flow3));
-		points.add(new Point(x, y + height, z, flow1, flow2, flow3));
-		points.add(new Point(x + width, y + height, z, flow1, flow2, flow3));
-		points.add(new Point(x + width, y, z, flow1, flow2, flow3));
-		points.add(new Point(x, y, z, flow1, flow2, flow3));
+		points.add(new RelativePoint(x, y, z, flow1, flow2, flow3));
+		points.add(new RelativePoint(x, y - height, z, flow1, flow2, flow3));
+		points.add(new RelativePoint(x + width, y - height, z, flow1, flow2, flow3));
+		points.add(new RelativePoint(x + width, y, z, flow1, flow2, flow3));
+		points.add(new RelativePoint(x, y, z, flow1, flow2, flow3));
 
 		RelativePoint point = points.get(points.size() - 1);
 		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),
@@ -235,8 +232,8 @@ public abstract class Calculate {
 			long flow3) {
 		ArrayList<RelativePoint> points = new ArrayList<RelativePoint>();
 
-		points.add(new Point(x, y, z, flow1, flow2, flow3));
-		points.add(new Point(x + x_length, y + y_length, z, flow1, flow2, flow3));
+		points.add(new RelativePoint(x, y, z, flow1, flow2, flow3));
+		points.add(new RelativePoint(x + x_length, y + y_length, z, flow1, flow2, flow3));
 
 		RelativePoint point = points.get(points.size() - 1);
 		points.add(new RelativePoint(point.getX(), point.getY(), point.getZ(),

@@ -319,9 +319,46 @@ public class MainInterface extends javax.swing.JFrame {
 		});
 		menuTools.add(mItemStepperManual);
 
+		/****************************************
+		 * 					figures				*
+		 * **************************************/
+		
+		JMenuItem arc = new JMenuItem("arc");
+		arc.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				new DrawShapes(MainInterface.this,0);
+			}
+		});
+		
+		JMenuItem circle = new JMenuItem("circle");
+		circle.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				new DrawShapes(MainInterface.this,1);
+			}
+		});
+		
+		
+		JMenuItem rectangle = new JMenuItem("rectangle");
+		rectangle.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				new DrawShapes(MainInterface.this,2);
+			}
+		});
+
+		
+		JMenu menuFigures = new JMenu("Figures");	
+
+		menuFigures.add(arc);
+		menuFigures.add(circle);
+		menuFigures.add(rectangle);
+		
+		
+		
+		///////
 
 
 		mBar.add(menuModes);
+		mBar.add(menuFigures);
 		mBar.add(TalkWithArduino.getSelectPortMenu());
 		mBar.add(menuTools);
 
@@ -583,7 +620,7 @@ public class MainInterface extends javax.swing.JFrame {
 		JLabel flowLabel = new JLabel("Set Flow: ");
 		flowLabel.setFont(buttonsFont);
 
-		SpinnerNumberModel flows = new SpinnerNumberModel(15, 5, 20, 5); // initial, min, max, step 
+		SpinnerNumberModel flows = new SpinnerNumberModel(Constants.DEFAULT_FLOW, 5, 20, 5); // initial, min, max, step 
 		JSpinner spinnerFlow = new JSpinner(flows);
 		spinnerFlow.addChangeListener( new ChangeListener() {
 			@Override
