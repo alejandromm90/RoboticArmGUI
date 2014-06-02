@@ -1,25 +1,19 @@
 package ArduinoComm;
 
-import java.awt.Dialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import math.Calculate;
-import appInterface.MainInterface;
-import appInterface.ManualControl;
 import geometric.Angles;
-import geometric.RelativePoint;
 import constants.Constants;
 import processing.core.PApplet;
 import processing.serial.Serial;
@@ -30,6 +24,7 @@ public class TalkWithArduino {
 	private static Server server = null;
 	private static Client client = null;
 	private static int busyID = 0;
+	private static long busyIdLastSeen =0;
 	private static TalkWithArduino istance =  new TalkWithArduino();
 
 
@@ -133,14 +128,14 @@ public class TalkWithArduino {
 	private static void remoteEnableClientMode(String address, int port){
 		client = new Client(address, port);
 	}
-	
-	
+
+
 	private static void remoteEnableServerMode(int port){
 		server = new Server(port);
-		 Thread t = new Thread(server);
-	     t.start();
+		Thread t = new Thread(server);
+		t.start();
 	}
-	
+
 
 
 
@@ -204,23 +199,18 @@ public class TalkWithArduino {
 		menu.add(disableR);
 
 		final String  clientn = "Client mode" ;
-		JMenuItem cientR = new JMenuItem(clientn);
+		final JMenuItem cientR = new JMenuItem(clientn);
 		cientR.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				closeServer();
-				closeClient();
-				remote = true;
 				askConnectionDetails(false);
 			}
 		});
 		menu.add(cientR);
 
 		final String  servern = "Server mode" ;
-		JMenuItem serverR = new JMenuItem(servern);
+		final JMenuItem serverR = new JMenuItem(servern);
 		serverR.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				closeServer();
-				closeClient();
 				askConnectionDetails(true);
 
 			}
@@ -234,73 +224,78 @@ public class TalkWithArduino {
 
 
 	private static void askConnectionDetails(boolean isserver){
-		int port=0;
-		String address = "addr";
-		istance.new Dialog(isserver, port, address);
-		
+		istance.new Dialog(isserver);
+
 	}
 
 	public static boolean wirteDirectly(String command, int clientID){//TODO use client id also for local machine
-		//if(busyID <0) TODO check if busy or not;
-		busyID = clientID;
+		final long now = System.currentTimeMillis();
+		if((now-busyIdLastSeen) > Constants.MAX_TIME_BUSY_MS){
+			busyID = clientID;
+		}
+
 		if((busyID != clientID) || port == null){
 			return false;
 		} else {
 			// TODO prevent malicious injection, check if line is in the correct format 
-			if(command == null || "endPrint".equals(command)){
-				busyID = -1;
-			}else{
-				port.write(command);
-			}
+			port.write(command);
+			
+			busyIdLastSeen = now;
+			busyID = clientID;
+			
 			return true;
 		}
 	}
-	
+
 	private class Dialog extends JDialog  implements ActionListener{
+		private static final long serialVersionUID = 1L;
 		private JPanel myPanel;
 		private JButton ok;
 		private JButton cancel;
 		private boolean isserver;
+		private JLabel addressL = new JLabel("Address:");
+		private JTextField address  = new JTextField();
+		private JLabel portL = new JLabel("Port:");
+		private JTextField  port = new JTextField();
 
-		JLabel addressL = new JLabel("Address:");
-		JTextField address  = new JTextField();
 
-		JLabel portL = new JLabel("Port:");
-		JTextField  port = new JTextField();
-		
-		
 
-		public Dialog(boolean isserver, int defPort, String defAddress) {
+		public Dialog(boolean isserver) {
 			this.isserver= isserver;
 			myPanel = new JPanel();
 
 			getContentPane().add(myPanel);
-			
+
 			ok = new JButton("ok");
 			ok.addActionListener(this);
 			cancel = new JButton("cancel");
 			cancel.addActionListener(this);
-			
+
 			myPanel.setLayout(new GridLayout(3, 2));
 
-			if(defAddress!= null) address.setText(defAddress);
-			port.setText(defPort+"");
+			port.setText(Constants.DEFAULT_PORT);
 			myPanel.add(addressL);
 			myPanel.add(address);
 			myPanel.add(portL);
 			myPanel.add(port);
-			
-			
+
+
 			if(isserver){
-			address.setEditable(false);
+				try {
+					address.setText(InetAddress.getLocalHost().getHostAddress());
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				address.setEditable(false);
 			}
-			
+
 			myPanel.add(ok);
 			myPanel.add(cancel);
 
 
 			pack();
-			//setLocationRelativeTo(frame);
+			setLocationRelativeTo(null);
 			setVisible(true);
 		}
 
@@ -308,16 +303,28 @@ public class TalkWithArduino {
 
 		public void actionPerformed(ActionEvent e) {
 			if(ok == e.getSource()) {
-				//TODO  start server with correct param show error message if not ok.
+				closeServer();
+				closeClient();
 				if(isserver){
 					remoteEnableServerMode(Integer.valueOf(port.getText()));
-				}else {
-				remoteEnableClientMode(address.getText(), Integer.valueOf(port.getText()));	
+					this.setVisible(false);
+				}else {//is client
+					remoteEnableClientMode(address.getText(), Integer.valueOf(port.getText()));
+
+					if(Constants.ACK_NEW_CONNECTION.equals(client.ReceiveMessage())){
+						remote = true;
+						this.setVisible(false);
+					} else {
+						port.setText("connection error");
+						client = null;
+					}
 				}
+			} else {//cancel do nothing and close
+				this.setVisible(false);
 			}
 
 		}
-		
-		}
-	
+
+	}
+
 }

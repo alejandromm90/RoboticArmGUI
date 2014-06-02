@@ -104,4 +104,11 @@ public abstract class Constants {
 	public static final double X_FACTOR = 0.8;
 	public static final double Z_FACTOR = 0.9;
 	public static final Double PIXEL_CENTIMETER = 23.54;
+	
+	
+	///remote
+	public static final String ACK_NEW_CONNECTION = "ackconnection";
+	public static final long MAX_TIME_BUSY_MS = 1500;
+	public static final String DEFAULT_PORT = "1234";
+
 }

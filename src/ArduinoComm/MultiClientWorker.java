@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import constants.Constants;
+
 public class MultiClientWorker implements Runnable {
   private Socket client;
   private boolean stop= false;
@@ -38,15 +40,19 @@ public class MultiClientWorker implements Runnable {
       System.out.println("in or out failed");
     }
 
+  out.println(Constants.ACK_NEW_CONNECTION);
+
     while(!stop){
       try{
         line = in.readLine();
 //Send ack back to client
 //     out.println("ack message");
         System.out.println(Thread.currentThread().getId()+" received: "+ line);
-        if(! TalkWithArduino.wirteDirectly(line, client.getLocalPort())){
+        if(line == null){
+        	stopClient();
+        } else if(! TalkWithArduino.wirteDirectly(line, client.getLocalPort())){
         	//TODO busy message
-        	out.write("server busy try later");
+        	//out.write("server busy try later");
         }
         
        }catch (IOException e) {
