@@ -14,11 +14,16 @@ import processing.core.PApplet;
 import processing.serial.Serial;
 
 public class TalkWithArduino {
-	public static Serial port;// =new Serial(new PApplet(), Serial.list()[Serial.list().length-1], 19200);
-	
+	private static Serial port;// =new Serial(new PApplet(), Serial.list()[Serial.list().length-1], 19200);
+	private static boolean remote = false;
+	private static Server server = null;
+	private static Client client = null;
+	private static int busyID = 0;
+
+
 	private TalkWithArduino() {
 	}
-	
+
 
 	/**
 	 * 
@@ -28,8 +33,27 @@ public class TalkWithArduino {
 	 * @param flow3
 	 */
 	public static void sendToArduino(Angles angles, long flow1, long flow2, long flow3) {
+		if(remote){
+
+			int thi = (int) Math.toDegrees(angles.getThi())
+					+ Constants.CORRECT_ANGLE_THI;
+			int theta = (int) Math.toDegrees(angles.getTheta())
+					+ Constants.CORRECT_ANGLE_THETA;
+			int kappa = (int) -Math.toDegrees(angles.getKappa())
+					+ Constants.CORRECT_ANGLE_KAPPA;
+
+			sendToServer(thi + "a");
+			sendToServer(theta + "b");
+			sendToServer(kappa + "c");
+
+			sendFlowToArduino(flow1, flow2, flow3);
+
+
+
+		}
+		//not else if this way can control a local and a remote arm
 		if(port == null)return;
-		
+
 		int thi = (int) Math.toDegrees(angles.getThi())
 				+ Constants.CORRECT_ANGLE_THI;
 		int theta = (int) Math.toDegrees(angles.getTheta())
@@ -51,9 +75,20 @@ public class TalkWithArduino {
 	 * @param flow3
 	 */
 	public static void sendFlowToArduino(long flow1, long flow2, long flow3) {
+		if(remote){
+
+			flow1 = (100 * flow1) + 12000;
+			sendToServer(flow1 + "d");
+
+			flow2 = (-100 * flow2) + 12000;
+			sendToServer(flow2 + "e");
+
+
+		}
+		//not else if this way can control a local and a remote arm
 		if(port == null)return;
 
-		
+
 		flow1 = (100 * flow1) + 12000;
 		port.write(flow1 + "d");
 
@@ -61,12 +96,35 @@ public class TalkWithArduino {
 		port.write(flow2 + "e");
 
 		// flow3 = (100 * flow2) + 12000; // TODO
-		// port.write(flow3 + "f");
+		// port.write(flow3 + "f")
 	}
 
-	
-	
-	private static void setPort(String portName){
+
+
+	private static void sendToServer(String string) {
+		if(client == null){
+			askConnectionDetails(false);
+		}
+		client.sendMessage(string);
+	}
+
+	public static void closeServer(){
+		if(server != null) server.stopServer();
+		server = null;
+	}
+
+	private static void closeClient(){
+		if(client != null) client.closeConnection();
+		client = null;
+		remote = false;
+	}
+	private static void remoteEnableClientMode(String address, int port){
+		client = new Client(address, port);
+	}
+
+
+
+	private static void setPort(String portName){//TODO check if disable remote or ok, ok for multiple arms,...
 		if(port != null){
 			port.dispose();
 		}
@@ -76,24 +134,24 @@ public class TalkWithArduino {
 			port =new Serial(new PApplet(), portName, 19200);
 		}
 	}
-	
+
 	public static JMenu getSelectPortMenu(){
-		
-		
+
+
 		JMenu menu = new JMenu("COM Port");	
-		
+
 		{
-		final String  itemName = "Only Simulation" ;
-		JMenuItem mItemStepperManual = new JMenuItem(itemName);
-		mItemStepperManual.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				setPort(null);
-			}
-		});
-		menu.add(mItemStepperManual);
+			final String  itemName = "Only Simulation" ;
+			JMenuItem mItemStepperManual = new JMenuItem(itemName);
+			mItemStepperManual.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					setPort(null);
+				}
+			});
+			menu.add(mItemStepperManual);
 		}
-		
-		
+
+
 		for (String portName : Serial.list()) {
 			final String  itemName = portName;
 			JMenuItem mItemStepperManual = new JMenuItem(itemName);
@@ -104,8 +162,84 @@ public class TalkWithArduino {
 			});
 			menu.add(mItemStepperManual);
 		}
-		
-		
+
+
 		return menu;
+	}
+
+
+	public static JMenu getCientServerMenu(){
+
+
+		JMenu menu = new JMenu("Remote Menu");	
+
+		final String  disablen = "Disable remote" ;
+		JMenuItem disableR = new JMenuItem(disablen);
+		disableR.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				closeServer();
+				closeClient();
+			}
+		});
+		menu.add(disableR);
+
+		final String  clientn = "Client mode" ;
+		JMenuItem cientR = new JMenuItem(clientn);
+		cientR.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				closeServer();
+				closeClient();
+				remote = true;
+				askConnectionDetails(false);
+			}
+		});
+		menu.add(cientR);
+
+		final String  servern = "Server mode" ;
+		JMenuItem serverR = new JMenuItem(servern);
+		serverR.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				closeServer();
+				closeClient();
+				askConnectionDetails(true);
+
+			}
+		});
+		menu.add(serverR);
+
+
+
+		return menu;
+	}
+
+
+	private static void askConnectionDetails(boolean isserver){
+		int port=0;
+		String address = "addr";
+		//TODO jdialog with port if address and current addess, port and adress if client.
+		if(isserver){
+
+			server = new Server(port);     
+			Thread t = new Thread(server);
+			t.start();
+		}else {//is client
+			remoteEnableClientMode(address, port);
+		}
+	}
+
+	public static boolean wirteDirectly(String command, int clientID){//TODO use client id also for local machine
+		//if(busyID <0) TODO check if busy or not;
+		busyID = clientID;
+		if((busyID != clientID) || port == null){
+			return false;
+		} else {
+			// TODO prevent malicious injection, check if line is in the correct format 
+			if(command == null || "endPrint".equals(command)){
+				busyID = -1;
+			}else{
+				port.write(command);
+			}
+			return true;
+		}
 	}
 }
