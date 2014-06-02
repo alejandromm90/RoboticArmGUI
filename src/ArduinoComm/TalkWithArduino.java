@@ -133,6 +133,14 @@ public class TalkWithArduino {
 	private static void remoteEnableClientMode(String address, int port){
 		client = new Client(address, port);
 	}
+	
+	
+	private static void remoteEnableServerMode(int port){
+		server = new Server(port);
+		 Thread t = new Thread(server);
+	     t.start();
+	}
+	
 
 
 
@@ -302,9 +310,9 @@ public class TalkWithArduino {
 			if(ok == e.getSource()) {
 				//TODO  start server with correct param show error message if not ok.
 				if(isserver){
-					
+					remoteEnableServerMode(Integer.valueOf(port.getText()));
 				}else {
-					
+				remoteEnableClientMode(address.getText(), Integer.valueOf(port.getText()));	
 				}
 			}
 
