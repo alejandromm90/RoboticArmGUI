@@ -1,14 +1,25 @@
 package ArduinoComm;
 
+import java.awt.Dialog;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+import math.Calculate;
 import appInterface.MainInterface;
 import appInterface.ManualControl;
 import geometric.Angles;
+import geometric.RelativePoint;
 import constants.Constants;
 import processing.core.PApplet;
 import processing.serial.Serial;
@@ -19,6 +30,7 @@ public class TalkWithArduino {
 	private static Server server = null;
 	private static Client client = null;
 	private static int busyID = 0;
+	private static TalkWithArduino istance =  new TalkWithArduino();
 
 
 	private TalkWithArduino() {
@@ -124,7 +136,7 @@ public class TalkWithArduino {
 
 
 
-	private static void setPort(String portName){//TODO check if disable remote or ok, ok for multiple arms,...
+	private static void setPort(String portName){
 		if(port != null){
 			port.dispose();
 		}
@@ -216,15 +228,8 @@ public class TalkWithArduino {
 	private static void askConnectionDetails(boolean isserver){
 		int port=0;
 		String address = "addr";
-		//TODO jdialog with port if address and current addess, port and adress if client.
-		if(isserver){
-
-			server = new Server(port);     
-			Thread t = new Thread(server);
-			t.start();
-		}else {//is client
-			remoteEnableClientMode(address, port);
-		}
+		istance.new Dialog(isserver, port, address);
+		
 	}
 
 	public static boolean wirteDirectly(String command, int clientID){//TODO use client id also for local machine
@@ -242,4 +247,69 @@ public class TalkWithArduino {
 			return true;
 		}
 	}
+	
+	private class Dialog extends JDialog  implements ActionListener{
+		private JPanel myPanel;
+		private JButton ok;
+		private JButton cancel;
+		private boolean isserver;
+
+		JLabel addressL = new JLabel("Address:");
+		JTextField address  = new JTextField();
+
+		JLabel portL = new JLabel("Port:");
+		JTextField  port = new JTextField();
+		
+		
+
+		public Dialog(boolean isserver, int defPort, String defAddress) {
+			this.isserver= isserver;
+			myPanel = new JPanel();
+
+			getContentPane().add(myPanel);
+			
+			ok = new JButton("ok");
+			ok.addActionListener(this);
+			cancel = new JButton("cancel");
+			cancel.addActionListener(this);
+			
+			myPanel.setLayout(new GridLayout(3, 2));
+
+			if(defAddress!= null) address.setText(defAddress);
+			port.setText(defPort+"");
+			myPanel.add(addressL);
+			myPanel.add(address);
+			myPanel.add(portL);
+			myPanel.add(port);
+			
+			
+			if(isserver){
+			address.setEditable(false);
+			}
+			
+			myPanel.add(ok);
+			myPanel.add(cancel);
+
+
+			pack();
+			//setLocationRelativeTo(frame);
+			setVisible(true);
+		}
+
+
+
+		public void actionPerformed(ActionEvent e) {
+			if(ok == e.getSource()) {
+				//TODO  start server with correct param show error message if not ok.
+				if(isserver){
+					
+				}else {
+					
+				}
+			}
+
+		}
+		
+		}
+	
 }

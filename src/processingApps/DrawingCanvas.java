@@ -413,7 +413,7 @@ public class DrawingCanvas extends PApplet{
 						lastEllipse.get(lastEllipse.size()-1).getZ(), flow1, flow2, flow3);
 				lastEllipse.add(lastPoint);
 				flavourChanged = false;
-			} else if (split) {	// If we had split we only add a flow 0 point 
+			} else if (split && (!lastEllipse.isEmpty())) {	// If we had split we only add a flow 0 point 
 				RelativePoint lastPoint = new RelativePoint(lastEllipse.get(lastEllipse.size()-1).getX(), lastEllipse.get(lastEllipse.size()-1).getY(),
 						lastEllipse.get(lastEllipse.size()-1).getZ(), 0, 0, 0);
 				lastEllipse.add(lastPoint);

@@ -374,11 +374,16 @@ public class MainInterface extends javax.swing.JFrame {
 
 
 		///////
+		
+		
+		
+		
 
 
 		mBar.add(menuModes);
 		mBar.add(menuFigures);
 		mBar.add(TalkWithArduino.getSelectPortMenu());
+		mBar.add(TalkWithArduino.getCientServerMenu());
 		mBar.add(menuTools);
 
 		return mBar;
