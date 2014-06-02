@@ -8,7 +8,7 @@ public class Server implements Runnable{
 	
 
 private ServerSocket server;
-private ArrayList<MultiClientWorker> clients = new ArrayList<>();
+private ArrayList<MultiClientWorker> clients = new ArrayList<MultiClientWorker>();
 private boolean stop = false;
 private int port =0;
 

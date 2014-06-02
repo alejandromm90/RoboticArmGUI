@@ -42,7 +42,6 @@ public class Client {
 	public void sendMessage(String message){
 		//TODO check if busy or not before sending messages
 		out.println(message);
-		System.out.println("client sent: "+message);
 	}
 	public String ReceiveMessage(){
 		String line = null;

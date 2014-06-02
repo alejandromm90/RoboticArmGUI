@@ -45,9 +45,6 @@ public class MultiClientWorker implements Runnable {
     while(!stop){
       try{
         line = in.readLine();
-//Send ack back to client
-//     out.println("ack message");
-        System.out.println(Thread.currentThread().getId()+" received: "+ line);
         if(line == null){
         	stopClient();
         } else if(! TalkWithArduino.wirteDirectly(line, client.getLocalPort())){
