@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import sun.awt.windows.ThemeReader;
 import constants.Constants;
 
 public class MultiClientWorker implements Runnable {
@@ -47,7 +48,7 @@ public class MultiClientWorker implements Runnable {
         line = in.readLine();
         if(line == null){
         	stopClient();
-        } else if(! TalkWithArduino.wirteDirectly(line, client.getLocalPort())){
+        } else if(! TalkWithArduino.wirteDirectly(line, (int)Thread.currentThread().getId())){
         	//TODO busy message
         	//out.write("server busy try later");
         }

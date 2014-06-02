@@ -42,7 +42,7 @@ private void listenSocket(){
 //server.accept returns a client connection
       w = new MultiClientWorker(server.accept());
       if(stop) return;
-      System.out.println("new connection");
+      System.out.println("new client connection");
       Thread t = new Thread(w);
       t.start();
       clients.add(w);
