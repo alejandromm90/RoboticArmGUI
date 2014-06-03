@@ -452,6 +452,8 @@ public class DrawingCanvas extends PApplet{
 		ellipsesRedo = new ArrayList<RelativePoint>();
 		linesRedo = new ArrayList<Line>();
 		ellipsesLeapMotion = new ArrayList<RelativePoint>();
+		lastX = -10;
+		lastY = -10;
 	}
 
 
