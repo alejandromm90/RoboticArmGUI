@@ -695,7 +695,7 @@ public class MainInterface extends javax.swing.JFrame {
 		decreaseZ.setFont(buttonsFont);
 		decreaseZ.addMouseListener(new SetZvalue(false));
 		JPanel zpanel = new JPanel(new GridLayout(0, 1));
-		JLabel zlabel = new JLabel("Set z-Value: ");
+		JLabel zlabel = new JLabel("Set Height: ");
 		zlabel.setFont(buttonsFont);
 		zpanel.add(zlabel);
 		zpanel.add(increaseZ);
