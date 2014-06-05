@@ -108,18 +108,16 @@ public class TalkWithArduino {
 
 	
 	public static void sendTableRotationToArduino(long speed) {
-		System.out.println(speed + "t");
-
 		if(remote){
 
 			speed = (100 * speed) + 12000;
-			sendToServer(speed + "t");
+			sendToServer(speed + "f");
 		}
 		//not else if this way can control a local and a remote arm
 		if(port == null)return;
 
 		speed = (100 * speed) + 12000;
-		port.write(speed + "t");
+		port.write(speed + "f");
 	}
 
 
