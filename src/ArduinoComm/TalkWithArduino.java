@@ -106,6 +106,19 @@ public class TalkWithArduino {
 		// port.write(flow3 + "f")
 	}
 
+	
+	public static void sendTableRotationToArduino(long speed) {
+		if(remote){
+
+			speed = (100 * speed) + 12000;
+			sendToServer(speed + "t");
+		}
+		//not else if this way can control a local and a remote arm
+		if(port == null)return;
+
+		speed = (100 * speed) + 12000;
+		port.write(speed + "t");
+	}
 
 
 	private static void sendToServer(String string) {
