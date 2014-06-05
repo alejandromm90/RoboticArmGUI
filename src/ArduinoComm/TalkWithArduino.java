@@ -108,6 +108,8 @@ public class TalkWithArduino {
 
 	
 	public static void sendTableRotationToArduino(long speed) {
+		System.out.println(speed + "t");
+
 		if(remote){
 
 			speed = (100 * speed) + 12000;

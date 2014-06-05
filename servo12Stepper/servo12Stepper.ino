@@ -95,7 +95,20 @@ void loop() {
       break;
       
       case 't':
+      
       if(v < 12000){
+        stepper02.moveTo(-50000000); 
+        stepper02.setMaxSpeed(abs(v-12000));
+      }
+      else if (v >12000){
+        stepper02.moveTo(50000000);
+        stepper02.setMaxSpeed(abs(v-12000));
+      }
+      else {
+        stepper02.move(0);
+        stepper02.setMaxSpeed(0);
+      }
+     /* if(v < 12000){
         rotatingTable.moveTo(-50000000); 
         rotatingTable.setMaxSpeed(abs(v-12000));
       }
@@ -108,6 +121,7 @@ void loop() {
         rotatingTable.setMaxSpeed(0);
       }
       v = 0;
+      */
       break;
     }  
   }

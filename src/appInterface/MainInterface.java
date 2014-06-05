@@ -320,7 +320,16 @@ public class MainInterface extends javax.swing.JFrame {
 				new ManualControl(MainInterface.this);
 			}
 		});
+		
+		JMenuItem rotatingTable = new JMenuItem("Rotating Table control");
+		rotatingTable.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				new RotatingTable(MainInterface.this);
+			}
+		});
+		
 		menuTools.add(mItemStepperManual);
+		menuTools.add(rotatingTable);
 
 		/****************************************
 		 * 					figures				*
