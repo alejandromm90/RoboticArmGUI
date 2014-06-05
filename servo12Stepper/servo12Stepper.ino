@@ -8,16 +8,16 @@ int servoPin03 = 8;
 
 int directionPin01 = 2;
 int directionPin02 = 4;
-int directionPinTable = 0;
+int directionPin03 = 12;
 
 int stepPin01 = 3;
 int stepPin02 = 5;
-int stepPinTable = 1;
+int stepPin03 = 13;
 
 
 AccelStepper stepper01(1, stepPin01, directionPin01);
 AccelStepper stepper02(1, stepPin02, directionPin02);
-AccelStepper rotatingTable(1, stepPinTable, directionPinTable);
+AccelStepper stepper03(1, stepPin03, directionPin03);
 
 
 void setup() {
@@ -25,14 +25,15 @@ void setup() {
   myservo01.attach(servoPin01);
   myservo02.attach(servoPin02);
   myservo03.attach(servoPin03);
+
   myservo01.write(92);
   myservo02.write(97 + 35);
   myservo03.write(65 + 24);
-  
-  
+
+
   stepper01.setAcceleration(20000);
   stepper02.setAcceleration(20000);
-  rotatingTable.setAcceleration(20000);
+  stepper03.setAcceleration(20000);
 }
 
 void loop() {
@@ -92,37 +93,23 @@ void loop() {
         stepper02.setMaxSpeed(0);
       }
       v = 0;
-      break;
-      
-      case 't':
-      
+      break; 
+
+    case 'f':
       if(v < 12000){
-        stepper02.moveTo(-50000000); 
-        stepper02.setMaxSpeed(abs(v-12000));
+        stepper03.moveTo(-50000000); 
+        stepper03.setMaxSpeed(abs(v-12000));
       }
       else if (v >12000){
-        stepper02.moveTo(50000000);
-        stepper02.setMaxSpeed(abs(v-12000));
+        stepper03.moveTo(50000000);
+        stepper03.setMaxSpeed(abs(v-12000));
       }
       else {
-        stepper02.move(0);
-        stepper02.setMaxSpeed(0);
-      }
-     /* if(v < 12000){
-        rotatingTable.moveTo(-50000000); 
-        rotatingTable.setMaxSpeed(abs(v-12000));
-      }
-      else if (v >12000){
-        rotatingTable.moveTo(50000000);
-        rotatingTable.setMaxSpeed(abs(v-12000));
-      }
-      else {
-        rotatingTable.move(0);
-        rotatingTable.setMaxSpeed(0);
+        stepper03.move(0);
+        stepper03.setMaxSpeed(0);
       }
       v = 0;
-      */
-      break;
+      break; 
     }  
   }
 
@@ -130,6 +117,11 @@ void loop() {
 
   stepper01.run();
   stepper02.run();
-  rotatingTable.run();
+  stepper03.run();
 }
+
+
+
+
+
 
