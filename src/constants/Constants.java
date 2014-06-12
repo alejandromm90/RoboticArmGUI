@@ -54,7 +54,7 @@ public abstract class Constants {
 	/**
 	 * Correct angle for 0 degree servo
 	 */
-	public static final int CORRECT_ANGLE_THI = 3; //0;
+	public static final int CORRECT_ANGLE_THI = 1; //0;
 	public static final int CORRECT_ANGLE_THETA = 35;
 	public static final int CORRECT_ANGLE_KAPPA = 24;
 
